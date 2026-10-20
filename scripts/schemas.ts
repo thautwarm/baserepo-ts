@@ -1,4 +1,4 @@
-import { readFile, readdir, writeFile } from "node:fs/promises";
+import { readdir, readFile, writeFile } from "node:fs/promises";
 import { generate } from "ts-to-zod";
 
 const check = process.argv.includes("--check");
@@ -22,7 +22,7 @@ for (const directory of await readdir(packages, { withFileTypes: true })) {
     throw new Error(`${manifest.name}: /types must define Models`);
   }
   if (check) {
-    if (await readFile(output, "utf8") !== generated) {
+    if ((await readFile(output, "utf8")) !== generated) {
       throw new Error(`${manifest.name}: schemas are stale. Run pnpm schema.`);
     }
   } else {

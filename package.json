@@ -4,7 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@10.9.0",
   "engines": {
-    "node": ">=24"
+    "node": ">=24.6.0"
   },
   "template": {
     "scope": "@template"
@@ -12,13 +12,17 @@
   "scripts": {
     "start": "node apps/cli/src/main.ts",
     "check": "tsc --noEmit && pnpm -r --if-present check",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "fmt": "biome format --write .",
     "provision": "node scripts/provision.ts",
     "schema": "node scripts/schemas.ts",
     "schema:check": "node scripts/schemas.ts --check",
     "test": "node --test \"packages/**/*.test.ts\" \"apps/**/*.test.ts\" \"scripts/**/*.test.ts\"",
-    "verify": "pnpm schema:check && pnpm check && pnpm test"
+    "verify": "pnpm schema:check && pnpm check && pnpm lint && pnpm test"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.15",
     "@template/tsconfig": "workspace:*",
     "@types/node": "24.19.2",
     "ts-to-zod": "5.1.0",

@@ -1,6 +1,6 @@
 # TypeScript Monorepo Template
 
-Node 24+ runs TypeScript source directly. pnpm 10.9.0 manages the workspace.
+Node 24.6+ runs TypeScript source directly. pnpm 10.9.0 manages the workspace.
 There is no JavaScript build step or `dist/` directory for Node applications.
 
 ## Provision a project
@@ -18,6 +18,8 @@ Provisioning sets the root project name and local package scope, updates imports
 configuration references, the lockfile, and the README title. The default scope
 is `@<project-name>`; `--scope` accepts a name with or without `@`. Names use
 lowercase kebab case. The directory and Git repository are preserved.
+The marked template-only section in `AGENTS.md` is removed; project development
+conventions are retained.
 
 The script uses only Node built-ins, so `node scripts/provision.ts my-project`
 also works before dependency installation. Repeating the same request is a no-op;
@@ -48,8 +50,9 @@ Apps, libraries, and root scripts inherit presets from the workspace config pack
 }
 ```
 
-`base.json` provides environment-independent checks. `node.json` adds Node globals,
-NodeNext module resolution, and erasable syntax requirements. Each consumer declares
+`base.json` provides environment-independent checks, including the project-wide
+`erasableSyntaxOnly` requirement. `node.json` adds Node globals and NodeNext module
+resolution. Each consumer declares
 `@template/tsconfig` as a workspace dev dependency and owns its source paths.
 Root `pnpm check` checks scripts and runs all app/library `check` scripts.
 
@@ -120,9 +123,13 @@ const response = schemas.greetResponse.parse(await greet(request));
 
 ## Verification
 
-`pnpm verify` checks schema drift, checks all TypeScript projects, and runs Node's
+`pnpm verify` checks schema drift, checks all TypeScript projects, runs Biome, and runs Node's
 built-in tests, including provisioning validation and idempotence. Node strips
 types without checking them, so the separate type checks remain required.
+
+Use `pnpm lint` to check formatting and lint rules, `pnpm lint:fix` for safe fixes,
+and `pnpm fmt` to format. Generated schemas are excluded from Biome so their output
+continues to match `ts-to-zod`.
 
 The runtime setup follows [pp-brain-server](https://github.com/thautwarm/pp-brain-server).
 Schema generation uses [ts-to-zod](https://github.com/fabien0102/ts-to-zod).

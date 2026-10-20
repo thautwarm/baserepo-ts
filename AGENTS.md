@@ -1,5 +1,6 @@
 # Project conventions
 
+<!-- template-only:start -->
 ## Template and provisioning
 
 This repository is a project template. The default names are placeholders.
@@ -9,24 +10,23 @@ This repository is a project template. The default names are placeholders.
 - Provisioning updates the root name, local package names and references, configuration references, lockfile, and README title. Run `pnpm install --frozen-lockfile` afterward to refresh workspace links.
 - Do not hardcode the template's project name or scope in new tooling. Discover local packages from their manifests and use `template.scope`.
 - Provisioning must preserve `.git`, installed dependencies, and unrelated external package references. Repeating it with the same arguments must be idempotent.
+- Provisioning removes this marked template-only section from `AGENTS.md` and preserves the project's development conventions below.
+<!-- template-only:end -->
 
-## Workspace roles
+## Workspace
 
-A **library** is a reusable runtime TypeScript package imported by other workspace packages. Libraries live in `packages/lib*/`; their directory and unscoped package name must start with `lib`, for example `packages/libgreeting` and `@template/libgreeting`.
+- `packages/lib*` (`@template/lib*`): reusable libraries consumed by workspace packages and apps.
+- `apps/*`: applications.
+- `packages/tsconfig`: project-wide TypeScript presets.
 
-- Applications live in `apps/`. They select and consume libraries and are not required to expose a library interface.
-- Tooling packages provide development assets rather than runtime application APIs. `packages/tsconfig` is a tooling package, not a library; it does not need `ILibrary`, `Models`, bindings, or interface checks.
-- Do not create a central contracts package. Each library owns its public contract and data models.
+## Runtime and checks
 
-## Runtime and TypeScript configuration
-
-- Use Node 24+ native TypeScript execution and pnpm workspaces. Node packages do not need a JavaScript build step, `dist/`, a loader, or a runtime container.
-- Shared TypeScript presets live in `packages/tsconfig`. Every consumer declares the configuration package as a `workspace:*` dev dependency and uses `extends`, for example `"extends": "@template/tsconfig/node.json"`.
-- `base.json` contains environment-independent checks. `node.json` adds Node module resolution, globals, and erasable syntax requirements.
-- Each project owns its `include`, `exclude`, and environment-specific options. Relative paths in an inherited config resolve relative to the config that declares them. Arrays such as `types` and `lib` are overridden, not appended.
-- Browser, JSX, Worker, or framework projects may extend the base preset and supply their actual environment settings and necessary tooling. Do not force Node globals or module resolution into browser code; do not create unused presets in advance.
-- Each app and library provides a `check` script. Root `pnpm check` checks root scripts and invokes all workspace checks. Every library's `interface-check.ts` must remain covered.
-- Run `pnpm verify` after changes. Also run `pnpm start Example` when CLI behavior changes.
+- Use Node 24.6+ and pnpm. Run TypeScript directly; no JavaScript build step or `dist/`.
+- `erasableSyntaxOnly: true` is required.
+- Environment-specific tsconfig overrides are allowed.
+- Each app and library has a `check` script, run by root `pnpm check`.
+- Use Biome for formatting and linting: `pnpm fmt` and `pnpm lint`.
+- Run `pnpm verify` after changes.
 
 ## A library's two public entry points
 

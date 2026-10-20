@@ -1,4 +1,4 @@
-import { readFile, readdir, writeFile } from "node:fs/promises";
+import { readdir, readFile, writeFile } from "node:fs/promises";
 import { extname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -36,7 +36,21 @@ for (const parent of ["apps", "packages"]) {
 }
 
 const ignored = new Set([".git", "node_modules", "dist", "target", ".pnpm-store"]);
-const extensions = new Set([".json", ".jsonc", ".yaml", ".yml", ".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs", ".md"]);
+const extensions = new Set([
+  ".json",
+  ".jsonc",
+  ".yaml",
+  ".yml",
+  ".ts",
+  ".tsx",
+  ".mts",
+  ".cts",
+  ".js",
+  ".jsx",
+  ".mjs",
+  ".cjs",
+  ".md",
+]);
 const changes: { path: URL; text: string }[] = [];
 async function collect(directory: URL): Promise<void> {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -61,11 +75,22 @@ async function collect(directory: URL): Promise<void> {
       if (path.href === new URL("README.md", root).href) {
         text = text.replace(/^# .*$/m, `# ${name}`);
       }
+      if (path.href === new URL("AGENTS.md", root).href) {
+        text = text.replace(
+          /^<!-- template-only:start -->\r?\n[\s\S]*?^<!-- template-only:end -->(?:\r?\n|$)(?:\r?\n)?/gm,
+          "",
+        );
+        if (/^<!-- template-only:(?:start|end) -->\r?$/m.test(text)) {
+          throw new Error("AGENTS.md has unmatched template-only markers.");
+        }
+      }
       if (text !== original) changes.push({ path, text });
     }
   }
 }
 await collect(root);
 for (const { path, text } of changes) await writeFile(path, text);
-console.log(`Provisioned ${name} (${scope}); updated ${changes.length} files in ${fileURLToPath(root)}.`);
+console.log(
+  `Provisioned ${name} (${scope}); updated ${changes.length} files in ${fileURLToPath(root)}.`,
+);
 console.log("Run pnpm install --frozen-lockfile to refresh workspace links, then pnpm verify.");

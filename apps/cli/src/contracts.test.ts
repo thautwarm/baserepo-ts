@@ -1,16 +1,22 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import type { ILibrary } from "@template/libgreeting/types";
 import * as implementation from "@template/libgreeting";
+import type { ILibrary } from "@template/libgreeting/types";
 
 // An unused @ts-expect-error fails tsc.
 void (implementation satisfies ILibrary);
 // @ts-expect-error The required greet export is missing.
 void ({} satisfies ILibrary);
-// @ts-expect-error The request parameter does not match the contract.
-void ({ schemas: implementation.schemas, greet: async (_name: number) => ({ message: "invalid" }) } satisfies ILibrary);
-// @ts-expect-error The response does not match the contract.
-void ({ schemas: implementation.schemas, greet: async (_request: { name: string }) => 42 } satisfies ILibrary);
+void ({
+  schemas: implementation.schemas,
+  // @ts-expect-error The request parameter does not match the contract.
+  greet: async (_name: number) => ({ message: "invalid" }),
+} satisfies ILibrary);
+void ({
+  schemas: implementation.schemas,
+  // @ts-expect-error The response does not match the contract.
+  greet: async (_request: { name: string }) => 42,
+} satisfies ILibrary);
 
 test("the implementation module fulfills the async greeting contract", async () => {
   const greeting = implementation;

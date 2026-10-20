@@ -4,6 +4,7 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
     "target": "esnext",
     "lib": ["esnext"],
     "types": [],
