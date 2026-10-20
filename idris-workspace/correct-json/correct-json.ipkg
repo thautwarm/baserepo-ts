@@ -1,0 +1,37 @@
+package correct-json
+
+authors    = "stefan-hoeck"
+brief      = "Derivable JSON marshallers for Idris2"
+version    = 0.2.0
+sourcedir  = "src"
+depends    = base         >= 0.6.0
+           , parser
+           , elab-util
+           , ilex
+
+modules = Derive.FromJSON
+        , Derive.ToJSON
+        , JSON
+        , JSON.Derive
+        , JSON.Encoder
+        , JSON.FromJSON
+        , JSON.Parser
+        , JSON.Number
+        , JSON.Object
+        , JSON.Option
+        , JSON.ToJSON
+        , JSON.Wire.Description
+        , JSON.Wire.Reflection
+        , JSON.Wire.Codec
+        , JSON.Wire.Numeric
+        , JSON.Wire.Binary64
+        , JSON.Wire.Derive
+        , JSON.Wire.TypeScript
+        , JSON.Wire.Registry
+        , JSON.Wire.Check
+        , JSON.Wire.Codegen
+        , JSON.Wire.Authoring
+        , Value.Unicode
+        , Value.Unicode.Order
+        , Value.StringKeySortedAssoc
+        , Proof.Value.StringKeySortedAssoc

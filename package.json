@@ -27,6 +27,7 @@
     "@template/tsconfig": "workspace:*",
     "@types/node": "24.19.2",
     "ts-to-zod": "5.1.0",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "typescript-parser": "npm:typescript@5.9.3"
   }
 }

@@ -1,4 +1,5 @@
 package salutation
 version = 0.1.0
+depends = correct-json
 sourcedir = "src"
-modules = Salutation
+modules = Salutation.Types, Salutation, Salutation.JSON

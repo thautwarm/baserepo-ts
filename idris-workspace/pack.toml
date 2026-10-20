@@ -9,3 +9,67 @@ ipkg = "salutation.ipkg"
 type = "local"
 path = "salutation-js"
 ipkg = "salutation-js.ipkg"
+
+[custom.all.correct-json]
+type = "local"
+path = "correct-json"
+ipkg = "correct-json.ipkg"
+
+[custom.all.correct-json-tests]
+type = "local"
+path = "correct-json-tests"
+ipkg = "correct-json-tests.ipkg"
+
+[custom.all.parser]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-parser"
+commit = "9decb99fe27c3411c18850129715a49c64f1b1c0"
+ipkg = "parser.ipkg"
+
+[custom.all.elab-util]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-elab-util"
+commit = "90a2363256cbaafd3b0cc4e2bf36003761b6c4f0"
+ipkg = "elab-util.ipkg"
+
+[custom.all.ilex]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-ilex"
+commit = "35300916952f92912f8b4894f73da7be9b4b805a"
+ipkg = "ilex.ipkg"
+
+[custom.all.ilex-core]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-ilex"
+commit = "35300916952f92912f8b4894f73da7be9b4b805a"
+ipkg = "core/ilex-core.ipkg"
+
+[custom.all.algebra]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-algebra"
+commit = "b80241edadc9237c2663df098c27e6dbc99886d0"
+ipkg = "algebra.ipkg"
+
+[custom.all.array]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-array"
+commit = "41a001cd6d8d1ba394d875dedfeae56183a64bd1"
+ipkg = "array.ipkg"
+
+[custom.all.bytestring]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-bytestring"
+commit = "1c5c6160eef2a91b222d219383af6901c74b57e0"
+ipkg = "bytestring.ipkg"
+
+[custom.all.ref1]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-ref1"
+commit = "d2355c8b51f9f278b82fb4c73547606ba2709a9a"
+ipkg = "ref1.ipkg"
+
+[custom.all.refined]
+type = "github"
+url = "https://github.com/stefan-hoeck/idris2-refined"
+commit = "7ad095dc89232cfa667e47ae507b13f132837fdd"
+ipkg = "refined.ipkg"

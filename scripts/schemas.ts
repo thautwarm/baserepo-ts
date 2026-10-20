@@ -1,20 +1,19 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, relative, sep } from "node:path";
 import { generate } from "ts-to-zod";
+import { publicModelNames } from "./schema-models.ts";
 
 const [source, target, ...extra] = process.argv.slice(2);
 if (!source || !target || extra.length > 0) {
   throw new Error("Usage: node scripts/schemas.ts <input> <output>");
 }
 
-let hasPublicModels = false;
+const sourceText = await readFile(source, "utf8");
+const models = publicModelNames(sourceText);
+const hasPublicModels = models.has("PublicModels");
 const result = generate({
-  sourceText: await readFile(source, "utf8"),
-  nameFilter(name) {
-    if (name !== "PublicModels") return false;
-    hasPublicModels = true;
-    return true;
-  },
+  sourceText,
+  nameFilter: (name) => models.has(name),
 });
 if (result.errors.length > 0) throw new Error(result.errors.join("\n"));
 

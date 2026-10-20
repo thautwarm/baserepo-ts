@@ -23,7 +23,14 @@ const arithmetic = rustProject({
   name: "arithmetic",
   wasm: "packages/libarithmetic/src/generated/wasm-bytes.ts",
 });
-const salutation = idrisProject({ name: "salutation" });
+const json = idrisProject({ name: "correct-json" });
+const jsonTests = idrisProject({
+  name: "correct-json-tests",
+  dependencies: [json],
+  javascript: ".nomake_files/idris-correct-json-tests/correct-json-tests.mjs",
+  test: true,
+});
+const salutation = idrisProject({ name: "salutation", dependencies: [json] });
 const salutationJs = idrisProject({
   name: "salutation-js",
   dependencies: [salutation],
@@ -57,7 +64,7 @@ const scripts = tsProject({
   ],
 });
 const tsProjects = [greeting, libarithmetic, libsalutation, cli, scripts];
-const projects = [...tsProjects, arithmetic, salutation, salutationJs];
+const projects = [...tsProjects, arithmetic, json, jsonTests, salutation, salutationJs];
 
 // #endregion
 

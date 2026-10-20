@@ -51,6 +51,7 @@ export function tsProject({
         deps: {
           toolchain,
           generator: "scripts/schemas.ts",
+          models: "scripts/schema-models.ts",
           types,
         },
         async build({ deps, target }) {

@@ -44,7 +44,8 @@ consumed by [libarithmetic](../../../packages/libarithmetic/src/index.ts). Run i
 
 - For a small synchronous API, raw scalar exports plus linear memory avoid a
   separate binding generator. Read [raw-wasm-abi](references/raw-wasm-abi.md) when
-  implementing strings, structured results, or instance reuse. If the API needs
+  implementing structured messages or buffer ownership. The example exchanges
+  MessagePack using Rust `rmp-serde` and TypeScript `@std/msgpack`. If the API needs
   generated bindings, include their generator and outputs in the build instead.
 - Decode the inline bytes with `atob` and `Uint8Array`, then instantiate once in a
   private runtime module. Embedding requires no runtime file read or fetch.

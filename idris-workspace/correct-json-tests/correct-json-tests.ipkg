@@ -1,0 +1,7 @@
+package correct-json-tests
+
+depends = correct-json
+sourcedir = "src"
+modules = InternallyTagged, CompileNegative, SortedAssoc, Main
+main = Main
+executable = "correct-json-tests.mjs"
