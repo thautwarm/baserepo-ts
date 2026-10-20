@@ -35,7 +35,7 @@ async function* lintInputs(paths: string[]) {
     if (await new NM.Path(path).isDir()) {
       yield* NM.Path.glob(`${path}/**/*`, {
         includeDirs: false,
-        exclude: ["**/node_modules/**", "packages/lib*/src/schemas.ts"],
+        exclude: ["**/node_modules/**", "apps/*/src/schemas.ts", "packages/*/src/schemas.ts"],
       });
     } else {
       yield path;

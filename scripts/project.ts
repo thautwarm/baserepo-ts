@@ -1,6 +1,6 @@
+import { existsSync } from "node:fs";
 import * as NM from "@nomake/core";
 import { lintTarget } from "./lint.ts";
-import { generateSchema } from "./schemas.ts";
 
 interface ProjectOptions {
   name: string;
@@ -28,11 +28,7 @@ const toolchain = [
   "pnpm-workspace.yaml",
   process.execPath,
 ];
-const tsconfig = [
-  "packages/tsconfig/package.json",
-  "packages/tsconfig/base.json",
-  "packages/tsconfig/node.json",
-];
+const tsconfig = ["packages/tsconfig/package.json", "packages/tsconfig/base.json"];
 
 export function project({
   name,
@@ -46,21 +42,21 @@ export function project({
   const root = new NM.Path(directory);
   const config = root.join("tsconfig.json").asPosix();
   const inputs = [root.join("package.json").asPosix(), config];
+  const types = root.join("src/types.ts").asPosix();
 
-  const schema =
-    type === "library"
-      ? NM.target({
-          name: root.join("src/schemas.ts").asPosix(),
-          deps: {
-            toolchain,
-            generator: "scripts/schemas.ts",
-            types: root.join("src/types.ts").asPosix(),
-          },
-          async build({ deps, target }) {
-            await new NM.Path(target).writeText(await generateSchema(deps.types));
-          },
-        })
-      : undefined;
+  const schema = existsSync(types)
+    ? NM.target({
+        name: root.join("src/schemas.ts").asPosix(),
+        deps: {
+          toolchain,
+          generator: "scripts/schemas.ts",
+          types,
+        },
+        async build({ deps, target }) {
+          await NM.Shell.runChecked([process.execPath, deps.generator, deps.types, target]);
+        },
+      })
+    : undefined;
 
   const check = NM.target({
     name: `.nomake_files/${name}/check.checked`,

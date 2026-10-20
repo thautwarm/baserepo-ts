@@ -31,7 +31,7 @@ async function fixture() {
     join(root, "packages/libhello/src/index.ts"),
     'import type { API } from "@starter/libhello/types";\nimport "@starter/libhello-extra";\nimport "@starter/external";\n',
   );
-  await writeFile(join(root, "tsconfig.json"), '{"extends":"@starter/tsconfig/node.json"}\n');
+  await writeFile(join(root, "tsconfig.json"), '{"extends":"@starter/tsconfig/base.json"}\n');
   await writeFile(
     join(root, "pnpm-lock.yaml"),
     'dependencies:\n  "@starter/libhello": workspace:*\n',
