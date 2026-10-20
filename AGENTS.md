@@ -20,8 +20,7 @@ Provisioning removes this marked section.
 
 ## Development
 
-- Use Node 24.6+ and pnpm. Run TypeScript directly; no JavaScript build step or `dist/`. Web apps are an exception.
-- Node libraries and apps extend `@template/tsconfig/base.json` via a `workspace:*` dev dependency; web apps and libraries use tsconfig suited to their browser or framework environment.
+- Use Node 24.6+ and pnpm. Run Node code directly from TypeScript; no JavaScript build step or `dist/`.
 - `erasableSyntaxOnly: true` is required.
 - Import JSON with `with { type: "json" }`.
 - Declare projects, dependencies, and aggregate targets in `make.ts`. Use NoMake for generation and validation.
