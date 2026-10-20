@@ -1,0 +1,19 @@
+{
+  "name": "@template/libgreeting",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@template/tsconfig": "workspace:*"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts"
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  }
+}

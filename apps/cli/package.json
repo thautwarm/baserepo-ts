@@ -1,0 +1,15 @@
+{
+  "name": "@template/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@template/tsconfig": "workspace:*"
+  },
+  "dependencies": {
+    "@template/libgreeting": "workspace:*"
+  }
+}
