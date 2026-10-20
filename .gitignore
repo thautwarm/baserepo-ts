@@ -1,4 +1,5 @@
 node_modules/
+.nomake_files/
 .env
 .env.*
 !.env.example

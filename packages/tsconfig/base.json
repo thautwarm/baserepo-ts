@@ -9,6 +9,7 @@
     "lib": ["esnext"],
     "types": [],
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "noEmit": true,
     "skipLibCheck": true
   }

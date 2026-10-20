@@ -11,18 +11,19 @@
   },
   "scripts": {
     "start": "node apps/cli/src/main.ts",
-    "check": "tsc --noEmit && pnpm -r --if-present check",
-    "lint": "biome check .",
+    "check": "node make.ts check",
+    "interface:check": "node make.ts interface:check",
+    "lint": "node make.ts lint",
     "lint:fix": "biome check --write .",
     "fmt": "biome format --write .",
     "provision": "node scripts/provision.ts",
-    "schema": "node scripts/schemas.ts",
-    "schema:check": "node scripts/schemas.ts --check",
-    "test": "node --test \"packages/**/*.test.ts\" \"apps/**/*.test.ts\" \"scripts/**/*.test.ts\"",
-    "verify": "pnpm schema:check && pnpm check && pnpm lint && pnpm test"
+    "schema": "node make.ts schema",
+    "test": "node make.ts tests",
+    "verify": "node make.ts verify"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
+    "@nomake/core": "0.2.0",
     "@template/tsconfig": "workspace:*",
     "@types/node": "24.19.2",
     "ts-to-zod": "5.1.0",

@@ -11,6 +11,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.5.15
         version: 2.5.15
+      '@nomake/core':
+        specifier: 0.2.0
+        version: 0.2.0
       '@template/tsconfig':
         specifier: workspace:*
         version: link:packages/tsconfig
@@ -110,6 +113,10 @@ packages:
 
   '@clack/prompts@1.0.0-alpha.4':
     resolution: {integrity: sha512-KnmtDF2xQGoI5AlBme9akHtvCRV0RKAARUXHBQO2tMwnY8B08/4zPWigT7uLK25UPrMCEqnyQPkKRjNdhPbf8g==}
+
+  '@nomake/core@0.2.0':
+    resolution: {integrity: sha512-fwdccjBm2FIlTpZTXliJ4fMDGx8dC7uTkJjFGdfWN2RNr+S57i5Uak6Wa2aPpoBqQZF3AuJmuHJOouAl2IeX6w==}
+    engines: {node: '>=24.6.0'}
 
   '@oclif/core@4.14.0':
     resolution: {integrity: sha512-QCJIZoVJxV7jywgVAUlsQwl3dr3Sa21kfi5z9KrYolbexWJUtFSEtMoNiBWojD05mYycLnB50gp/VxlGdaOCRA==}
@@ -653,6 +660,8 @@ snapshots:
       '@clack/core': 1.0.0-alpha.4
       picocolors: 1.1.1
       sisteransi: 1.0.5
+
+  '@nomake/core@0.2.0': {}
 
   '@oclif/core@4.14.0':
     dependencies:

@@ -18,7 +18,7 @@ void ({
   greet: async (_request: { name: string }) => 42,
 } satisfies ILibrary);
 
-test("the implementation module fulfills the async greeting contract", async () => {
+test("the library fulfills the async greeting contract", async () => {
   const greeting = implementation;
   const request = greeting.schemas.greetRequest.parse({ name: "Lightning" });
   const response = greeting.schemas.greetResponse.parse(await greeting.greet(request));

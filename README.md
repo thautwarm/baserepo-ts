@@ -32,12 +32,22 @@ Unrelated external packages are not renamed. Install afterward to refresh links.
 apps/cli/                Example CLI application
 packages/libgreeting/    Example reusable runtime library
 packages/tsconfig/       Shared TypeScript configuration (tooling, not a library)
-scripts/                 Schema generation and template provisioning
+scripts/                 Build helpers, schema generation, and provisioning
+make.ts                  Project declarations and aggregate targets
 ```
 
 A library is a runtime package imported by other packages. Libraries use `lib*`
 for both their folder and unscoped package name. Apps and tooling packages have
 separate roles. See [AGENTS.md](AGENTS.md) for the complete conventions.
+
+To add a package, create it under `apps/` or `packages/lib*/` and declare it in `make.ts`:
+
+```ts
+const greeting = project({ name: "libgreeting", type: "library" });
+const cli = project({ name: "cli", type: "app", dependencies: [greeting] });
+```
+
+Include the declaration in `projects`.
 
 ## TypeScript configuration
 
@@ -54,7 +64,6 @@ Apps, libraries, and root scripts inherit presets from the workspace config pack
 `erasableSyntaxOnly` requirement. `node.json` adds Node globals and NodeNext module
 resolution. Each consumer declares
 `@template/tsconfig` as a workspace dev dependency and owns its source paths.
-Root `pnpm check` checks scripts and runs all app/library `check` scripts.
 
 Browser or framework projects may extend `base.json` and add DOM, JSX, and their
 module-resolution settings. Shared configs do not contain project-relative paths;
@@ -105,7 +114,6 @@ export interface Models {
 
 ```sh
 pnpm schema
-pnpm schema:check
 ```
 
 The script uses the official `ts-to-zod` generator with `Models` as its root,
@@ -123,13 +131,26 @@ const response = schemas.greetResponse.parse(await greet(request));
 
 ## Verification
 
-`pnpm verify` checks schema drift, checks all TypeScript projects, runs Biome, and runs Node's
-built-in tests, including provisioning validation and idempotence. Node strips
-types without checking them, so the separate type checks remain required.
+Schema generation, type checks, tests, and lint reuse NoMake's dependency cache.
 
-Use `pnpm lint` to check formatting and lint rules, `pnpm lint:fix` for safe fixes,
-and `pnpm fmt` to format. Generated schemas are excluded from Biome so their output
-continues to match `ts-to-zod`.
+| Command | Action |
+| --- | --- |
+| `pnpm check` | Generate schemas and check types, including library interfaces |
+| `pnpm test` | Run package tests |
+| `pnpm lint` | Check formatting and lint rules |
+| `pnpm verify` | Run all checks and tests |
+| `pnpm fmt` | Format code |
+| `pnpm lint:fix` | Apply safe Biome fixes |
+
+Select a project from the workspace root:
+
+```sh
+pnpm exec node make.ts check:cli
+pnpm exec node make.ts test:cli
+pnpm exec node make.ts lint:cli
+```
+
+Tests include dependency tests; lint stays within the selected project.
 
 The runtime setup follows [pp-brain-server](https://github.com/thautwarm/pp-brain-server).
 Schema generation uses [ts-to-zod](https://github.com/fabien0102/ts-to-zod).

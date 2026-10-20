@@ -24,9 +24,10 @@ This repository is a project template. The default names are placeholders.
 - Use Node 24.6+ and pnpm. Run TypeScript directly; no JavaScript build step or `dist/`.
 - `erasableSyntaxOnly: true` is required.
 - Environment-specific tsconfig overrides are allowed.
-- Each app and library has a `check` script, run by root `pnpm check`.
+- Declare projects and dependencies in `make.ts`. Use NoMake targets for generation and validation.
+- Import JSON with `with { type: "json" }`.
 - Use Biome for formatting and linting: `pnpm fmt` and `pnpm lint`.
-- Run `pnpm verify` after changes.
+- Validate affected projects during local work; use `pnpm verify` for full-workspace validation.
 
 ## A library's two public entry points
 
@@ -56,7 +57,7 @@ Use `src/bindings.ts` as the library's internal assembly record.
 - Internal callers import selected API bindings from this module rather than selecting implementations throughout the codebase.
 - Keep simple adapters in bindings and business logic in private implementation modules.
 - The root entry exports contract-typed APIs, for example `export const greet: ILibrary["greet"] = bindings.greet`.
-- Internal modules must not import their own public root or package name, and bindings must not import `index.ts`. Avoid cycles between assembly and business modules.
+- Implementation modules must not import their own public root or package name, and bindings must not import `index.ts`. Avoid cycles between assembly and business modules.
 - Pure functions do not need an artificial dependency on bindings.
 - Define the contract first; do not infer the public contract from the implementation.
 
@@ -95,7 +96,7 @@ void (mod satisfies mod.ILibrary);
 - `src/schemas.ts` is an internal generated file, not a public import point. Consumers obtain schemas from `<package>`.
 - Bind `modelsSchema.shape` as `schemas` and export it through the root. Its keys follow `Models`, with type `{ [K in keyof Models]: ZodType<Models[K]> }`.
 - `ILibrary` covers public functions and the schema map, so interface checks validate both.
-- After model changes, run `pnpm schema` and retain generated files. `pnpm schema:check` must reject stale output without rewriting it.
+- Keep generated schemas in Git.
 - Keep generation inputs self-contained. Verify support before adding cross-file references or complex types; do not accept silent degradation to `z.any()`.
 - Schema generation applies to `packages/lib*`, not applications or tooling packages.
 

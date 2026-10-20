@@ -1,6 +1,7 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { extname } from "node:path";
 import { fileURLToPath } from "node:url";
+import manifest from "../package.json" with { type: "json" };
 
 const args = process.argv.slice(2);
 if (args[0] === "--help") {
@@ -18,7 +19,6 @@ if (!validName.test(scope.slice(1))) throw new Error("Scope must be a lowercase 
 
 const root = new URL("../", import.meta.url);
 const manifestPath = new URL("package.json", root);
-const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
 const oldScope = manifest.template?.scope;
 if (typeof oldScope !== "string") throw new Error("Missing template.scope in root package.json.");
 const replacements: [string, string][] = [];
@@ -27,7 +27,7 @@ for (const parent of ["apps", "packages"]) {
   for (const directory of await readdir(base, { withFileTypes: true })) {
     if (!directory.isDirectory()) continue;
     const path = new URL(`${directory.name}/package.json`, base);
-    const child = JSON.parse(await readFile(path, "utf8"));
+    const { default: child } = await import(path.href, { with: { type: "json" } });
     if (typeof child.name !== "string" || !child.name.startsWith(`${oldScope}/`)) {
       throw new Error(`Workspace package must use template scope ${oldScope}: ${path.pathname}`);
     }
@@ -35,7 +35,7 @@ for (const parent of ["apps", "packages"]) {
   }
 }
 
-const ignored = new Set([".git", "node_modules", "dist", "target", ".pnpm-store"]);
+const ignored = new Set([".git", "node_modules", "dist", "target", ".pnpm-store", ".nomake_files"]);
 const extensions = new Set([
   ".json",
   ".jsonc",

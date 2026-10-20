@@ -1,4 +1,4 @@
 {
   "extends": "@template/tsconfig/node.json",
-  "include": ["scripts"]
+  "include": ["make.ts", "scripts"]
 }
