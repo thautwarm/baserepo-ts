@@ -1,0 +1,11 @@
+collection = "nightly-260827"
+
+[custom.all.salutation]
+type = "local"
+path = "salutation"
+ipkg = "salutation.ipkg"
+
+[custom.all.salutation-js]
+type = "local"
+path = "salutation-js"
+ipkg = "salutation-js.ipkg"

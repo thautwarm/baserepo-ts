@@ -1,6 +1,8 @@
 import * as NM from "@nomake/core";
-import { project } from "./scripts/project.ts";
+import { idrisProject } from "./scripts/idris-project.ts";
+import { rustProject } from "./scripts/rust-project.ts";
 import { checkToolchains } from "./scripts/toolchains.ts";
+import { tsProject } from "./scripts/ts-project.ts";
 import { setupWorkspace } from "./scripts/workspace.ts";
 
 // #region Workspace
@@ -11,15 +13,35 @@ await setupWorkspace(new URL("./", import.meta.url));
 
 // #region Toolchains
 
-await checkToolchains(["tsc", "biome"]);
+await checkToolchains(["tsc", "biome", "cargo", "docker"]);
 
 // #endregion
 
 // #region Projects
 
-const greeting = project({ name: "libgreeting", type: "library" });
-const cli = project({ name: "cli", type: "app", dependencies: [greeting] });
-const scripts = project({
+const arithmetic = rustProject({
+  name: "arithmetic",
+  wasm: "packages/libarithmetic/src/generated/wasm-bytes.ts",
+});
+const salutation = idrisProject({ name: "salutation" });
+const salutationJs = idrisProject({
+  name: "salutation-js",
+  dependencies: [salutation],
+  javascript: "packages/libsalutation/src/generated/salutation-js.mjs",
+});
+const greeting = tsProject({ name: "libgreeting", type: "library" });
+const libarithmetic = tsProject({
+  name: "libarithmetic",
+  type: "library",
+  dependencies: [arithmetic],
+});
+const libsalutation = tsProject({
+  name: "libsalutation",
+  type: "library",
+  dependencies: [salutationJs],
+});
+const cli = tsProject({ name: "cli", type: "app", dependencies: [greeting] });
+const scripts = tsProject({
   name: "scripts",
   directory: ".",
   sources: "scripts/**/*",
@@ -31,9 +53,11 @@ const scripts = project({
     "tsconfig.json",
     "biome.jsonc",
     "packages/tsconfig",
+    "idris-workspace/toolchain.json",
   ],
 });
-const projects = [greeting, cli, scripts];
+const tsProjects = [greeting, libarithmetic, libsalutation, cli, scripts];
+const projects = [...tsProjects, arithmetic, salutation, salutationJs];
 
 // #endregion
 
@@ -42,7 +66,7 @@ const projects = [greeting, cli, scripts];
 NM.target({
   name: "schema",
   virtual: true,
-  deps: projects.flatMap((project) => (project.schema ? [project.schema] : [])),
+  deps: tsProjects.flatMap((project) => (project.schema ? [project.schema] : [])),
 });
 
 NM.target({
@@ -54,7 +78,7 @@ NM.target({
 NM.target({
   name: "idd:check",
   virtual: true,
-  deps: projects.filter((project) => project.type === "library").map((project) => project.check),
+  deps: tsProjects.filter((project) => project.type === "library").map((project) => project.check),
 });
 
 NM.target({
@@ -66,7 +90,7 @@ NM.target({
 NM.target({
   name: "lint",
   virtual: true,
-  deps: projects.map((project) => project.lint),
+  deps: tsProjects.map((project) => project.lint),
 });
 NM.target({ name: "verify", virtual: true, deps: ["check", "tests", "lint"] });
 

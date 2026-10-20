@@ -1,5 +1,7 @@
 node_modules/
 .nomake_files/
+rust-workspace/target/
+idris-workspace/**/build/
 .env
 .env.*
 !.env.example

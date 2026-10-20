@@ -10,16 +10,21 @@ including schemas and IDD, live in `AGENTS.md`.
 
 ## integrate-projects
 
-Reuse `project()` from `scripts/project.ts` and its returned targets. Declare
-projects, dependency relationships, and aggregates in `make.ts`:
+Use `tsProject()`, `rustProject()`, and `idrisProject()` from their
+`scripts/*-project.ts` helpers. Declare projects, dependencies, and aggregates in
+`make.ts`; reuse the returned targets:
 
 ```ts
-const library = project({ name: "libexample", type: "library" });
-const app = project({ name: "example", type: "app", dependencies: [library] });
+const library = tsProject({ name: "libexample", type: "library" });
+const app = tsProject({ name: "example", type: "app", dependencies: [library] });
 const projects = [library, app];
 
 NM.target({ name: "tests", virtual: true, deps: projects.map((p) => p.tests) });
 ```
+
+Connect projects through `dependencies`. Each exposes `check`, `tests`, and
+`outputs`; TypeScript consumers build dependency outputs before checking them.
+TypeScript projects also supply schema and lint targets.
 
 Put shared target construction in focused `scripts/` helpers. Keep workspace
 setup, toolchain discovery, and individual build actions out of project declarations.

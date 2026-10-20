@@ -1,7 +1,7 @@
 # Target patterns in NoMake 0.2.0
 
 These are NoMake semantics. Workspace choices such as `.checked` files and
-`project()` are conventions of this template. Examples use `import * as NM from
+`tsProject()` are conventions of this template. Examples use `import * as NM from
 "@nomake/core"` and run from the workspace root.
 
 ## Model the output and its inputs
@@ -19,7 +19,7 @@ const schema = NM.target({
   deps: {
     types: "packages/libgreeting/src/types.ts",
     generator: "scripts/schemas.ts",
-    tooling: ["make.ts", "scripts/project.ts", "package.json", "pnpm-lock.yaml"],
+    tooling: ["make.ts", "scripts/ts-project.ts", "package.json", "pnpm-lock.yaml"],
   },
   async build({ deps, target }) {
     await NM.Shell.runChecked([process.execPath, deps.generator, deps.types, target]);
@@ -68,7 +68,7 @@ const check = NM.target({
       exclude: [schema.name],
     }),
     config: ["packages/libgreeting/tsconfig.json", "packages/tsconfig/base.json"],
-    tooling: ["make.ts", "scripts/project.ts", "package.json", "pnpm-lock.yaml"],
+    tooling: ["make.ts", "scripts/ts-project.ts", "package.json", "pnpm-lock.yaml"],
   }),
   async build({ target }) {
     await NM.Shell.runChecked(["tsc", "--noEmit", "-p", "packages/libgreeting"]);
@@ -83,7 +83,7 @@ Write the stamp after the command succeeds. A failed rebuild revokes the prior
 success record; partial output is not accepted as a cache hit next session.
 Generated inputs are explicit targets, so they are built even on a clean checkout.
 The glob excludes the generated file to avoid dependency lists differing between
-the first and second run. In this template, `project()` already creates these
+the first and second run. In this template, `tsProject()` already creates these
 schema and check targets; reuse it for ordinary packages.
 
 Sources: [build ordering and cache commit](https://github.com/thautwarm/nomake/blob/v0.2.0/source/build.ts#L547-L643),

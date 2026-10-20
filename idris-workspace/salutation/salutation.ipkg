@@ -1,0 +1,4 @@
+package salutation
+version = 0.1.0
+sourcedir = "src"
+modules = Salutation

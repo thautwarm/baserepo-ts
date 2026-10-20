@@ -4,6 +4,8 @@ A starting point for applications built from reusable TypeScript libraries.
 Each library owns its public interface and data models, with validation schemas
 generated from those models.
 
+Includes Rust/Wasm and Idris library examples with TypeScript interfaces.
+
 ## Get started
 
 Requires Node 24.6+ and pnpm.

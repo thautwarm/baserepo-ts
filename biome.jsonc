@@ -1,5 +1,7 @@
 {
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
-  "files": { "includes": ["**", "!apps/*/src/schemas.ts", "!packages/*/src/schemas.ts"] },
+  "files": {
+    "includes": ["**", "!apps/*/src/schemas.ts", "!packages/*/src/schemas.ts", "!**/src/generated"]
+  },
   "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 }
 }

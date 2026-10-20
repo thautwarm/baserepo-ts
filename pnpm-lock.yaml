@@ -37,7 +37,27 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tsconfig
 
+  packages/libarithmetic:
+    dependencies:
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@template/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+
   packages/libgreeting:
+    dependencies:
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@template/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+
+  packages/libsalutation:
     dependencies:
       zod:
         specifier: 4.6.7
