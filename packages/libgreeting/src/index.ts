@@ -1,7 +1,10 @@
-import * as bindings from "./bindings.ts";
-import type { ILibrary } from "./types.ts";
+import type { ILibrary } from "@template/libgreeting/types";
+import { createGreeting } from "./implementation.ts";
+import { publicModelsSchema } from "./schemas.ts";
 
-export type { GreetRequest, GreetResponse, ILibrary, ModelSchemas, Models } from "./types.ts";
+const schemas = publicModelsSchema.shape;
 
-export const greet: ILibrary["greet"] = bindings.greet;
-export const schemas: ILibrary["schemas"] = bindings.schemas;
+export const libgreeting: ILibrary = {
+  greet: async (request) => createGreeting(schemas.greetRequest.parse(request).name),
+  schemas,
+};

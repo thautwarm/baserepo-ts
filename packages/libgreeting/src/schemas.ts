@@ -9,7 +9,7 @@ export const greetResponseSchema = z.object({
     message: z.string()
 });
 
-export const modelsSchema = z.object({
+export const publicModelsSchema = z.object({
     greetRequest: greetRequestSchema,
     greetResponse: greetResponseSchema
 });

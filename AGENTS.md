@@ -20,12 +20,13 @@ Provisioning removes this marked section.
 
 ## Development
 
-- Use Node 24.6+ and pnpm. Run TypeScript directly; no JavaScript build step or `dist/`.
-- Libraries and Node apps extend `@template/tsconfig/base.json` via a `workspace:*` dev dependency; web apps use their framework's own tsconfig.
+- Use Node 24.6+ and pnpm. Run TypeScript directly; no JavaScript build step or `dist/`. Web apps are an exception.
+- Node libraries and apps extend `@template/tsconfig/base.json` via a `workspace:*` dev dependency; web apps and libraries use tsconfig suited to their browser or framework environment.
 - `erasableSyntaxOnly: true` is required.
 - Import JSON with `with { type: "json" }`.
 - Declare projects, dependencies, and aggregate targets in `make.ts`. Use NoMake for generation and validation.
 - Keep each file at one abstraction level; extract lower-level details into helpers. Tooling helpers belong in `scripts/`, including workspace discovery, toolchain setup, and target construction.
+- Entry points assemble dependencies and simple adapters; keep business logic in private modules. Implementation modules must not import their entry points.
 - Use Biome for formatting and linting: `pnpm fmt` and `pnpm lint`.
 
 Run project targets from the workspace root, for example `pnpm exec node make.ts check:cli`
@@ -33,34 +34,26 @@ Run project targets from the workspace root, for example `pnpm exec node make.ts
 Tests include dependency tests; lint covers only the selected project. Run `pnpm verify`
 for full-workspace validation before finishing.
 
-Libraries use the structure below. Node and web apps may use `types.ts`, `bindings.ts`,
-and generated `schemas.ts` as needed. Public exports and interface checks are required
-only for libraries.
+Libraries use the structure below. Node and web apps may use `types.ts` and generated
+`schemas.ts` as needed. Public exports and IDD checks are required only for libraries.
 
 ### Types: `<package>/src/types.ts`
 
 - Type declarations, `import type`, and `export type` only; no runtime code.
-- Define models and module contracts before implementing them; do not infer contracts from implementations.
+- Use Interface-Driven Design (IDD): define models and module contracts before implementations; do not infer contracts from implementations.
 - Provide all public types callers need. Keep implementation-only helper types private.
-
-### Assembly: `<package>/src/bindings.ts`
-
-- Record selected APIs with explicit types: `export const someRequiredAPI: SomeRequiredAPI = ...`.
-- Internal callers import selected APIs from bindings. Pure functions need no artificial dependency on bindings.
-- Keep simple adapters in bindings and business logic in private implementation modules.
-- Bindings must not import app entry points or the public package entry. Keep assembly and business modules free of cycles.
 
 ### Generated Schemas: `<package>/src/schemas.ts`
 
-List schema models in an exported `Models` interface in `types.ts`:
+`PublicModels` in `types.ts` contains only models whose schemas need to be public:
 
 ```ts
-export interface Models {
+export interface PublicModels {
   type1: Type1;
 }
 ```
 
-- Generate schemas with `ts-to-zod` from `Models` and its referenced data types. Do not maintain separate data definitions or generate from behavior contracts such as `ILibrary`.
+- Generate schemas with `ts-to-zod` from `PublicModels` and its referenced data types. Do not maintain separate data definitions or generate from behavior contracts such as `ILibrary`.
 - `src/schemas.ts` is generated and internal; keep it in Git. `pnpm schema` runs the registered schema targets.
 - Any app or package with `src/types.ts` automatically gets a NoMake target for `src/schemas.ts`.
 - Keep generation inputs self-contained. Check support before adding cross-file references or complex types; do not accept silent fallback to `z.any()`.
@@ -79,32 +72,47 @@ It has exactly two public entry points:
 }
 ```
 
-- `types.ts` defines `ILibrary`, the runtime API contract, and `Models`, the registry of schema models.
+`index.ts` exports one object named after the unscoped package, explicitly typed with
+`ILibrary` from `<package>/types`:
+
+```ts
+import type { ILibrary } from "@template/libgreeting/types";
+import { createGreeting } from "./implementation.ts";
+import { publicModelsSchema } from "./schemas.ts";
+
+const schemas = publicModelsSchema.shape;
+
+export const libgreeting: ILibrary = {
+  greet: async (request) => createGreeting(schemas.greetRequest.parse(request).name),
+  schemas,
+};
+```
+
+- `types.ts` supplies all public types, including the runtime contract `ILibrary` and schema registry `PublicModels`. `index.ts` exports no types.
 - When consuming a library workspace dependency, agents normally only need its `src/types.ts`; reading the entire package's source is unnecessary.
-- Public types must be reachable from `ILibrary` or `Models`.
-- `index.ts` is the public assembly entry. Export contract-typed APIs from bindings: `export const greet: ILibrary["greet"] = bindings.greet`.
-- Directly re-export original public types from `types.ts`, including `ILibrary` and `Models`. `mod.LibraryType` must refer to the original type.
-- Bind `modelsSchema.shape` as `schemas` with type `{ [K in keyof Models]: ZodType<Models[K]> }` and export it through `<package>`. Include public functions and the schema map in `ILibrary` so interface checks cover both.
+- Public types must be reachable from `ILibrary` or `PublicModels`.
+- Use an explicit `: ILibrary` annotation to fix the consumer-visible type. `satisfies` alone preserves implementation inference.
+- Declare `ILibrary.schemas` as `{ [K in keyof PublicModels]: ZodType<PublicModels[K]> }`.
 - Implementation modules must not import their own public root or package name.
 - Import cross-package types through `<package>/types` and values through `<package>`. No cross-package deep imports or public `<package>/schemas` entry.
 
-### Interface checks: `<library-package>/src/interface-check.ts`
+### IDD checks: `<library-package>/src/idd-check.ts`
 
-Each library has `src/interface-check.ts`, using its actual package name:
+Each library has `src/idd-check.ts`, using its actual package and object names. This
+independent check normally stays unchanged when API members or assembly change:
 
 ```ts
 import * as mod from "@template/libgreeting";
 import type { ILibrary } from "@template/libgreeting/types";
 
-void (mod satisfies ILibrary);
-void (mod satisfies mod.ILibrary);
+void (mod satisfies { libgreeting: ILibrary });
 ```
 
 - Include this file in the library's type check; do not import it at runtime.
-- Keep the check independent of implementations. Do not replace it with a self-module `typeof import` constraint.
-- `satisfies` checks required value exports and signatures. It does not check type exports or forbid additional exports. Re-export public types directly.
+- Check the public entry against its contract in `<package>/types`.
+- `satisfies` checks required exports and compatible signatures. It does not enforce the `: ILibrary` annotation or forbid additional exports.
 - Do not bypass contract errors with assertions, `any`, or ignored diagnostics. Use `@ts-expect-error` only for negative type tests.
-- Update contracts, bindings, root exports, and checks together when changing a public API.
+- Update the contract and assembly together when changing an API; keep the independent IDD check.
 
 ## Scope
 

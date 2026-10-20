@@ -12,7 +12,7 @@
   "scripts": {
     "start": "node apps/cli/src/main.ts",
     "check": "node make.ts check",
-    "interface:check": "node make.ts interface:check",
+    "idd:check": "node make.ts idd:check",
     "lint": "node make.ts lint",
     "lint:fix": "biome check --write .",
     "fmt": "biome format --write .",

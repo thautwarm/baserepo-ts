@@ -9,7 +9,7 @@ if (!source || !target || extra.length > 0) {
 
 const result = generate({
   sourceText: await readFile(source, "utf8"),
-  nameFilter: (name) => name === "Models",
+  nameFilter: (name) => name === "PublicModels",
 });
 if (result.errors.length > 0) throw new Error(result.errors.join("\n"));
 
@@ -17,7 +17,7 @@ const sourceImport = relative(dirname(target), source).split(sep).join("/");
 const output = result.getZodSchemasFile(
   sourceImport.startsWith("../") ? sourceImport : `./${sourceImport}`,
 );
-if (!output.includes("export const modelsSchema =")) {
-  throw new Error(`${source}: missing Models interface`);
+if (!output.includes("export const publicModelsSchema =")) {
+  throw new Error(`${source}: missing PublicModels interface`);
 }
 await writeFile(target, output);

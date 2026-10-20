@@ -3,15 +3,19 @@ import { project } from "./scripts/project.ts";
 import { checkToolchains } from "./scripts/toolchains.ts";
 import { setupWorkspace } from "./scripts/workspace.ts";
 
-// ====== Workspace ======
+// #region Workspace
 
 await setupWorkspace(new URL("./", import.meta.url));
 
-// ====== Toolchains ======
+// #endregion
+
+// #region Toolchains
 
 await checkToolchains(["tsc", "biome"]);
 
-// ====== Projects ======
+// #endregion
+
+// #region Projects
 
 const greeting = project({ name: "libgreeting", type: "library" });
 const cli = project({ name: "cli", type: "app", dependencies: [greeting] });
@@ -31,7 +35,9 @@ const scripts = project({
 });
 const projects = [greeting, cli, scripts];
 
-// ====== Aggregate targets ======
+// #endregion
+
+// #region Aggregate targets
 
 NM.target({
   name: "schema",
@@ -46,7 +52,7 @@ NM.target({
 });
 
 NM.target({
-  name: "interface:check",
+  name: "idd:check",
   virtual: true,
   deps: projects.filter((project) => project.type === "library").map((project) => project.check),
 });
@@ -64,6 +70,10 @@ NM.target({
 });
 NM.target({ name: "verify", virtual: true, deps: ["check", "tests", "lint"] });
 
-// ====== Run ======
+// #endregion
+
+// #region Run
 
 await NM.makefile();
+
+// #endregion

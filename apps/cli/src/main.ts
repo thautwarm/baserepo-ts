@@ -1,5 +1,5 @@
-import * as greeting from "@template/libgreeting";
+import { libgreeting } from "@template/libgreeting";
 
-const request = greeting.schemas.greetRequest.parse({ name: process.argv[2] ?? "world" });
-const response = greeting.schemas.greetResponse.parse(await greeting.greet(request));
+const request = libgreeting.schemas.greetRequest.parse({ name: process.argv[2] ?? "world" });
+const response = libgreeting.schemas.greetResponse.parse(await libgreeting.greet(request));
 console.log(response.message);
