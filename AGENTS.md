@@ -1,37 +1,42 @@
 # Project conventions
 
 <!-- template-only:start -->
-## Template and provisioning
+## Template setup
 
-This repository is a project template. The default names are placeholders.
+`pnpm provision <project-name> [--scope <scope>]` sets the project name and package scope.
+The scope defaults to `@<project-name>`. Run `pnpm install --frozen-lockfile` afterward.
 
-- Provision with `pnpm provision <project-name> [--scope <scope>]`.
-- The default scope is `@<project-name>`. Root `package.json` records the current scope in `template.scope`.
-- Provisioning updates the root name, local package names and references, configuration references, lockfile, and README title. Run `pnpm install --frozen-lockfile` afterward to refresh workspace links.
-- Do not hardcode the template's project name or scope in new tooling. Discover local packages from their manifests and use `template.scope`.
-- Provisioning must preserve `.git`, installed dependencies, and unrelated external package references. Repeating it with the same arguments must be idempotent.
-- Provisioning removes this marked template-only section from `AGENTS.md` and preserves the project's development conventions below.
+Provisioning uses only Node built-ins and must remain idempotent. Preserve `.git`,
+installed dependencies, and unrelated external references. Read package names from
+manifests and the current scope from `template.scope`; do not hardcode template names.
+Provisioning removes this marked section.
 <!-- template-only:end -->
 
 ## Workspace
 
-- `packages/lib*` (`@template/lib*`): reusable libraries consumed by workspace packages and apps.
 - `apps/*`: applications.
+- `packages/lib*` (`@template/lib*`): reusable libraries consumed by workspace packages and apps.
 - `packages/tsconfig`: project-wide TypeScript presets.
 
-## Runtime and checks
+## Development
 
 - Use Node 24.6+ and pnpm. Run TypeScript directly; no JavaScript build step or `dist/`.
+- Extend `@template/tsconfig/base.json`, or `node.json` for Node, with a `workspace:*` dev dependency. Environment-specific overrides are allowed.
 - `erasableSyntaxOnly: true` is required.
-- Environment-specific tsconfig overrides are allowed.
-- Declare projects and dependencies in `make.ts`. Use NoMake targets for generation and validation.
 - Import JSON with `with { type: "json" }`.
+- Declare projects, dependencies, and aggregate targets in `make.ts`. Use NoMake for generation and validation.
+- Keep each file at one abstraction level; extract lower-level details into helpers. Tooling helpers belong in `scripts/`, including workspace discovery, toolchain setup, and target construction.
 - Use Biome for formatting and linting: `pnpm fmt` and `pnpm lint`.
-- Validate affected projects during local work; use `pnpm verify` for full-workspace validation.
 
-## A library's two public entry points
+Run project targets from the workspace root, for example `pnpm exec node make.ts check:cli`
+(also `test:cli` and `lint:cli`). Use one NoMake session to coordinate the projects.
+Tests include dependency tests; lint covers only the selected project. Run `pnpm verify`
+for full-workspace validation before finishing.
 
-Each library has exactly two public import points:
+## Library exports
+
+Each library owns its contract; do not create a central contracts package.
+It has exactly two public entry points:
 
 ```json
 {
@@ -42,28 +47,26 @@ Each library has exactly two public import points:
 }
 ```
 
-- `<package>/types` is type-only: type declarations, `import type`, and `export type`. No runtime functions, constants, classes, or side effects.
-- `types.ts` defines `ILibrary`, the required runtime exports of `<package>`, and `Models`, the registry of data models requiring schemas.
-- Public types should be reachable, directly or indirectly, from fields or signatures in `ILibrary` or from `Models`. Keep implementation-only helper types in private modules and do not re-export them from the root.
+- `<package>/types` is type-only: declarations, `import type`, and `export type`; no runtime code.
+- `<package>/src/types.ts` defines `ILibrary`, the runtime API contract, and `Models`, the registry of schema models. It must provide all public types callers need.
+- When consuming a library workspace dependency, agents normally only need its `src/types.ts`; reading the entire package's source is unnecessary.
+- Public types must be reachable from `ILibrary` or `Models`. Keep implementation-only helper types private.
 - `<package>` is the public assembly entry. `index.ts` selects APIs from `bindings.ts` and exports them with explicit contract types.
-- Root type exports must directly re-export the original public types from `types.ts`, including `ILibrary` and `Models`. `mod.LibraryType` is the original type, not a runtime placeholder.
-- Import cross-package types through `<package>/types` and runtime values through `<package>`. No cross-package deep imports or public `<package>/schemas` entry.
+- Directly re-export original public types from `types.ts`, including `ILibrary` and `Models`. `mod.LibraryType` must refer to the original type.
+- Import cross-package types through `<package>/types` and values through `<package>`. No cross-package deep imports or public `<package>/schemas` entry.
 
-## Fixed assembly record: bindings.ts
+## Assembly: bindings.ts
 
-Use `src/bindings.ts` as the library's internal assembly record.
-
-- Record selected APIs with explicit types: `export const someRequiredAPI: SomeRequiredAPI = ...`.
-- Internal callers import selected API bindings from this module rather than selecting implementations throughout the codebase.
+- Define contracts first; do not infer them from implementations.
+- Record selected APIs in `src/bindings.ts` with explicit types: `export const someRequiredAPI: SomeRequiredAPI = ...`.
+- Internal callers import selected APIs from bindings. Pure functions need no artificial dependency on bindings.
 - Keep simple adapters in bindings and business logic in private implementation modules.
-- The root entry exports contract-typed APIs, for example `export const greet: ILibrary["greet"] = bindings.greet`.
-- Implementation modules must not import their own public root or package name, and bindings must not import `index.ts`. Avoid cycles between assembly and business modules.
-- Pure functions do not need an artificial dependency on bindings.
-- Define the contract first; do not infer the public contract from the implementation.
+- Export contract-typed APIs from `index.ts`: `export const greet: ILibrary["greet"] = bindings.greet`.
+- Implementation modules must not import their own public root or package name; bindings must not import `index.ts`. Keep assembly and business modules free of cycles.
 
-## Independent interface-check.ts
+## Interface checks
 
-Every library must have `src/interface-check.ts`, checking its public package entry:
+Each library has `src/interface-check.ts`, using its actual package name:
 
 ```ts
 import * as mod from "@template/libgreeting";
@@ -73,33 +76,29 @@ void (mod satisfies ILibrary);
 void (mod satisfies mod.ILibrary);
 ```
 
-- Use the actual package name. The second expression also requires the root entry to re-export `ILibrary`.
-- Wrap the entire `satisfies` expression with `void`. Do not write `(void) mod` or `void mod satisfies ILibrary`.
-- Include this file in the library's type check. Do not import it from runtime entry points.
-- Do not replace this check with a self-module `typeof import` constraint inside implementation files.
-- Do not bypass contract errors using assertions, `any`, or ignored diagnostics. `@ts-expect-error` is only for explicit negative type tests.
-- `satisfies` checks required value exports and compatible signatures. It does not check type exports or forbid additional exports. Re-export public types directly.
-- Update the contract, bindings, root exports, and checks together when changing a public API.
+- Include this file in the library's type check; do not import it at runtime.
+- Keep the check independent of implementations. Do not replace it with a self-module `typeof import` constraint.
+- `satisfies` checks required value exports and signatures. It does not check type exports or forbid additional exports. Re-export public types directly.
+- Do not bypass contract errors with assertions, `any`, or ignored diagnostics. Use `@ts-expect-error` only for negative type tests.
+- Update contracts, bindings, root exports, and checks together when changing a public API.
 
 ## Schemas
 
-- Define data types first; generate validation code with `ts-to-zod` rather than maintaining a second data definition.
-- Each library's `types.ts` exports a `Models` interface listing its schema models:
+Each library's `types.ts` exports its schema model registry:
 
-  ```ts
-  export interface Models {
-    type1: Type1;
-  }
-  ```
+```ts
+export interface Models {
+  type1: Type1;
+}
+```
 
-- Generate from `Models` and its referenced data types. Do not generate from all exported types or behavior contracts such as `ILibrary`.
-- `src/schemas.ts` is an internal generated file, not a public import point. Consumers obtain schemas from `<package>`.
-- Bind `modelsSchema.shape` as `schemas` and export it through the root. Its keys follow `Models`, with type `{ [K in keyof Models]: ZodType<Models[K]> }`.
-- `ILibrary` covers public functions and the schema map, so interface checks validate both.
-- Keep generated schemas in Git.
-- Keep generation inputs self-contained. Verify support before adding cross-file references or complex types; do not accept silent degradation to `z.any()`.
-- Schema generation applies to `packages/lib*`, not applications or tooling packages.
+- Generate schemas with `ts-to-zod` from `Models` and its referenced data types. Do not maintain separate data definitions or generate from behavior contracts such as `ILibrary`.
+- `src/schemas.ts` is generated and internal; keep it in Git. `pnpm schema` regenerates library schemas, not app or tooling schemas.
+- Bind `modelsSchema.shape` as `schemas` and export it through `<package>`. Its keys follow `Models`, with type `{ [K in keyof Models]: ZodType<Models[K]> }`.
+- Include public functions and the schema map in `ILibrary` so interface checks cover both.
+- Keep generation inputs self-contained. Check support before adding cross-file references or complex types; do not accept silent fallback to `z.any()`.
 
 ## Scope
 
-Reuse existing scripts and shared configuration. Do not add an assembly framework or code-generation system to enforce conventions that ordinary TypeScript checks can express.
+Reuse existing scripts and shared configuration. Use ordinary TypeScript checks to
+enforce these conventions rather than adding an assembly framework or code generator.
