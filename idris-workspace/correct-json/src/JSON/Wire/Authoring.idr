@@ -244,6 +244,7 @@ mutual
   resolveExpression : Elaboration m => Nat -> Name -> TypeExpr -> List WireMetadata -> Maybe Name -> List Nat -> TypeExpr -> TypeExpr
                     -> m (TypeExpr, List ReferenceOrigin, List WireMetadata)
   resolveExpression _ _ _ _ Nothing _ NaturalType NaturalType = pure (NaturalType, [], [])
+  resolveExpression _ _ _ _ Nothing _ (Integer64Type _) (Integer64Type kind) = pure (Integer64Type kind, [], [])
   resolveExpression _ _ _ _ Nothing _ StringType StringType = pure (StringType, [], [])
   resolveExpression _ _ _ _ _ _ (Parameter _) _ = fail "Wire authoring: unbound parameter"
   resolveExpression 0 _ _ _ _ _ _ _ = fail "Wire authoring: inconsistent reflected expression depth"
@@ -251,6 +252,9 @@ mutual
     case application of
       NaturalType => case selected of
         Nothing => pure (NaturalType, [], [])
+        _ => fail "Wire authoring: FieldWire requires a referenced value"
+      Integer64Type kind => case selected of
+        Nothing => pure (Integer64Type kind, [], [])
         _ => fail "Wire authoring: FieldWire requires a referenced value"
       StringType => case selected of
         Nothing => pure (StringType, [], [])

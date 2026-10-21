@@ -1,0 +1,7 @@
+package salutation-types
+version = 0.1.0
+depends = salutation
+sourcedir = "src"
+modules = Main
+main = Main
+executable = "salutation-types.mjs"

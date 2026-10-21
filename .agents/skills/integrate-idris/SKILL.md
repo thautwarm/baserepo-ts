@@ -34,9 +34,10 @@ collection metadata and source cache available from the image.
 - Follow [Salutation.idr](../../../idris-workspace/salutation/src/Salutation.idr)
   and its [JS entry point](../../../idris-workspace/salutation-js/src/Main.idr).
   Read [javascript-bridge](references/javascript-bridge.md) when adapting the FFI and loader.
-- Exchange records, collections, and other structured values as JSON strings.
-  Use the local [correct-json](../../../idris-workspace/correct-json/README.md)
-  package for Idris codecs and generated Zod schemas on the TypeScript side.
+- Exchange structured values as JSON strings. Define models once in Idris;
+  use the local [correct-json](../../../idris-workspace/correct-json/README.md)
+  package to derive wire codecs, TypeScript types, and validators from a checked
+  graph. Keep `ILibrary` handwritten; re-export model types from `src/types.ts`.
 
 ## build-integration
 
@@ -44,6 +45,10 @@ Use the [nomake](../nomake/SKILL.md) skill when changing generation. Declare eac
 Idris package with `idrisProject()` and connect local packages through
 `dependencies`. Supply `javascript` for an entry point's generated output; its
 executable name must be `<package>.mjs`.
+For a model generator, use `typescript: { RootName: outputPath }` instead of
+`javascript`. NoMake runs the compiled generator with each root name and caches
+each output file. Set the consumer's `tsProject().schemaSource` to the generated
+module exposing `PublicModels`; schema generation then follows the producer.
 Set `test: true` for a generated JS test executable; it must exit unsuccessfully
 when a check fails. The test target caches successful runs.
 

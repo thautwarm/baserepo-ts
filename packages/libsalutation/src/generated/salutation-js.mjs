@@ -216,11 +216,17 @@ const _strReverse = x => x.split('').reverse().join('')
 
 const _substr = (o,l,x) => x.slice(o, o + l)
 
-const Main_register = ( exchange => { globalThis[Symbol.for('monorepo.salutation')] = { exchange }; });
+const Main_register = ( (exchange, integers) => { globalThis[Symbol.for('monorepo.salutation')] = { exchange, integers }; });
 const Main_raise = ( message => { throw new Error(message); });
 const Prelude_Types_fastUnpack = ((str)=>__prim_js2idris_array(Array.from(str)));
 const Prelude_Types_fastPack = ((xs)=>__prim_idris2js_array(xs).join(''));
 const Prelude_Types_fastConcat = ((xs)=>__prim_idris2js_array(xs).join(''));
+const JSON_Wire_Binary64_numberValue = ( token => Number(token));
+const JSON_Wire_Binary64_numberText = ( value => Object.is(value,-0) ? '-0' : String(value));
+const JSON_Wire_Binary64_hexBits = ( text => BigInt('0x'+text));
+const JSON_Wire_Binary64_doubleBits = ( value => { const view = new DataView(new ArrayBuffer(8)); view.setFloat64(0,value,false); return view.getBigUint64(0,false); });
+const JSON_Wire_Binary64_bitsHex = ( bits => bits.toString(16).padStart(16,'0'));
+const JSON_Wire_Binary64_bitsDouble = ( bits => { const view = new DataView(new ArrayBuffer(8)); view.setBigUint64(0,bits,false); return view.getFloat64(0,false); });
 const JSON_Parser_jdouble = ((s) => Number(s));
 const JSON_Parser_codeUnit = ( n => String.fromCharCode(n));
 const Data_Buffer_Core_prim__newBuf = ((s,w)=>new Uint8Array(Number(s)));
@@ -736,27 +742,45 @@ function Text_ILex_Parser_n__11339_11339_fill($0, $1, $2, $3, $4, $5) {
 
 /* {$tcOpt:6} */
 function x24tcOpt_6($0) {
+ switch($0.a2.a2.h) {
+  case 0: /* nil */ {
+   switch($0.a3.h) {
+    case 0: /* nil */ return {h: 0 /* {TcDone:6} */, a1: {h: 1 /* UN */, a1: {h: 0 /* Basic */, a1: $0.a2.a1}}};
+    default: return {h: 0 /* {TcDone:6} */, a1: {h: 0 /* NS */, a1: $0.a3, a2: {h: 1 /* UN */, a1: {h: 0 /* Basic */, a1: $0.a2.a1}}}};
+   }
+  }
+  case undefined: /* cons */ return {h: 1 /* {TcContinue6:1} */, a1: $0.a1, a2: {a1: $0.a2.a2.a1, a2: $0.a2.a2.a2}, a3: {a1: $0.a2.a1, a2: $0.a3}};
+ }
+}
+
+/* Language.Reflection.Syntax.4997:10648:run */
+function Language_Reflection_Syntax_n__4997_10648_run($0, $1, $2) {
+ return __tailRec(x24tcOpt_6, {h: 1 /* {TcContinue6:1} */, a1: $0, a2: $1, a3: $2});
+}
+
+/* {$tcOpt:7} */
+function x24tcOpt_7($0) {
  switch($0.h) {
-  case 1: /* {TcContinue6:1} */ {
+  case 1: /* {TcContinue7:1} */ {
    switch($0.a2.h) {
     case 0: /* nil */ {
      switch($0.a3.h) {
-      case 0: /* nil */ return {h: 0 /* {TcDone:6} */, a1: 1};
-      case undefined: /* cons */ return {h: 0 /* {TcDone:6} */, a1: 0};
+      case 0: /* nil */ return {h: 0 /* {TcDone:7} */, a1: 1};
+      case undefined: /* cons */ return {h: 0 /* {TcDone:7} */, a1: 0};
      }
     }
     case undefined: /* cons */ {
      switch($0.a3.h) {
-      case 0: /* nil */ return {h: 0 /* {TcDone:6} */, a1: 2};
-      case undefined: /* cons */ return {h: 2 /* {TcContinue6:2} */, a1: $0.a1, a2: $0.a2.a1, a3: $0.a2.a2, a4: $0.a3.a1, a5: $0.a3.a2, a6: $0.a1.a2($0.a2.a1)($0.a3.a1)};
+      case 0: /* nil */ return {h: 0 /* {TcDone:7} */, a1: 2};
+      case undefined: /* cons */ return {h: 2 /* {TcContinue7:2} */, a1: $0.a1, a2: $0.a2.a1, a3: $0.a2.a2, a4: $0.a3.a1, a5: $0.a3.a2, a6: $0.a1.a2($0.a2.a1)($0.a3.a1)};
      }
     }
    }
   }
-  case 2: /* {TcContinue6:2} */ {
+  case 2: /* {TcContinue7:2} */ {
    switch($0.a6) {
-    case 1: return {h: 1 /* {TcContinue6:1} */, a1: $0.a1, a2: $0.a3, a3: $0.a5};
-    default: return {h: 0 /* {TcDone:6} */, a1: $0.a6};
+    case 1: return {h: 1 /* {TcContinue7:1} */, a1: $0.a1, a2: $0.a3, a3: $0.a5};
+    default: return {h: 0 /* {TcDone:7} */, a1: $0.a6};
    }
   }
  }
@@ -764,73 +788,73 @@ function x24tcOpt_6($0) {
 
 /* Prelude.Types.compare */
 function Prelude_Types_compare_Ord_x28Listx20x24ax29($0, $1, $2) {
- return __tailRec(x24tcOpt_6, {h: 1 /* {TcContinue6:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_7, {h: 1 /* {TcContinue7:1} */, a1: $0, a2: $1, a3: $2});
 }
 
 /* Prelude.Types.case block in compare */
 function Prelude_Types_case__compare_6801($0, $1, $2, $3, $4, $5) {
- return __tailRec(x24tcOpt_6, {h: 2 /* {TcContinue6:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
+ return __tailRec(x24tcOpt_7, {h: 2 /* {TcContinue7:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
 }
 
-/* {$tcOpt:7} */
-function x24tcOpt_7($0) {
+/* {$tcOpt:8} */
+function x24tcOpt_8($0) {
  switch($0.a2.h) {
   case 0: /* nil */ {
    switch($0.a3.h) {
-    case 0: /* nil */ return {h: 0 /* {TcDone:7} */, a1: 1};
-    default: return {h: 0 /* {TcDone:7} */, a1: 0};
+    case 0: /* nil */ return {h: 0 /* {TcDone:8} */, a1: 1};
+    default: return {h: 0 /* {TcDone:8} */, a1: 0};
    }
   }
   case undefined: /* cons */ {
    switch($0.a3.h) {
     case undefined: /* cons */ {
      switch($0.a1.a1($0.a2.a1)($0.a3.a1)) {
-      case 1: return {h: 1 /* {TcContinue7:1} */, a1: $0.a1, a2: $0.a2.a2, a3: $0.a3.a2};
-      case 0: return {h: 0 /* {TcDone:7} */, a1: 0};
+      case 1: return {h: 1 /* {TcContinue8:1} */, a1: $0.a1, a2: $0.a2.a2, a3: $0.a3.a2};
+      case 0: return {h: 0 /* {TcDone:8} */, a1: 0};
      }
     }
-    default: return {h: 0 /* {TcDone:7} */, a1: 0};
+    default: return {h: 0 /* {TcDone:8} */, a1: 0};
    }
   }
-  default: return {h: 0 /* {TcDone:7} */, a1: 0};
+  default: return {h: 0 /* {TcDone:8} */, a1: 0};
  }
 }
 
 /* Prelude.Types.== */
 function Prelude_Types_x3dx3d_Eq_x28Listx20x24ax29($0, $1, $2) {
- return __tailRec(x24tcOpt_7, {h: 1 /* {TcContinue7:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_8, {h: 1 /* {TcContinue8:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:8} */
-function x24tcOpt_8($0) {
+/* {$tcOpt:9} */
+function x24tcOpt_9($0) {
  switch($0.h) {
-  case 1: /* {TcContinue8:1} */ {
+  case 1: /* {TcContinue9:1} */ {
    switch($0.a6.h) {
-    case 0: /* nil */ return {h: 0 /* {TcDone:8} */, a1: undefined};
-    case undefined: /* cons */ return {h: 2 /* {TcContinue8:2} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a6.a1, a7: $0.a6.a2, a8: $0.a7, a9: Data_Array_Index_tryNatToFin($0.a1, $0.a6.a1)};
+    case 0: /* nil */ return {h: 0 /* {TcDone:9} */, a1: undefined};
+    case undefined: /* cons */ return {h: 2 /* {TcContinue9:2} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a6.a1, a7: $0.a6.a2, a8: $0.a7, a9: Data_Array_Index_tryNatToFin($0.a1, $0.a6.a1)};
    }
   }
-  case 2: /* {TcContinue8:2} */ {
+  case 2: /* {TcContinue9:2} */ {
    switch($0.a9.h) {
-    case 0: /* nothing */ return {h: 1 /* {TcContinue8:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a7, a7: $0.a8};
+    case 0: /* nothing */ return {h: 1 /* {TcContinue9:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a7, a7: $0.a8};
     case undefined: /* just */ {
      const $18 = Data_Array_Core_prim__arrayGet($0.a3, $0.a9.a1);
      switch($18) {
-      case 1: return {h: 1 /* {TcContinue8:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a7, a7: undefined};
+      case 1: return {h: 1 /* {TcContinue9:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a7, a7: undefined};
       case 0: {
        const $24 = Data_Array_Core_prim__arraySet($0.a3, $0.a9.a1, 1, undefined);
-       return {h: 3 /* {TcContinue8:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a6, a7: $0.a7, a8: $0.a9.a1, a9: $24, a10: Data_Array_Core_prim__arrayGet($0.a4, $0.a9.a1)};
+       return {h: 3 /* {TcContinue9:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a6, a7: $0.a7, a8: $0.a9.a1, a9: $24, a10: Data_Array_Core_prim__arrayGet($0.a4, $0.a9.a1)};
       }
      }
     }
    }
   }
-  case 3: /* {TcContinue8:3} */ {
+  case 3: /* {TcContinue9:3} */ {
    switch($0.a10.h) {
-    case 0: /* nothing */ return {h: 1 /* {TcContinue8:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a7, a7: undefined};
+    case 0: /* nothing */ return {h: 1 /* {TcContinue9:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a7, a7: undefined};
     case undefined: /* just */ {
      const $3f = Data_Array_Core_prim__arraySet($0.a5, $0.a8, {a1: $0.a10.a1}, undefined);
-     return {h: 1 /* {TcContinue8:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: Prelude_Types_List_tailRecAppend($0.a2($0.a10.a1), $0.a7), a7: undefined};
+     return {h: 1 /* {TcContinue9:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: Prelude_Types_List_tailRecAppend($0.a2($0.a10.a1), $0.a7), a7: undefined};
     }
    }
   }
@@ -839,21 +863,21 @@ function x24tcOpt_8($0) {
 
 /* Text.ILex.Internal.Types.visit : (a -> List Nat) -> MArray s sz Bool -> MArray s sz (Maybe a) -> MArray s sz (Maybe a) -> List Nat -> F1' s */
 function Text_ILex_Internal_Types_visit($0, $1, $2, $3, $4, $5, $6) {
- return __tailRec(x24tcOpt_8, {h: 1 /* {TcContinue8:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6});
+ return __tailRec(x24tcOpt_9, {h: 1 /* {TcContinue9:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6});
 }
 
 /* Text.ILex.Internal.Types.case block in visit */
 function Text_ILex_Internal_Types_case__visit_9902($0, $1, $2, $3, $4, $5, $6, $7, $8) {
- return __tailRec(x24tcOpt_8, {h: 2 /* {TcContinue8:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8});
+ return __tailRec(x24tcOpt_9, {h: 2 /* {TcContinue9:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8});
 }
 
 /* Text.ILex.Internal.Types.case block in case block in case block in case block in visit */
 function Text_ILex_Internal_Types_case__casex20blockx20inx20casex20blockx20inx20casex20blockx20inx20visit_10061($0, $1, $2, $3, $4, $5, $6, $7, $8, $9) {
- return __tailRec(x24tcOpt_8, {h: 3 /* {TcContinue8:3} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9});
+ return __tailRec(x24tcOpt_9, {h: 3 /* {TcContinue9:3} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9});
 }
 
-/* {$tcOpt:9} */
-function x24tcOpt_9($0) {
+/* {$tcOpt:10} */
+function x24tcOpt_10($0) {
  switch($0.a2.h) {
   case undefined: /* cons */ {
    switch($0.a3.h) {
@@ -861,98 +885,480 @@ function x24tcOpt_9($0) {
      const $4 = {a1: $0.a2.a1, a2: $0.a2.a2};
      const $7 = {a1: $0.a3.a1, a2: $0.a3.a2};
      switch(Prelude_EqOrd_compare_Ord_Integer($0.a2.a1, $0.a3.a1)) {
-      case 0: return {h: 1 /* {TcContinue9:1} */, a1: {a1: $0.a1, a2: $0.a2.a1}, a2: $0.a2.a2, a3: $7};
-      case 2: return {h: 1 /* {TcContinue9:1} */, a1: {a1: $0.a1, a2: $0.a3.a1}, a2: $4, a3: $0.a3.a2};
-      case 1: return {h: 1 /* {TcContinue9:1} */, a1: {a1: $0.a1, a2: $0.a2.a1}, a2: $0.a2.a2, a3: $0.a3.a2};
+      case 0: return {h: 1 /* {TcContinue10:1} */, a1: {a1: $0.a1, a2: $0.a2.a1}, a2: $0.a2.a2, a3: $7};
+      case 2: return {h: 1 /* {TcContinue10:1} */, a1: {a1: $0.a1, a2: $0.a3.a1}, a2: $4, a3: $0.a3.a2};
+      case 1: return {h: 1 /* {TcContinue10:1} */, a1: {a1: $0.a1, a2: $0.a2.a1}, a2: $0.a2.a2, a3: $0.a3.a2};
      }
     }
-    default: return {h: 0 /* {TcDone:9} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, $0.a2)};
+    default: return {h: 0 /* {TcDone:10} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, $0.a2)};
    }
   }
-  case 0: /* nil */ return {h: 0 /* {TcDone:9} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, $0.a3)};
-  default: return {h: 0 /* {TcDone:9} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, $0.a2)};
+  case 0: /* nil */ return {h: 0 /* {TcDone:10} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, $0.a3)};
+  default: return {h: 0 /* {TcDone:10} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, $0.a2)};
  }
 }
 
 /* Text.ILex.Internal.Types.union_ : SnocList Nat -> NSet -> NSet -> NSet */
 function Text_ILex_Internal_Types_union_($0, $1, $2) {
- return __tailRec(x24tcOpt_9, {h: 1 /* {TcContinue9:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_10, {h: 1 /* {TcContinue10:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:10} */
-function x24tcOpt_10($0) {
+/* {$tcOpt:11} */
+function x24tcOpt_11($0) {
  switch($0.a3.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:10} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, {h: 0})};
+  case 0: /* nil */ return {h: 0 /* {TcDone:11} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, {h: 0})};
   case undefined: /* cons */ {
    const $7 = $0.a2($0.a3.a1)($0.a4);
-   return {h: 1 /* {TcContinue10:1} */, a1: {a1: $0.a1, a2: $7}, a2: $0.a2, a3: $0.a3.a2, a4: undefined};
+   return {h: 1 /* {TcContinue11:1} */, a1: {a1: $0.a1, a2: $7}, a2: $0.a2, a3: $0.a3.a2, a4: undefined};
   }
  }
 }
 
 /* Data.Linear.Traverse1.traverse1List : SnocList b -> (a -> F1 s b) -> List a -> F1 s (List b) */
 function Data_Linear_Traverse1_traverse1List($0, $1, $2, $3) {
- return __tailRec(x24tcOpt_10, {h: 1 /* {TcContinue10:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
+ return __tailRec(x24tcOpt_11, {h: 1 /* {TcContinue11:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
 }
 
-/* {$tcOpt:11} */
-function x24tcOpt_11($0) {
+/* {$tcOpt:12} */
+function x24tcOpt_12($0) {
+ switch($0.a1) {
+  case 0n: return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: checked traversal depth exhausted'}}};
+  default: {
+   const $7 = ($0.a1-1n);
+   switch($0.a3.h) {
+    case 2: /* Integer64Value */ {
+     const $b = JSON_Wire_Numeric_integer64($0.a3.a1, $0.a4);
+     switch($b.h) {
+      case 0: /* Left */ return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $b.a1}}};
+      case 1: /* Right */ return {h: 0 /* {TcDone:12} */, a1: {h: 1 /* Right */, a1: {h: 1 /* JInteger */, a1: $b.a1}}};
+     }
+    }
+    case 12: /* UntaggedValue */ {
+     let $16;
+     switch($0.a2) {
+      case 1: {
+       $16 = 1;
+       break;
+      }
+      case 0: {
+       $16 = 0;
+       break;
+      }
+     }
+     const $1b = JSON_Wire_Description_selectUntaggedShape($16, JSON_Wire_Codec_jsonRepresentationKind($0.a4), $0.a3.a2);
+     let $1a;
+     switch($1b.h) {
+      case 0: /* Left */ {
+       $1a = {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $1b.a1}};
+       break;
+      }
+      case 1: /* Right */ {
+       $1a = {h: 1 /* Right */, a1: $1b.a1};
+       break;
+      }
+     }
+     const $18 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($1a, shape => JSON_Wire_Codec_transform($7, $0.a2, shape, $0.a4));
+     return {h: 0 /* {TcDone:12} */, a1: $18};
+    }
+    case 0: /* NaturalValue */ {
+     switch($0.a2) {
+      case 1: {
+       const $31 = $32 => {
+        switch($32.h) {
+         case 7: /* JsonObject */ {
+          const $34 = Prelude_Types_List_mapAppend({h: 0}, $38 => Value_StringKeySortedAssoc_bindingContent($38), $32.a1);
+          const $42 = $43 => {
+           const $4d = $4e => {
+            const $4f = {h: 7 /* JsonObject */, a1: $32.a1};
+            switch($4e.h) {
+             case undefined: /* just */ {
+              switch($4e.a1.h) {
+               case 5: /* JString */ {
+                switch($4e.a1.a1) {
+                 case 'integer': {
+                  const $5d = $5e => {
+                   const $5f = {a1: {h: 5 /* JString */, a1: 'integer'}};
+                   switch($5e.h) {
+                    case undefined: /* just */ {
+                     switch($5e.a1.h) {
+                      case 5: /* JString */ {
+                       const $64 = {a1: {h: 5 /* JString */, a1: $5e.a1.a1}};
+                       const $72 = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($5e.a1.a1)))), $7d => JSON_Parser_json(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($5e.a1.a1)));
+                       let $71;
+                       switch($72.h) {
+                        case 0: /* Left */ {
+                         $71 = {h: 0 /* Left */, a1: Text_ByteBounds_toParseError({h: 0}, Data_Buffer_Core_toString(Data_Buffer_Core_fromString(JSON_Parser_prepareText($5e.a1.a1)), 0n, Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($5e.a1.a1))))), $72.a1)};
+                         break;
+                        }
+                        case 1: /* Right */ {
+                         $71 = {h: 1 /* Right */, a1: $72.a1};
+                         break;
+                        }
+                       }
+                       return JSON_Wire_Codec_case__casex20blockx20inx20casex20blockx20inx20casex20blockx20inx20casex20blockx20inx20transform_12269($7, $0.a4, 1, $32.a1, $4f, $34, $5f, $5e.a1.a1, $64, $71);
+                      }
+                      default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer token'}};
+                     }
+                    }
+                    default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer token'}};
+                   }
+                  };
+                  return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_lookup(csegen_681()(), 'token', $34)}, $5d);
+                 }
+                 default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer syntax kind'}};
+                }
+               }
+               default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer syntax kind'}};
+              }
+             }
+             default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer syntax kind'}};
+            }
+           };
+           return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_lookup(csegen_681()(), 'kind', $34)}, $4d);
+          };
+          return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_exactKeys(csegen_678(), $34), $42);
+         }
+         default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer syntax node'}};
+        }
+       };
+       const $2d = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: $0.a4}, $31);
+       return {h: 0 /* {TcDone:12} */, a1: $2d};
+      }
+      case 0: return {h: 0 /* {TcDone:12} */, a1: Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readNatural($0.a4), csegen_682())};
+     }
+    }
+    case 1: /* BoundNaturalValue */ {
+     switch($0.a2) {
+      case 1: {
+       const $b7 = $b8 => {
+        switch($b8.h) {
+         case 7: /* JsonObject */ {
+          const $ba = Prelude_Types_List_mapAppend({h: 0}, $be => Value_StringKeySortedAssoc_bindingContent($be), $b8.a1);
+          const $c8 = $c9 => {
+           const $d3 = $d4 => {
+            switch($d4.h) {
+             case undefined: /* just */ {
+              switch($d4.a1.h) {
+               case 5: /* JString */ {
+                switch($d4.a1.a1) {
+                 case 'integer': {
+                  const $e1 = $e2 => {
+                   switch($e2.h) {
+                    case undefined: /* just */ {
+                     switch($e2.a1.h) {
+                      case 5: /* JString */ {
+                       const $eb = n => {
+                        switch(Prelude_EqOrd_x3dx3d_Eq_String($e2.a1.a1, Prelude_Show_show_Show_Nat(n))) {
+                         case 1: return {h: 1 /* Right */, a1: {h: 1 /* JInteger */, a1: n}};
+                         case 0: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected canonical natural token'}};
+                        }
+                       };
+                       return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readBoundNatural($0.a3.a1, {h: 3 /* JDecimal */, a1: $e2.a1.a1}), $eb);
+                      }
+                      default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer token'}};
+                     }
+                    }
+                    default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer token'}};
+                   }
+                  };
+                  return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_lookup(csegen_681()(), 'token', $ba)}, $e1);
+                 }
+                 default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer syntax kind'}};
+                }
+               }
+               default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer syntax kind'}};
+              }
+             }
+             default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer syntax kind'}};
+            }
+           };
+           return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_lookup(csegen_681()(), 'kind', $ba)}, $d3);
+          };
+          return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_exactKeys(csegen_678(), $ba), $c8);
+         }
+         default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected integer syntax node'}};
+        }
+       };
+       const $b3 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: $0.a4}, $b7);
+       return {h: 0 /* {TcDone:12} */, a1: $b3};
+      }
+      case 0: return {h: 0 /* {TcDone:12} */, a1: Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readBoundNatural($0.a3.a1, $0.a4), csegen_682())};
+     }
+    }
+    case 5: /* FiniteBinary64Value */ {
+     switch($0.a2) {
+      case 1: {
+       const $116 = $117 => {
+        switch($117.h) {
+         case 7: /* JsonObject */ {
+          const $119 = Prelude_Types_List_mapAppend({h: 0}, $11d => Value_StringKeySortedAssoc_bindingContent($11d), $117.a1);
+          const $12a = $12b => {
+           const $135 = $136 => {
+            switch($136.h) {
+             case undefined: /* just */ {
+              switch($136.a1.h) {
+               case 5: /* JString */ {
+                switch($136.a1.a1) {
+                 case 'finite-binary64': {
+                  const $143 = $144 => {
+                   switch($144.h) {
+                    case undefined: /* just */ {
+                     switch($144.a1.h) {
+                      case 5: /* JString */ {
+                       const $149 = JSON_Wire_Binary64_readFiniteHex($144.a1.a1);
+                       let $148;
+                       switch($149.h) {
+                        case 0: /* Left */ {
+                         $148 = {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $149.a1}};
+                         break;
+                        }
+                        case 1: /* Right */ {
+                         $148 = {h: 1 /* Right */, a1: $149.a1};
+                         break;
+                        }
+                       }
+                       return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($148, csegen_684());
+                      }
+                      default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire binary64: expected finite bits string'}};
+                     }
+                    }
+                    default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire binary64: expected finite bits string'}};
+                   }
+                  };
+                  return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_lookup(csegen_681()(), 'bits', $119)}, $143);
+                 }
+                 default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire binary64: expected finite bits syntax kind'}};
+                }
+               }
+               default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire binary64: expected finite bits syntax kind'}};
+              }
+             }
+             default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire binary64: expected finite bits syntax kind'}};
+            }
+           };
+           return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_lookup(csegen_681()(), 'kind', $119)}, $135);
+          };
+          return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_exactKeys({a1: 'kind', a2: {a1: 'bits', a2: {h: 0}}}, $119), $12a);
+         }
+         default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire binary64: expected finite bits syntax node'}};
+        }
+       };
+       const $112 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: $0.a4}, $116);
+       return {h: 0 /* {TcDone:12} */, a1: $112};
+      }
+      case 0: {
+       const $167 = JSON_Wire_Binary64_readFiniteBits($0.a4);
+       let $166;
+       switch($167.h) {
+        case 0: /* Left */ {
+         $166 = {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $167.a1}};
+         break;
+        }
+        case 1: /* Right */ {
+         $166 = {h: 1 /* Right */, a1: $167.a1};
+         break;
+        }
+       }
+       const $16e = bits => {
+        const $171 = JSON_Wire_Binary64_finiteBitsHex(bits);
+        let $170;
+        switch($171.h) {
+         case 0: /* Left */ {
+          $170 = {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $171.a1}};
+          break;
+         }
+         case 1: /* Right */ {
+          $170 = {h: 1 /* Right */, a1: $171.a1};
+          break;
+         }
+        }
+        return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($170, text => JSON_Wire_Codec_buildObjectValue({a1: {a1: 'kind', a2: {h: 5 /* JString */, a1: 'finite-binary64'}}, a2: {a1: {a1: 'bits', a2: {h: 5 /* JString */, a1: text}}, a2: {h: 0}}}));
+       };
+       const $164 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($166, $16e);
+       return {h: 0 /* {TcDone:12} */, a1: $164};
+      }
+     }
+    }
+    case 8: /* NullValue */ {
+     switch($0.a4.h) {
+      case 0: /* JNull */ return {h: 0 /* {TcDone:12} */, a1: {h: 1 /* Right */, a1: {h: 0 /* JNull */}}};
+      default: return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected null'}}};
+     }
+    }
+    case 6: /* BooleanValue */ {
+     switch($0.a4.h) {
+      case 4: /* JBool */ return {h: 0 /* {TcDone:12} */, a1: {h: 1 /* Right */, a1: {h: 4 /* JBool */, a1: $0.a4.a1}}};
+      default: return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected boolean'}}};
+     }
+    }
+    case 7: /* NeverValue */ return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: empty type has no JSON value'}}};
+    case 11: /* TaggedValue */ {
+     const $19e = tag => {
+      const $1a8 = $1a9 => {
+       switch($1a9.h) {
+        case undefined: /* just */ return JSON_Wire_Codec_transform($7, $0.a2, $1a9.a1, $0.a4);
+        default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: unknown internal tag'}};
+       }
+      };
+      return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_lookup(csegen_681()(), tag, $0.a3.a2)}, $1a8);
+     };
+     const $198 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readInternalTag($0.a3.a1, $0.a4), $19e);
+     return {h: 0 /* {TcDone:12} */, a1: $198};
+    }
+    case 3: /* StringValue */ return {h: 0 /* {TcDone:12} */, a1: Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readString($0.a4), text => ({h: 1 /* Right */, a1: {h: 5 /* JString */, a1: text}}))};
+    case 4: /* ScalarValue */ {
+     const $1c0 = text => {
+      switch(JSON_Wire_Codec_scalarTextValid(text)) {
+       case 1: return {h: 1 /* Right */, a1: {h: 5 /* JString */, a1: text}};
+       case 0: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: isolated surrogate'}};
+      }
+     };
+     const $1bb = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readString($0.a4), $1c0);
+     return {h: 0 /* {TcDone:12} */, a1: $1bb};
+    }
+    case 13: /* EnumValue */ {
+     switch($0.a4.h) {
+      case 5: /* JString */ {
+       switch(Prelude_Types_elem(csegen_44()(), csegen_681()(), $0.a4.a1)($0.a3.a1)) {
+        case 1: return {h: 0 /* {TcDone:12} */, a1: {h: 1 /* Right */, a1: {h: 5 /* JString */, a1: $0.a4.a1}}};
+        case 0: return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: unknown enum tag'}}};
+       }
+      }
+      default: return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected enum string'}}};
+     }
+    }
+    case 9: /* ArrayValue */ {
+     switch($0.a4.h) {
+      case 6: /* JArray */ {
+       const $1e1 = JSON_Wire_Codec_readListValues($1e4 => JSON_Wire_Codec_transform($7, $0.a2, $0.a3.a1, $1e4), 0n, $0.a4.a1);
+       switch($1e1.h) {
+        case 0: /* Left */ return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: $1e1.a1}};
+        case 1: /* Right */ return {h: 0 /* {TcDone:12} */, a1: {h: 1 /* Right */, a1: {h: 6 /* JArray */, a1: $1e1.a1}}};
+       }
+      }
+      default: return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected array'}}};
+     }
+    }
+    case 10: /* DynamicObjectValue */ {
+     switch($0.a4.h) {
+      case 7: /* JsonObject */ {
+       const $1f8 = key => value => {
+        const $1f9 = JSON_Wire_Codec_transform($7, $0.a2, $0.a3.a1, value);
+        switch($1f9.h) {
+         case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: key}, a2: $1f9.a1.a1}, a2: $1f9.a1.a2}};
+         case 1: /* Right */ return {h: 1 /* Right */, a1: $1f9.a1};
+        }
+       };
+       const $1f6 = JSON_Object_traverseAssocWithKey($1f8, $0.a4.a1);
+       switch($1f6.h) {
+        case 0: /* Left */ return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: $1f6.a1}};
+        case 1: /* Right */ return {h: 0 /* {TcDone:12} */, a1: {h: 1 /* Right */, a1: {h: 7 /* JsonObject */, a1: $1f6.a1}}};
+       }
+      }
+      default: return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected dynamic object'}}};
+     }
+    }
+    case 14: /* NullableValue */ {
+     switch($0.a4.h) {
+      case 0: /* JNull */ return {h: 0 /* {TcDone:12} */, a1: {h: 1 /* Right */, a1: {h: 0 /* JNull */}}};
+      default: return {h: 1 /* {TcContinue12:1} */, a1: $7, a2: $0.a2, a3: $0.a3.a1, a4: $0.a4};
+     }
+    }
+    case 15: /* ObjectValue */ {
+     switch($0.a4.h) {
+      case 7: /* JsonObject */ {
+       const $219 = Prelude_Types_List_mapAppend({h: 0}, $21d => Value_StringKeySortedAssoc_bindingContent($21d), $0.a4.a1);
+       const $227 = $228 => {
+        const $22f = $230 => {
+         const $233 = Data_List_lookup(csegen_681()(), $230.a1, $219);
+         switch($233.h) {
+          case 0: /* nothing */ return {h: 1 /* Right */, a1: {h: 0}};
+          case undefined: /* just */ {
+           const $23b = JSON_Wire_Codec_transform($7, $0.a2, $230.a2.a2, $233.a1);
+           switch($23b.h) {
+            case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: $230.a1}, a2: $23b.a1.a1}, a2: $23b.a1.a2}};
+            case 1: /* Right */ return {h: 1 /* Right */, a1: {a1: {a1: $230.a1, a2: $23b.a1}, a2: {h: 0}}};
+           }
+          }
+         }
+        };
+        const $22a = Prelude_Types_traverse_Traversable_List(csegen_26()(), $22f, $0.a3.a1);
+        return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($22a, values => JSON_Wire_Codec_buildObjectValue(Prelude_Types_foldMap_Foldable_List(csegen_56(), $255 => $255, values)));
+       };
+       const $221 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_checkObjectKeys($0.a3.a1, $219), $227);
+       return {h: 0 /* {TcDone:12} */, a1: $221};
+      }
+      default: return {h: 0 /* {TcDone:12} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected object'}}};
+     }
+    }
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Codec.transform : Nat -> Bool -> ValueShape -> JSON -> Result JSON */
+function JSON_Wire_Codec_transform($0, $1, $2, $3) {
+ return __tailRec(x24tcOpt_12, {h: 1 /* {TcContinue12:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
+}
+
+/* {$tcOpt:13} */
+function x24tcOpt_13($0) {
  switch($0.a2.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:11} */, a1: {a1: $0.a1, a2: '}'}};
+  case 0: /* nil */ return {h: 0 /* {TcDone:13} */, a1: {a1: $0.a1, a2: '}'}};
   case undefined: /* cons */ {
    const $6 = JSON_Parser_showPair({a1: $0.a1, a2: ','}, $0.a2.a1);
-   return {h: 1 /* {TcContinue11:1} */, a1: $6, a2: $0.a2.a2};
+   return {h: 1 /* {TcContinue13:1} */, a1: $6, a2: $0.a2.a2};
   }
  }
 }
 
 /* JSON.Parser.showObject : SnocList String -> List (Binding JSON) -> SnocList String */
 function JSON_Parser_showObject($0, $1) {
- return __tailRec(x24tcOpt_11, {h: 1 /* {TcContinue11:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_13, {h: 1 /* {TcContinue13:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:12} */
-function x24tcOpt_12($0) {
+/* {$tcOpt:14} */
+function x24tcOpt_14($0) {
  switch($0.a2.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:12} */, a1: {a1: $0.a1, a2: ']'}};
+  case 0: /* nil */ return {h: 0 /* {TcDone:14} */, a1: {a1: $0.a1, a2: ']'}};
   case undefined: /* cons */ {
    const $6 = JSON_Parser_showValue({a1: $0.a1, a2: ','}, $0.a2.a1);
-   return {h: 1 /* {TcContinue12:1} */, a1: $6, a2: $0.a2.a2};
+   return {h: 1 /* {TcContinue14:1} */, a1: $6, a2: $0.a2.a2};
   }
  }
 }
 
 /* JSON.Parser.showArray : SnocList String -> List JSON -> SnocList String */
 function JSON_Parser_showArray($0, $1) {
- return __tailRec(x24tcOpt_12, {h: 1 /* {TcContinue12:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_14, {h: 1 /* {TcContinue14:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:13} */
-function x24tcOpt_13($0) {
+/* {$tcOpt:15} */
+function x24tcOpt_15($0) {
  switch($0.a2) {
-  case 0n: return {h: 0 /* {TcDone:13} */, a1: $0.a1};
+  case 0n: return {h: 0 /* {TcDone:15} */, a1: $0.a1};
   default: {
    const $4 = ($0.a2-1n);
-   return {h: 1 /* {TcContinue13:1} */, a1: {a1: $0.a3, a2: $0.a1}, a2: $4, a3: $0.a3};
+   return {h: 1 /* {TcContinue15:1} */, a1: {a1: $0.a3, a2: $0.a1}, a2: $4, a3: $0.a3};
   }
  }
 }
 
 /* Data.List.replicateTR : List a -> Nat -> a -> List a */
 function Data_List_replicateTR($0, $1, $2) {
- return __tailRec(x24tcOpt_13, {h: 1 /* {TcContinue13:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_15, {h: 1 /* {TcContinue15:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:14} */
-function x24tcOpt_14($0) {
+/* {$tcOpt:16} */
+function x24tcOpt_16($0) {
  switch($0.a3.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:14} */, a1: $4 => Prelude_Types_SnocList_x3cx3ex3e($0.a2, {h: 0})};
+  case 0: /* nil */ return {h: 0 /* {TcDone:16} */, a1: $4 => Prelude_Types_SnocList_x3cx3ex3e($0.a2, {h: 0})};
   case undefined: /* cons */ {
    switch($0.a3.a1.a2.h) {
-    case 0: /* nil */ return {h: 1 /* {TcContinue14:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a2};
+    case 0: /* nil */ return {h: 1 /* {TcContinue16:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a2};
     case undefined: /* cons */ {
      switch($0.a3.a1.a2.a2.h) {
-      case 0: /* nil */ return {h: 1 /* {TcContinue14:1} */, a1: $0.a1, a2: {a1: $0.a2, a2: {a1: $0.a3.a1.a1, a2: $0.a3.a1.a2.a1}}, a3: $0.a3.a2};
+      case 0: /* nil */ return {h: 1 /* {TcContinue16:1} */, a1: $0.a1, a2: {a1: $0.a2, a2: {a1: $0.a3.a1.a1, a2: $0.a3.a1.a2.a1}}, a3: $0.a3.a2};
       default: {
        const $15 = $16 => {
         const $17 = Text_ILex_Internal_Types_lookupSet($0.a1, $0.a3.a1.a2, $16);
@@ -961,13 +1367,13 @@ function x24tcOpt_14($0) {
          case 0: /* nothing */ {
           const $27 = Text_ILex_Internal_Types_addSet($0.a1, $0.a3.a1.a2, undefined);
           const $2c = Data_Linear_Traverse1_traverse1List({h: 0}, $30 => $31 => Text_ILex_Internal_Types_lookupDflt1($30, () => ({a1: $30, a2: {h: 0}, a3: {h: 0}}), $0.a1.a4, $31), $0.a3.a1.a2, undefined);
-          const $3d = Text_ILex_Internal_Types_insert1($27, Prelude_Types_foldl_Foldable_List(csegen_442(), {a1: $27, a2: {h: 0}, a3: {h: 0}}, $2c), $0.a1.a4, undefined);
+          const $3d = Text_ILex_Internal_Types_insert1($27, Prelude_Types_foldl_Foldable_List(csegen_649(), {a1: $27, a2: {h: 0}, a3: {h: 0}}, $2c), $0.a1.a4, undefined);
           const $4c = Text_ILex_Internal_DFA_discrete($0.a1, $27, undefined);
           return Text_ILex_Internal_DFA_process($0.a1, {a1: $0.a2, a2: {a1: $0.a3.a1.a1, a2: $27}}, $0.a3.a2)(undefined);
          }
         }
        };
-       return {h: 0 /* {TcDone:14} */, a1: $15};
+       return {h: 0 /* {TcDone:16} */, a1: $15};
       }
      }
     }
@@ -979,13 +1385,13 @@ function x24tcOpt_14($0) {
        case 0: /* nothing */ {
         const $6d = Text_ILex_Internal_Types_addSet($0.a1, $0.a3.a1.a2, undefined);
         const $72 = Data_Linear_Traverse1_traverse1List({h: 0}, $76 => $77 => Text_ILex_Internal_Types_lookupDflt1($76, () => ({a1: $76, a2: {h: 0}, a3: {h: 0}}), $0.a1.a4, $77), $0.a3.a1.a2, undefined);
-        const $83 = Text_ILex_Internal_Types_insert1($6d, Prelude_Types_foldl_Foldable_List(csegen_442(), {a1: $6d, a2: {h: 0}, a3: {h: 0}}, $72), $0.a1.a4, undefined);
+        const $83 = Text_ILex_Internal_Types_insert1($6d, Prelude_Types_foldl_Foldable_List(csegen_649(), {a1: $6d, a2: {h: 0}, a3: {h: 0}}, $72), $0.a1.a4, undefined);
         const $92 = Text_ILex_Internal_DFA_discrete($0.a1, $6d, undefined);
         return Text_ILex_Internal_DFA_process($0.a1, {a1: $0.a2, a2: {a1: $0.a3.a1.a1, a2: $6d}}, $0.a3.a2)(undefined);
        }
       }
      };
-     return {h: 0 /* {TcDone:14} */, a1: $5b};
+     return {h: 0 /* {TcDone:16} */, a1: $5b};
     }
    }
   }
@@ -994,19 +1400,19 @@ function x24tcOpt_14($0) {
 
 /* Text.ILex.Internal.DFA.process : DFAState s a => SnocList Edge -> NEdges -> F1 s Edges */
 function Text_ILex_Internal_DFA_process($0, $1, $2) {
- return __tailRec(x24tcOpt_14, {h: 1 /* {TcContinue14:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_16, {h: 1 /* {TcContinue16:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:15} */
-function x24tcOpt_15($0) {
+/* {$tcOpt:17} */
+function x24tcOpt_17($0) {
  switch($0.a4) {
-  case 0n: return {h: 0 /* {TcDone:15} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {h: 0})};
+  case 0n: return {h: 0 /* {TcDone:17} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {h: 0})};
   default: {
    const $7 = ($0.a4-1n);
    const $a = Data_Array_Core_prim__arrayGet($0.a2, $7);
    switch($a.h) {
-    case undefined: /* just */ return {h: 1 /* {TcContinue15:1} */, a1: $0.a1, a2: $0.a2, a3: {a1: $0.a3, a2: {a1: $7, a2: $a.a1}}, a4: $7, a5: undefined};
-    case 0: /* nothing */ return {h: 1 /* {TcContinue15:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $7, a5: undefined};
+    case undefined: /* just */ return {h: 1 /* {TcContinue17:1} */, a1: $0.a1, a2: $0.a2, a3: {a1: $0.a3, a2: {a1: $7, a2: $a.a1}}, a4: $7, a5: undefined};
+    case 0: /* nothing */ return {h: 1 /* {TcContinue17:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $7, a5: undefined};
    }
   }
  }
@@ -1014,28 +1420,185 @@ function x24tcOpt_15($0) {
 
 /* Text.ILex.Internal.Types.9807:9656:go */
 function Text_ILex_Internal_Types_n__9807_9656_go($0, $1, $2, $3, $4) {
- return __tailRec(x24tcOpt_15, {h: 1 /* {TcContinue15:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4});
+ return __tailRec(x24tcOpt_17, {h: 1 /* {TcContinue17:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4});
 }
 
-/* {$tcOpt:16} */
-function x24tcOpt_16($0) {
- switch($0.a3.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:16} */, a1: $0.a2};
-  case undefined: /* cons */ return {h: 1 /* {TcContinue16:1} */, a1: $0.a1, a2: $0.a1($0.a2)($0.a3.a1), a3: $0.a3.a2};
+/* {$tcOpt:18} */
+function x24tcOpt_18($0) {
+ switch($0.a1) {
+  case 0n: return {h: 0 /* {TcDone:18} */, a1: {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: normalization depth exhausted'}}};
+  default: {
+   const $7 = ($0.a1-1n);
+   switch($0.a2.h) {
+    case 12: /* UntaggedValue */ {
+     const $e = JSON_Wire_Description_selectUntaggedShape(0, JSON_Wire_Codec_jsonRepresentationKind($0.a3), $0.a2.a2);
+     let $d;
+     switch($e.h) {
+      case 0: /* Left */ {
+       $d = {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $e.a1}};
+       break;
+      }
+      case 1: /* Right */ {
+       $d = {h: 1 /* Right */, a1: $e.a1};
+       break;
+      }
+     }
+     const $b = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($d, shape => JSON_Wire_Codec_normalizeParsed($7, shape, $0.a3));
+     return {h: 0 /* {TcDone:18} */, a1: $b};
+    }
+    case 0: /* NaturalValue */ {
+     switch($0.a3.h) {
+      case 3: /* JDecimal */ {
+       const $22 = JSON_Wire_Numeric_legacyIntegerToken($0.a3.a1);
+       let $21;
+       switch($22.h) {
+        case 0: /* Left */ {
+         $21 = {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $22.a1}};
+         break;
+        }
+        case 1: /* Right */ {
+         $21 = {h: 1 /* Right */, a1: $22.a1};
+         break;
+        }
+       }
+       const $1f = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($21, value => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readNatural(value), _ => ({h: 1 /* Right */, a1: value})));
+       return {h: 0 /* {TcDone:18} */, a1: $1f};
+      }
+      default: return {h: 0 /* {TcDone:18} */, a1: Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_transform($0.a1, 0, $0.a2, $0.a3), _ => ({h: 1 /* Right */, a1: $0.a3}))};
+     }
+    }
+    case 1: /* BoundNaturalValue */ {
+     const $3a = JSON_Wire_Codec_readBoundNatural($0.a2.a1, $0.a3);
+     switch($3a.h) {
+      case 0: /* Left */ return {h: 0 /* {TcDone:18} */, a1: {h: 0 /* Left */, a1: $3a.a1}};
+      case 1: /* Right */ return {h: 0 /* {TcDone:18} */, a1: {h: 1 /* Right */, a1: {h: 1 /* JInteger */, a1: $3a.a1}}};
+     }
+    }
+    case 5: /* FiniteBinary64Value */ {
+     const $46 = JSON_Wire_Binary64_readFiniteBits($0.a3);
+     let $45;
+     switch($46.h) {
+      case 0: /* Left */ {
+       $45 = {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $46.a1}};
+       break;
+      }
+      case 1: /* Right */ {
+       $45 = {h: 1 /* Right */, a1: $46.a1};
+       break;
+      }
+     }
+     const $43 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($45, csegen_684());
+     return {h: 0 /* {TcDone:18} */, a1: $43};
+    }
+    case 9: /* ArrayValue */ {
+     switch($0.a3.h) {
+      case 6: /* JArray */ {
+       const $50 = JSON_Wire_Codec_readListValues($53 => JSON_Wire_Codec_normalizeParsed($7, $0.a2.a1, $53), 0n, $0.a3.a1);
+       switch($50.h) {
+        case 0: /* Left */ return {h: 0 /* {TcDone:18} */, a1: {h: 0 /* Left */, a1: $50.a1}};
+        case 1: /* Right */ return {h: 0 /* {TcDone:18} */, a1: {h: 1 /* Right */, a1: {h: 6 /* JArray */, a1: $50.a1}}};
+       }
+      }
+      default: return {h: 0 /* {TcDone:18} */, a1: Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_transform($0.a1, 0, $0.a2, $0.a3), _ => ({h: 1 /* Right */, a1: $0.a3}))};
+     }
+    }
+    case 10: /* DynamicObjectValue */ {
+     switch($0.a3.h) {
+      case 7: /* JsonObject */ {
+       const $6c = key => value => {
+        const $6d = JSON_Wire_Codec_normalizeParsed($7, $0.a2.a1, value);
+        switch($6d.h) {
+         case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: key}, a2: $6d.a1.a1}, a2: $6d.a1.a2}};
+         case 1: /* Right */ return {h: 1 /* Right */, a1: $6d.a1};
+        }
+       };
+       const $6a = JSON_Object_traverseAssocWithKey($6c, $0.a3.a1);
+       switch($6a.h) {
+        case 0: /* Left */ return {h: 0 /* {TcDone:18} */, a1: {h: 0 /* Left */, a1: $6a.a1}};
+        case 1: /* Right */ return {h: 0 /* {TcDone:18} */, a1: {h: 1 /* Right */, a1: {h: 7 /* JsonObject */, a1: $6a.a1}}};
+       }
+      }
+      default: return {h: 0 /* {TcDone:18} */, a1: Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_transform($0.a1, 0, $0.a2, $0.a3), _ => ({h: 1 /* Right */, a1: $0.a3}))};
+     }
+    }
+    case 14: /* NullableValue */ {
+     switch($0.a3.h) {
+      case 0: /* JNull */ return {h: 0 /* {TcDone:18} */, a1: {h: 1 /* Right */, a1: {h: 0 /* JNull */}}};
+      default: return {h: 1 /* {TcContinue18:1} */, a1: $7, a2: $0.a2.a1, a3: $0.a3};
+     }
+    }
+    case 11: /* TaggedValue */ {
+     const $96 = tag => {
+      const $a0 = $a1 => {
+       switch($a1.h) {
+        case undefined: /* just */ return JSON_Wire_Codec_normalizeParsed($7, $a1.a1, $0.a3);
+        default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: unknown internal tag'}};
+       }
+      };
+      return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_lookup(csegen_681()(), tag, $0.a2.a2)}, $a0);
+     };
+     const $90 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readInternalTag($0.a2.a1, $0.a3), $96);
+     return {h: 0 /* {TcDone:18} */, a1: $90};
+    }
+    case 15: /* ObjectValue */ {
+     switch($0.a3.h) {
+      case 7: /* JsonObject */ {
+       const $ab = Prelude_Types_List_mapAppend({h: 0}, $af => Value_StringKeySortedAssoc_bindingContent($af), $0.a3.a1);
+       const $b9 = $ba => {
+        const $bd = key => value => {
+         const $ca = $cb => {
+          switch($cb.h) {
+           case undefined: /* just */ {
+            switch($cb.a1.h) {
+             case undefined: /* cons */ {
+              switch($cb.a1.a2.h) {
+               case undefined: /* cons */ {
+                const $cf = JSON_Wire_Codec_normalizeParsed($7, $cb.a1.a2.a2, value);
+                switch($cf.h) {
+                 case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: key}, a2: $cf.a1.a1}, a2: $cf.a1.a2}};
+                 case 1: /* Right */ return {h: 1 /* Right */, a1: $cf.a1};
+                }
+               }
+               default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: unknown field'}};
+              }
+             }
+             default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: unknown field'}};
+            }
+           }
+           default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: unknown field'}};
+          }
+         };
+         return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29({h: 1 /* Right */, a1: Data_List_find($c3 => Prelude_EqOrd_x3dx3d_Eq_String($c3.a1, key), $0.a2.a1)}, $ca);
+        };
+        const $bb = JSON_Object_traverseAssocWithKey($bd, $0.a3.a1);
+        switch($bb.h) {
+         case 0: /* Left */ return {h: 0 /* Left */, a1: $bb.a1};
+         case 1: /* Right */ return {h: 1 /* Right */, a1: {h: 7 /* JsonObject */, a1: $bb.a1}};
+        }
+       };
+       const $b3 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_checkObjectKeys($0.a2.a1, $ab), $b9);
+       return {h: 0 /* {TcDone:18} */, a1: $b3};
+      }
+      default: return {h: 0 /* {TcDone:18} */, a1: Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_transform($0.a1, 0, $0.a2, $0.a3), _ => ({h: 1 /* Right */, a1: $0.a3}))};
+     }
+    }
+    default: return {h: 0 /* {TcDone:18} */, a1: Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_transform($0.a1, 0, $0.a2, $0.a3), _ => ({h: 1 /* Right */, a1: $0.a3}))};
+   }
+  }
  }
 }
 
-/* Prelude.Types.foldl */
-function Prelude_Types_foldl_Foldable_List($0, $1, $2) {
- return __tailRec(x24tcOpt_16, {h: 1 /* {TcContinue16:1} */, a1: $0, a2: $1, a3: $2});
+/* JSON.Wire.Codec.normalizeParsed : Nat -> ValueShape -> JSON -> Result JSON */
+function JSON_Wire_Codec_normalizeParsed($0, $1, $2) {
+ return __tailRec(x24tcOpt_18, {h: 1 /* {TcContinue18:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:17} */
-function x24tcOpt_17($0) {
+/* {$tcOpt:19} */
+function x24tcOpt_19($0) {
  switch($0.h) {
-  case 1: /* {TcContinue17:1} */ {
+  case 1: /* {TcContinue19:1} */ {
    switch($0.a4.h) {
-    case 0: /* nil */ return {h: 0 /* {TcDone:17} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {h: 0})};
+    case 0: /* nil */ return {h: 0 /* {TcDone:19} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {h: 0})};
     case undefined: /* cons */ {
      switch($0.a4.a2.h) {
       case 0: /* nil */ {
@@ -1048,16 +1611,16 @@ function x24tcOpt_17($0) {
         default: $8 = 0;
        }
        switch($8) {
-        case 1: return {h: 0 /* {TcDone:17} */, a1: {h: 0}};
-        case 0: return {h: 0 /* {TcDone:17} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {a1: $0.a4.a1, a2: {h: 0}})};
+        case 1: return {h: 0 /* {TcDone:19} */, a1: {h: 0}};
+        case 0: return {h: 0 /* {TcDone:19} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {a1: $0.a4.a1, a2: {h: 0}})};
        }
       }
-      case undefined: /* cons */ return {h: 2 /* {TcContinue17:2} */, a1: $0.a1, a2: $0.a2, a3: $0.a4.a1, a4: $0.a4.a2.a1, a5: $0.a4.a2.a2, a6: $0.a3, a7: Text_ILex_Char_Range_union($0.a1.a1, $0.a2, $0.a4.a1, $0.a4.a2.a1)};
+      case undefined: /* cons */ return {h: 2 /* {TcContinue19:2} */, a1: $0.a1, a2: $0.a2, a3: $0.a4.a1, a4: $0.a4.a2.a1, a5: $0.a4.a2.a2, a6: $0.a3, a7: Text_ILex_Char_Range_union($0.a1.a1, $0.a2, $0.a4.a1, $0.a4.a2.a1)};
      }
     }
    }
   }
-  case 2: /* {TcContinue17:2} */ {
+  case 2: /* {TcContinue19:2} */ {
    switch($0.a7.h) {
     case 0: /* Left */ {
      let $1f;
@@ -1069,11 +1632,11 @@ function x24tcOpt_17($0) {
       default: $1f = 0;
      }
      switch($1f) {
-      case 1: return {h: 1 /* {TcContinue17:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a6, a4: $0.a5};
-      case 0: return {h: 1 /* {TcContinue17:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a6, a4: {a1: $0.a7.a1, a2: $0.a5}};
+      case 1: return {h: 1 /* {TcContinue19:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a6, a4: $0.a5};
+      case 0: return {h: 1 /* {TcContinue19:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a6, a4: {a1: $0.a7.a1, a2: $0.a5}};
      }
     }
-    case 1: /* Right */ return {h: 1 /* {TcContinue17:1} */, a1: $0.a1, a2: $0.a2, a3: {a1: $0.a6, a2: $0.a7.a1.a1}, a4: {a1: $0.a7.a1.a2, a2: $0.a5}};
+    case 1: /* Right */ return {h: 1 /* {TcContinue19:1} */, a1: $0.a1, a2: $0.a2, a3: {a1: $0.a6, a2: $0.a7.a1.a1}, a4: {a1: $0.a7.a1.a2, a2: $0.a5}};
    }
   }
  }
@@ -1082,16 +1645,16 @@ function x24tcOpt_17($0) {
 /* Text.ILex.Char.Set.normalise : WithBounds t => Neg t =>
 SnocList (RangeOf t) -> Vect n (RangeOf t) -> List (RangeOf t) */
 function Text_ILex_Char_Set_normalise($0, $1, $2, $3) {
- return __tailRec(x24tcOpt_17, {h: 1 /* {TcContinue17:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
+ return __tailRec(x24tcOpt_19, {h: 1 /* {TcContinue19:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
 }
 
 /* Text.ILex.Char.Set.case block in normalise */
 function Text_ILex_Char_Set_case__normalise_14085($0, $1, $2, $3, $4, $5, $6) {
- return __tailRec(x24tcOpt_17, {h: 2 /* {TcContinue17:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6});
+ return __tailRec(x24tcOpt_19, {h: 2 /* {TcContinue19:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6});
 }
 
-/* {$tcOpt:18} */
-function x24tcOpt_18($0) {
+/* {$tcOpt:20} */
+function x24tcOpt_20($0) {
  switch($0.a6.h) {
   case 0: /* nil */ {
    let $7;
@@ -1107,7 +1670,7 @@ function x24tcOpt_18($0) {
    }
    const $6 = {a1: $7, a2: {h: 0}};
    const $3 = Prelude_Types_SnocList_x3cx3ex3e($0.a4, $6);
-   return {h: 0 /* {TcDone:18} */, a1: $3};
+   return {h: 0 /* {TcDone:20} */, a1: $3};
   }
   case undefined: /* cons */ {
    let $14;
@@ -1119,7 +1682,7 @@ function x24tcOpt_18($0) {
     default: $14 = 0;
    }
    switch($14) {
-    case 1: return {h: 1 /* {TcContinue18:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a6.a2};
+    case 1: return {h: 1 /* {TcContinue20:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a6.a2};
     case 0: {
      const $1c = Text_ILex_Char_Range_lowerBound($0.a1, $0.a6.a1);
      const $20 = Text_ILex_Char_Range_upperBound($0.a1, $0.a6.a1);
@@ -1146,8 +1709,8 @@ function x24tcOpt_18($0) {
       }
      }
      switch($0.a1.a1.a1.a1($20)($0.a1.a3)) {
-      case 1: return {h: 0 /* {TcDone:18} */, a1: Prelude_Types_SnocList_x3cx3ex3e($24, {h: 0})};
-      case 0: return {h: 1 /* {TcContinue18:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $24, a5: $0.a2.a1.a1($20)($0.a2.a1.a3(1n)), a6: $0.a6.a2};
+      case 1: return {h: 0 /* {TcDone:20} */, a1: Prelude_Types_SnocList_x3cx3ex3e($24, {h: 0})};
+      case 0: return {h: 1 /* {TcContinue20:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $24, a5: $0.a2.a1.a1($20)($0.a2.a1.a3(1n)), a6: $0.a6.a2};
      }
     }
    }
@@ -1157,37 +1720,63 @@ function x24tcOpt_18($0) {
 
 /* Text.ILex.Char.Set.7645:14384:go */
 function Text_ILex_Char_Set_n__7645_14384_go($0, $1, $2, $3, $4, $5) {
- return __tailRec(x24tcOpt_18, {h: 1 /* {TcContinue18:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
+ return __tailRec(x24tcOpt_20, {h: 1 /* {TcContinue20:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
 }
 
-/* {$tcOpt:19} */
-function x24tcOpt_19($0) {
+/* {$tcOpt:21} */
+function x24tcOpt_21($0) {
+ switch($0.a1) {
+  case 0n: return {h: 0 /* {TcDone:21} */, a1: 0};
+  default: {
+   const $4 = ($0.a1-1n);
+   switch($0.a2.h) {
+    case 1: /* BoundNaturalValue */ return {h: 0 /* {TcDone:21} */, a1: 1};
+    case 5: /* FiniteBinary64Value */ return {h: 0 /* {TcDone:21} */, a1: 1};
+    case 9: /* ArrayValue */ return {h: 1 /* {TcContinue21:1} */, a1: $4, a2: $0.a2.a1};
+    case 10: /* DynamicObjectValue */ return {h: 1 /* {TcContinue21:1} */, a1: $4, a2: $0.a2.a1};
+    case 14: /* NullableValue */ return {h: 1 /* {TcContinue21:1} */, a1: $4, a2: $0.a2.a1};
+    case 15: /* ObjectValue */ return {h: 0 /* {TcDone:21} */, a1: Prelude_Types_foldMap_Foldable_List(csegen_251(), $15 => JSON_Wire_Codec_needsNumberTokens($4, $15.a2.a2), $0.a2.a1)};
+    case 12: /* UntaggedValue */ return {h: 0 /* {TcDone:21} */, a1: Prelude_Types_foldMap_Foldable_List(csegen_251(), $21 => JSON_Wire_Codec_needsNumberTokens($4, $21.a2), $0.a2.a2)};
+    case 11: /* TaggedValue */ return {h: 0 /* {TcDone:21} */, a1: Prelude_Types_foldMap_Foldable_List(csegen_251(), $2c => JSON_Wire_Codec_needsNumberTokens($4, $2c.a2), $0.a2.a2)};
+    default: return {h: 0 /* {TcDone:21} */, a1: 0};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Codec.needsNumberTokens : Nat -> ValueShape -> Bool */
+function JSON_Wire_Codec_needsNumberTokens($0, $1) {
+ return __tailRec(x24tcOpt_21, {h: 1 /* {TcContinue21:1} */, a1: $0, a2: $1});
+}
+
+/* {$tcOpt:22} */
+function x24tcOpt_22($0) {
  switch($0.a3.h) {
   case undefined: /* cons */ {
    const $3 = $0.a2($0.a3.a1);
    switch($3.h) {
-    case undefined: /* just */ return {h: 1 /* {TcContinue19:1} */, a1: {a1: $0.a1, a2: $3.a1}, a2: $0.a2, a3: $0.a3.a2};
-    case 0: /* nothing */ return {h: 1 /* {TcContinue19:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a2};
+    case undefined: /* just */ return {h: 1 /* {TcContinue22:1} */, a1: {a1: $0.a1, a2: $3.a1}, a2: $0.a2, a3: $0.a3.a2};
+    case 0: /* nothing */ return {h: 1 /* {TcContinue22:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a2};
    }
   }
-  case 0: /* nil */ return {h: 0 /* {TcDone:19} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, {h: 0})};
+  case 0: /* nil */ return {h: 0 /* {TcDone:22} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, {h: 0})};
  }
 }
 
 /* Prelude.Types.List.mapMaybeAppend : SnocList b -> (a -> Maybe b) -> List a -> List b */
 function Prelude_Types_List_mapMaybeAppend($0, $1, $2) {
- return __tailRec(x24tcOpt_19, {h: 1 /* {TcContinue19:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_22, {h: 1 /* {TcContinue22:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:20} */
-function x24tcOpt_20($0) {
+/* {$tcOpt:23} */
+function x24tcOpt_23($0) {
  switch($0.a2.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:20} */, a1: {h: 0}};
+  case 0: /* nil */ return {h: 0 /* {TcDone:23} */, a1: {h: 0}};
   case undefined: /* cons */ {
    switch(Value_Unicode_Order_compareKeys($0.a1, $0.a2.a1.a1)) {
-    case 0: return {h: 0 /* {TcDone:20} */, a1: {h: 0}};
-    case 1: return {h: 0 /* {TcDone:20} */, a1: {a1: $0.a2.a1.a2}};
-    case 2: return {h: 1 /* {TcContinue20:1} */, a1: $0.a1, a2: $0.a2.a2};
+    case 0: return {h: 0 /* {TcDone:23} */, a1: {h: 0}};
+    case 1: return {h: 0 /* {TcDone:23} */, a1: {a1: $0.a2.a1.a2}};
+    case 2: return {h: 1 /* {TcContinue23:1} */, a1: $0.a1, a2: $0.a2.a2};
    }
   }
  }
@@ -1195,31 +1784,49 @@ function x24tcOpt_20($0) {
 
 /* Value.StringKeySortedAssoc.lookupEntries : ScalarString -> List (Binding a) -> Maybe a */
 function Value_StringKeySortedAssoc_lookupEntries($0, $1) {
- return __tailRec(x24tcOpt_20, {h: 1 /* {TcContinue20:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_23, {h: 1 /* {TcContinue23:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:21} */
-function x24tcOpt_21($0) {
+/* {$tcOpt:24} */
+function x24tcOpt_24($0) {
+ switch($0.a3.h) {
+  case 0: /* nil */ return {h: 0 /* {TcDone:24} */, a1: {h: 0}};
+  case undefined: /* cons */ {
+   switch($0.a1($0.a2)($0.a3.a1.a1)) {
+    case 1: return {h: 0 /* {TcDone:24} */, a1: {a1: $0.a3.a1.a2}};
+    case 0: return {h: 1 /* {TcContinue24:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a2};
+   }
+  }
+ }
+}
+
+/* Data.List.lookupBy : (a -> b -> Bool) -> a -> List (b, v) -> Maybe v */
+function Data_List_lookupBy($0, $1, $2) {
+ return __tailRec(x24tcOpt_24, {h: 1 /* {TcContinue24:1} */, a1: $0, a2: $1, a3: $2});
+}
+
+/* {$tcOpt:25} */
+function x24tcOpt_25($0) {
  switch($0.a3.h) {
   case 0: /* Leaf */ {
    switch($0.a1.a1.a1($0.a2)($0.a3.a1)) {
-    case 1: return {h: 0 /* {TcDone:21} */, a1: {a1: {a1: $0.a3.a1, a2: $0.a3.a2}}};
-    case 0: return {h: 0 /* {TcDone:21} */, a1: {h: 0}};
+    case 1: return {h: 0 /* {TcDone:25} */, a1: {a1: {a1: $0.a3.a1, a2: $0.a3.a2}}};
+    case 0: return {h: 0 /* {TcDone:25} */, a1: {h: 0}};
    }
   }
   case 1: /* Branch2 */ {
    switch($0.a1.a5($0.a2)($0.a3.a2)) {
-    case 1: return {h: 1 /* {TcContinue21:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a1};
-    case 0: return {h: 1 /* {TcContinue21:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a3};
+    case 1: return {h: 1 /* {TcContinue25:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a1};
+    case 0: return {h: 1 /* {TcContinue25:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a3};
    }
   }
   case 2: /* Branch3 */ {
    switch($0.a1.a5($0.a2)($0.a3.a2)) {
-    case 1: return {h: 1 /* {TcContinue21:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a1};
+    case 1: return {h: 1 /* {TcContinue25:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a1};
     case 0: {
      switch($0.a1.a5($0.a2)($0.a3.a4)) {
-      case 1: return {h: 1 /* {TcContinue21:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a3};
-      case 0: return {h: 1 /* {TcContinue21:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a5};
+      case 1: return {h: 1 /* {TcContinue25:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a3};
+      case 0: return {h: 1 /* {TcContinue25:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a5};
      }
     }
    }
@@ -1229,59 +1836,46 @@ function x24tcOpt_21($0) {
 
 /* Data.SortedMap.Dependent.treeLookup : Ord k => k -> Tree n k v o -> Maybe (y : k ** v y) */
 function Data_SortedMap_Dependent_treeLookup($0, $1, $2) {
- return __tailRec(x24tcOpt_21, {h: 1 /* {TcContinue21:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_25, {h: 1 /* {TcContinue25:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:22} */
-function x24tcOpt_22($0) {
+/* {$tcOpt:26} */
+function x24tcOpt_26($0) {
  switch($0.a3.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:22} */, a1: Prelude_Types_List_reverse($0.a2)};
-  case undefined: /* cons */ return {h: 1 /* {TcContinue22:1} */, a1: $0.a1, a2: Prelude_Types_List_reverseOnto($0.a2, $0.a1($0.a3.a1)), a3: $0.a3.a2};
+  case 0: /* nil */ return {h: 0 /* {TcDone:26} */, a1: Prelude_Types_List_reverse($0.a2)};
+  case undefined: /* cons */ return {h: 1 /* {TcContinue26:1} */, a1: $0.a1, a2: Prelude_Types_List_reverseOnto($0.a2, $0.a1($0.a3.a1)), a3: $0.a3.a2};
  }
 }
 
 /* Prelude.Types.listBindOnto : (a -> List b) -> List b -> List a -> List b */
 function Prelude_Types_listBindOnto($0, $1, $2) {
- return __tailRec(x24tcOpt_22, {h: 1 /* {TcContinue22:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_26, {h: 1 /* {TcContinue26:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:23} */
-function x24tcOpt_23($0) {
- switch($0.a2.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:23} */, a1: $0.a1};
-  case undefined: /* cons */ return {h: 1 /* {TcContinue23:1} */, a1: {a1: $0.a2.a1, a2: $0.a1}, a2: $0.a2.a2};
- }
-}
-
-/* Prelude.Types.List.reverseOnto : List a -> List a -> List a */
-function Prelude_Types_List_reverseOnto($0, $1) {
- return __tailRec(x24tcOpt_23, {h: 1 /* {TcContinue23:1} */, a1: $0, a2: $1});
-}
-
-/* {$tcOpt:24} */
-function x24tcOpt_24($0) {
+/* {$tcOpt:27} */
+function x24tcOpt_27($0) {
  switch($0.a2.h) {
   case 0: /* nil */ {
    switch($0.a3.h) {
-    case 0: /* nil */ return {h: 0 /* {TcDone:24} */, a1: {h: 0}};
+    case 0: /* nil */ return {h: 0 /* {TcDone:27} */, a1: {h: 0}};
     default: {
      switch($0.a3.h) {
-      case 0: /* nil */ return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: {h: 0}}};
+      case 0: /* nil */ return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: {h: 0}}};
       case undefined: /* cons */ {
        switch($0.a3.a1) {
-        case '\n': return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
+        case '\n': return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
         case '\r': {
          switch($0.a3.a2.h) {
           case undefined: /* cons */ {
            switch($0.a3.a2.a1) {
-            case '\n': return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2.a2)}};
-            default: return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
+            case '\n': return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2.a2)}};
+            default: return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
            }
           }
-          default: return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
+          default: return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
          }
         }
-        default: return {h: 1 /* {TcContinue24:1} */, a1: $0.a1, a2: {a1: $0.a3.a1, a2: $0.a2}, a3: $0.a3.a2};
+        default: return {h: 1 /* {TcContinue27:1} */, a1: $0.a1, a2: {a1: $0.a3.a1, a2: $0.a2}, a3: $0.a3.a2};
        }
       }
      }
@@ -1290,22 +1884,22 @@ function x24tcOpt_24($0) {
   }
   default: {
    switch($0.a3.h) {
-    case 0: /* nil */ return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: {h: 0}}};
+    case 0: /* nil */ return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: {h: 0}}};
     case undefined: /* cons */ {
      switch($0.a3.a1) {
-      case '\n': return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
+      case '\n': return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
       case '\r': {
        switch($0.a3.a2.h) {
         case undefined: /* cons */ {
          switch($0.a3.a2.a1) {
-          case '\n': return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2.a2)}};
-          default: return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
+          case '\n': return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2.a2)}};
+          default: return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
          }
         }
-        default: return {h: 0 /* {TcDone:24} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
+        default: return {h: 0 /* {TcDone:27} */, a1: {a1: Prelude_Types_List_reverse($0.a2), a2: Data_String_n__3990_9729_linesHelp($0.a1, {h: 0}, $0.a3.a2)}};
        }
       }
-      default: return {h: 1 /* {TcContinue24:1} */, a1: $0.a1, a2: {a1: $0.a3.a1, a2: $0.a2}, a3: $0.a3.a2};
+      default: return {h: 1 /* {TcContinue27:1} */, a1: $0.a1, a2: {a1: $0.a3.a1, a2: $0.a2}, a3: $0.a3.a2};
      }
     }
    }
@@ -1315,47 +1909,47 @@ function x24tcOpt_24($0) {
 
 /* Data.String.3990:9729:linesHelp */
 function Data_String_n__3990_9729_linesHelp($0, $1, $2) {
- return __tailRec(x24tcOpt_24, {h: 1 /* {TcContinue24:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_27, {h: 1 /* {TcContinue27:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:25} */
-function x24tcOpt_25($0) {
+/* {$tcOpt:28} */
+function x24tcOpt_28($0) {
  switch($0.a4.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:25} */, a1: $0.a1};
+  case 0: /* nil */ return {h: 0 /* {TcDone:28} */, a1: $0.a1};
   case undefined: /* cons */ {
    const $4 = ($0.a3+1n);
    const $7 = Data_String_padLeft($0.a2, '0', Prelude_Show_show_Show_Nat($4));
-   return {h: 1 /* {TcContinue25:1} */, a1: {a1: $0.a1, a2: Prelude_Types_foldMap_Foldable_List(csegen_453(), $15 => $15, {a1: ' ', a2: {a1: $7, a2: {a1: ' | ', a2: {a1: $0.a4.a1, a2: {h: 0}}}}})}, a2: $0.a2, a3: $4, a4: $0.a4.a2};
+   return {h: 1 /* {TcContinue28:1} */, a1: {a1: $0.a1, a2: Prelude_Types_foldMap_Foldable_List(csegen_660(), $15 => $15, {a1: ' ', a2: {a1: $7, a2: {a1: ' | ', a2: {a1: $0.a4.a1, a2: {h: 0}}}}})}, a2: $0.a2, a3: $4, a4: $0.a4.a2};
   }
  }
 }
 
 /* Text.FC.lineNumbers : SnocList String -> Nat -> Nat -> List String -> SnocList String */
 function Text_FC_lineNumbers($0, $1, $2, $3) {
- return __tailRec(x24tcOpt_25, {h: 1 /* {TcContinue25:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
+ return __tailRec(x24tcOpt_28, {h: 1 /* {TcContinue28:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
 }
 
-/* {$tcOpt:26} */
-function x24tcOpt_26($0) {
+/* {$tcOpt:29} */
+function x24tcOpt_29($0) {
  switch($0.a2.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:26} */, a1: $0.a1};
-  case undefined: /* cons */ return {h: 1 /* {TcContinue26:1} */, a1: ($0.a1+1n), a2: $0.a2.a2};
+  case 0: /* nil */ return {h: 0 /* {TcDone:29} */, a1: $0.a1};
+  case undefined: /* cons */ return {h: 1 /* {TcContinue29:1} */, a1: ($0.a1+1n), a2: $0.a2.a2};
  }
 }
 
 /* Prelude.Types.List.lengthPlus : Nat -> List a -> Nat */
 function Prelude_Types_List_lengthPlus($0, $1) {
- return __tailRec(x24tcOpt_26, {h: 1 /* {TcContinue26:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_29, {h: 1 /* {TcContinue29:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:27} */
-function x24tcOpt_27($0) {
+/* {$tcOpt:30} */
+function x24tcOpt_30($0) {
  switch($0.a1.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:27} */, a1: 1};
+  case 0: /* nil */ return {h: 0 /* {TcDone:30} */, a1: 1};
   case undefined: /* cons */ {
    switch(Value_Unicode_scalarCharacter($0.a1.a1)) {
-    case 1: return {h: 1 /* {TcContinue27:1} */, a1: $0.a1.a2};
-    case 0: return {h: 0 /* {TcDone:27} */, a1: 0};
+    case 1: return {h: 1 /* {TcContinue30:1} */, a1: $0.a1.a2};
+    case 0: return {h: 0 /* {TcDone:30} */, a1: 0};
    }
   }
  }
@@ -1363,135 +1957,135 @@ function x24tcOpt_27($0) {
 
 /* Value.Unicode.scalarCharacters : List Char -> Bool */
 function Value_Unicode_scalarCharacters($0) {
- return __tailRec(x24tcOpt_27, {h: 1 /* {TcContinue27:1} */, a1: $0});
+ return __tailRec(x24tcOpt_30, {h: 1 /* {TcContinue30:1} */, a1: $0});
 }
 
-/* {$tcOpt:28} */
-function x24tcOpt_28($0) {
+/* {$tcOpt:31} */
+function x24tcOpt_31($0) {
  switch($0.h) {
-  case 1: /* {TcContinue28:1} */ {
+  case 1: /* {TcContinue31:1} */ {
    switch($0.a9) {
     case 0n: {
      const $3 = ($0.a5.value=$0.a10);
-     return {h: 0 /* {TcDone:28} */, a1: {h: 1 /* Right */, a1: {a1: $0.a6, a2: $0.a2, a3: $0.a7, a4: $0.a8, a5: {h: 1 /* Ign */}}}};
+     return {h: 0 /* {TcDone:31} */, a1: {h: 1 /* Right */, a1: {a1: $0.a6, a2: $0.a2, a3: $0.a7, a4: $0.a8, a5: {h: 1 /* Ign */}}}};
     }
     default: {
      const $f = ($0.a9-1n);
      const $12 = Data_Buffer_Core_prim__getByte($0.a3, $0.a10);
-     return {h: 2 /* {TcContinue28:2} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $f, a7: $0.a11, a8: $0.a10, a9: $0.a8, a10: $0.a7, a11: $0.a6, a12: $12, a13: Data_Array_Core_prim__arrayGet($0.a8, BigInt($12))};
+     return {h: 2 /* {TcContinue31:2} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $f, a7: $0.a11, a8: $0.a10, a9: $0.a8, a10: $0.a7, a11: $0.a6, a12: $12, a13: Data_Array_Core_prim__arrayGet($0.a8, BigInt($12))};
     }
    }
   }
-  case 2: /* {TcContinue28:2} */ {
+  case 2: /* {TcContinue31:2} */ {
    switch($0.a13.h) {
-    case 0: /* Keep */ return {h: 1 /* {TcContinue28:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: $0.a9, a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
+    case 0: /* Keep */ return {h: 1 /* {TcContinue31:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: $0.a9, a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
     case 1: /* Done */ {
      const $36 = ($0.a5.value=($0.a8+1n));
      const $35 = $0.a13.a1({a1: $0.a2, a2: undefined});
-     return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $35, a7: $0.a6, a8: ($0.a8+1n), a9: undefined};
+     return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $35, a7: $0.a6, a8: ($0.a8+1n), a9: undefined};
     }
-    case 2: /* Ignore */ return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a6, a8: ($0.a8+1n), a9: $0.a7};
-    case 3: /* Move */ return {h: 8 /* {TcContinue28:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a13.a2, a10: $0.a6, a11: ($0.a8+1n), a12: $0.a7};
-    case 4: /* MoveI */ return {h: 1 /* {TcContinue28:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
-    case 5: /* MoveE */ return {h: 6 /* {TcContinue28:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
-    case 6: /* Bottom */ return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: ($0.a6+1n), a8: $0.a8, a9: $0.a7};
+    case 2: /* Ignore */ return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a6, a8: ($0.a8+1n), a9: $0.a7};
+    case 3: /* Move */ return {h: 8 /* {TcContinue31:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a13.a2, a10: $0.a6, a11: ($0.a8+1n), a12: $0.a7};
+    case 4: /* MoveI */ return {h: 1 /* {TcContinue31:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
+    case 5: /* MoveE */ return {h: 6 /* {TcContinue31:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
+    case 6: /* Bottom */ return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: ($0.a6+1n), a8: $0.a8, a9: $0.a7};
    }
   }
-  case 3: /* {TcContinue28:3} */ {
+  case 3: /* {TcContinue31:3} */ {
    switch($0.a7) {
     case 0n: {
      const $94 = ($0.a4.value=$0.a8);
      const $99 = ($0.a5.value=$0.a8);
-     return {h: 0 /* {TcDone:28} */, a1: Text_ILex_Runner_case__casex20blockx20inx20casex20blockx20inx20loop_22196($0.a1, $0.a2, $0.a3, $0.a4, $0.a5, $0.a8, $0.a6, $94, $99, undefined, Text_ILex_Parser_prim__machineGet($0.a1.a4, $0.a6))};
+     return {h: 0 /* {TcDone:31} */, a1: Text_ILex_Runner_case__casex20blockx20inx20casex20blockx20inx20loop_22196($0.a1, $0.a2, $0.a3, $0.a4, $0.a5, $0.a8, $0.a6, $94, $99, undefined, Text_ILex_Parser_prim__machineGet($0.a1.a4, $0.a6))};
     }
     default: {
      const $af = ($0.a7-1n);
      const $b2 = ($0.a4.value=$0.a8);
-     return {h: 4 /* {TcContinue28:4} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $af, a7: $0.a8, a8: $0.a6, a9: $b2, a10: undefined, a11: Text_ILex_Parser_prim__machineGet($0.a1.a4, $0.a6)};
+     return {h: 4 /* {TcContinue31:4} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $af, a7: $0.a8, a8: $0.a6, a9: $b2, a10: undefined, a11: Text_ILex_Parser_prim__machineGet($0.a1.a4, $0.a6)};
     }
    }
   }
-  case 4: /* {TcContinue28:4} */ {
+  case 4: /* {TcContinue31:4} */ {
    const $c7 = Data_Array_Core_prim__arrayGet($0.a11.a2, 0n);
-   return {h: 5 /* {TcContinue28:5} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a6, a7: $0.a7, a8: $0.a8, a9: $0.a9, a10: $0.a10, a11: $0.a11.a1, a12: $0.a11.a2, a13: $c7, a14: Data_Array_Core_prim__arrayGet($c7, BigInt(Data_Buffer_Core_prim__getByte($0.a3, $0.a7)))};
+   return {h: 5 /* {TcContinue31:5} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a6, a7: $0.a7, a8: $0.a8, a9: $0.a9, a10: $0.a10, a11: $0.a11.a1, a12: $0.a11.a2, a13: $c7, a14: Data_Array_Core_prim__arrayGet($c7, BigInt(Data_Buffer_Core_prim__getByte($0.a3, $0.a7)))};
   }
-  case 5: /* {TcContinue28:5} */ {
+  case 5: /* {TcContinue31:5} */ {
    switch($0.a14.h) {
     case 1: /* Done */ {
      const $e2 = ($0.a5.value=($0.a7+1n));
      const $e1 = $0.a14.a1({a1: $0.a2, a2: undefined});
-     return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $e1, a7: $0.a6, a8: ($0.a7+1n), a9: undefined};
+     return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $e1, a7: $0.a6, a8: ($0.a7+1n), a9: undefined};
     }
-    case 2: /* Ignore */ return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a8, a7: $0.a6, a8: ($0.a7+1n), a9: $0.a10};
-    case 3: /* Move */ return {h: 8 /* {TcContinue28:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a8, a7: $0.a12, a8: Data_Array_Core_prim__arrayGet($0.a12, $0.a14.a1), a9: $0.a14.a2, a10: $0.a6, a11: ($0.a7+1n), a12: $0.a10};
-    case 4: /* MoveI */ return {h: 1 /* {TcContinue28:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a8, a7: $0.a12, a8: Data_Array_Core_prim__arrayGet($0.a12, $0.a14.a1), a9: $0.a6, a10: ($0.a7+1n), a11: $0.a10};
-    case 5: /* MoveE */ return {h: 6 /* {TcContinue28:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a8, a7: $0.a12, a8: Data_Array_Core_prim__arrayGet($0.a12, $0.a14.a1), a9: $0.a6, a10: ($0.a7+1n), a11: $0.a10};
+    case 2: /* Ignore */ return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a8, a7: $0.a6, a8: ($0.a7+1n), a9: $0.a10};
+    case 3: /* Move */ return {h: 8 /* {TcContinue31:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a8, a7: $0.a12, a8: Data_Array_Core_prim__arrayGet($0.a12, $0.a14.a1), a9: $0.a14.a2, a10: $0.a6, a11: ($0.a7+1n), a12: $0.a10};
+    case 4: /* MoveI */ return {h: 1 /* {TcContinue31:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a8, a7: $0.a12, a8: Data_Array_Core_prim__arrayGet($0.a12, $0.a14.a1), a9: $0.a6, a10: ($0.a7+1n), a11: $0.a10};
+    case 5: /* MoveE */ return {h: 6 /* {TcContinue31:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a8, a7: $0.a12, a8: Data_Array_Core_prim__arrayGet($0.a12, $0.a14.a1), a9: $0.a6, a10: ($0.a7+1n), a11: $0.a10};
     default: {
      const $134 = ($0.a5.value=($0.a7+1n));
-     return {h: 0 /* {TcDone:28} */, a1: Text_ILex_Parser_arrFail($0.a1.a6, $0.a8, $0.a2, undefined)};
+     return {h: 0 /* {TcDone:31} */, a1: Text_ILex_Parser_arrFail($0.a1.a6, $0.a8, $0.a2, undefined)};
     }
    }
   }
-  case 6: /* {TcContinue28:6} */ {
+  case 6: /* {TcContinue31:6} */ {
    switch($0.a9) {
     case 0n: {
      const $143 = ($0.a5.value=$0.a10);
-     return {h: 0 /* {TcDone:28} */, a1: {h: 1 /* Right */, a1: {a1: $0.a6, a2: $0.a2, a3: $0.a7, a4: $0.a8, a5: {h: 2 /* Err */}}}};
+     return {h: 0 /* {TcDone:31} */, a1: {h: 1 /* Right */, a1: {a1: $0.a6, a2: $0.a2, a3: $0.a7, a4: $0.a8, a5: {h: 2 /* Err */}}}};
     }
     default: {
      const $14f = ($0.a9-1n);
      const $152 = Data_Buffer_Core_prim__getByte($0.a3, $0.a10);
-     return {h: 7 /* {TcContinue28:7} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $14f, a7: $0.a11, a8: $0.a10, a9: $0.a8, a10: $0.a7, a11: $0.a6, a12: $152, a13: Data_Array_Core_prim__arrayGet($0.a8, BigInt($152))};
+     return {h: 7 /* {TcContinue31:7} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $14f, a7: $0.a11, a8: $0.a10, a9: $0.a8, a10: $0.a7, a11: $0.a6, a12: $152, a13: Data_Array_Core_prim__arrayGet($0.a8, BigInt($152))};
     }
    }
   }
-  case 7: /* {TcContinue28:7} */ {
+  case 7: /* {TcContinue31:7} */ {
    switch($0.a13.h) {
-    case 0: /* Keep */ return {h: 6 /* {TcContinue28:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: $0.a9, a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
+    case 0: /* Keep */ return {h: 6 /* {TcContinue31:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: $0.a9, a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
     case 1: /* Done */ {
      const $176 = ($0.a5.value=($0.a8+1n));
      const $175 = $0.a13.a1({a1: $0.a2, a2: undefined});
-     return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $175, a7: $0.a6, a8: ($0.a8+1n), a9: undefined};
+     return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $175, a7: $0.a6, a8: ($0.a8+1n), a9: undefined};
     }
-    case 2: /* Ignore */ return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a6, a8: ($0.a8+1n), a9: $0.a7};
-    case 3: /* Move */ return {h: 8 /* {TcContinue28:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a13.a2, a10: $0.a6, a11: ($0.a8+1n), a12: $0.a7};
-    case 4: /* MoveI */ return {h: 1 /* {TcContinue28:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
-    case 5: /* MoveE */ return {h: 6 /* {TcContinue28:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
+    case 2: /* Ignore */ return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a6, a8: ($0.a8+1n), a9: $0.a7};
+    case 3: /* Move */ return {h: 8 /* {TcContinue31:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a13.a2, a10: $0.a6, a11: ($0.a8+1n), a12: $0.a7};
+    case 4: /* MoveI */ return {h: 1 /* {TcContinue31:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
+    case 5: /* MoveE */ return {h: 6 /* {TcContinue31:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a11, a7: $0.a10, a8: Data_Array_Core_prim__arrayGet($0.a10, $0.a13.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
     case 6: /* Bottom */ {
      const $1c8 = ($0.a5.value=($0.a8+1n));
-     return {h: 0 /* {TcDone:28} */, a1: Text_ILex_Parser_arrFail($0.a1.a6, $0.a11, $0.a2, undefined)};
+     return {h: 0 /* {TcDone:31} */, a1: Text_ILex_Parser_arrFail($0.a1.a6, $0.a11, $0.a2, undefined)};
     }
    }
   }
-  case 8: /* {TcContinue28:8} */ {
+  case 8: /* {TcContinue31:8} */ {
    switch($0.a10) {
     case 0n: {
      const $1d7 = ($0.a5.value=$0.a11);
-     return {h: 0 /* {TcDone:28} */, a1: {h: 1 /* Right */, a1: {a1: $0.a6, a2: $0.a2, a3: $0.a7, a4: $0.a8, a5: {h: 0 /* Run */, a1: $0.a9}}}};
+     return {h: 0 /* {TcDone:31} */, a1: {h: 1 /* Right */, a1: {a1: $0.a6, a2: $0.a2, a3: $0.a7, a4: $0.a8, a5: {h: 0 /* Run */, a1: $0.a9}}}};
     }
     default: {
      const $1e4 = ($0.a10-1n);
      const $1e7 = Data_Buffer_Core_prim__getByte($0.a3, $0.a11);
-     return {h: 9 /* {TcContinue28:9} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $1e4, a7: $0.a12, a8: $0.a11, a9: $0.a9, a10: $0.a8, a11: $0.a7, a12: $0.a6, a13: $1e7, a14: Data_Array_Core_prim__arrayGet($0.a8, BigInt($1e7))};
+     return {h: 9 /* {TcContinue31:9} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $1e4, a7: $0.a12, a8: $0.a11, a9: $0.a9, a10: $0.a8, a11: $0.a7, a12: $0.a6, a13: $1e7, a14: Data_Array_Core_prim__arrayGet($0.a8, BigInt($1e7))};
     }
    }
   }
-  case 9: /* {TcContinue28:9} */ {
+  case 9: /* {TcContinue31:9} */ {
    switch($0.a14.h) {
-    case 0: /* Keep */ return {h: 8 /* {TcContinue28:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a11, a8: $0.a10, a9: $0.a9, a10: $0.a6, a11: ($0.a8+1n), a12: $0.a7};
+    case 0: /* Keep */ return {h: 8 /* {TcContinue31:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a11, a8: $0.a10, a9: $0.a9, a10: $0.a6, a11: ($0.a8+1n), a12: $0.a7};
     case 1: /* Done */ {
      const $20d = ($0.a5.value=($0.a8+1n));
      const $20c = $0.a14.a1({a1: $0.a2, a2: undefined});
-     return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $20c, a7: $0.a6, a8: ($0.a8+1n), a9: undefined};
+     return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $20c, a7: $0.a6, a8: ($0.a8+1n), a9: undefined};
     }
-    case 2: /* Ignore */ return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a6, a8: ($0.a8+1n), a9: $0.a7};
-    case 3: /* Move */ return {h: 8 /* {TcContinue28:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a11, a8: Data_Array_Core_prim__arrayGet($0.a11, $0.a14.a1), a9: $0.a14.a2, a10: $0.a6, a11: ($0.a8+1n), a12: $0.a7};
-    case 4: /* MoveI */ return {h: 1 /* {TcContinue28:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a11, a8: Data_Array_Core_prim__arrayGet($0.a11, $0.a14.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
-    case 5: /* MoveE */ return {h: 6 /* {TcContinue28:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a11, a8: Data_Array_Core_prim__arrayGet($0.a11, $0.a14.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
+    case 2: /* Ignore */ return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a6, a8: ($0.a8+1n), a9: $0.a7};
+    case 3: /* Move */ return {h: 8 /* {TcContinue31:8} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a11, a8: Data_Array_Core_prim__arrayGet($0.a11, $0.a14.a1), a9: $0.a14.a2, a10: $0.a6, a11: ($0.a8+1n), a12: $0.a7};
+    case 4: /* MoveI */ return {h: 1 /* {TcContinue31:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a11, a8: Data_Array_Core_prim__arrayGet($0.a11, $0.a14.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
+    case 5: /* MoveE */ return {h: 6 /* {TcContinue31:6} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $0.a12, a7: $0.a11, a8: Data_Array_Core_prim__arrayGet($0.a11, $0.a14.a1), a9: $0.a6, a10: ($0.a8+1n), a11: $0.a7};
     case 6: /* Bottom */ {
      const $260 = ($0.a5.value=$0.a8);
      const $25f = $0.a9({a1: $0.a2, a2: undefined});
-     return {h: 3 /* {TcContinue28:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $25f, a7: ($0.a6+1n), a8: $0.a8, a9: undefined};
+     return {h: 3 /* {TcContinue31:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a5, a6: $25f, a7: ($0.a6+1n), a8: $0.a8, a9: undefined};
     }
    }
   }
@@ -1502,69 +2096,82 @@ function x24tcOpt_28($0) {
 PST parser -> IBuffer n -> Ref q (LTENat n) -> Ref q (LTENat n) -> PIx parser -> PStepper k parser -> PByteStep k parser -> (pos : Nat) ->
 Ix pos n => LoopRes parser */
 function Text_ILex_Runner_igno($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a) {
- return __tailRec(x24tcOpt_28, {h: 1 /* {TcContinue28:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a});
+ return __tailRec(x24tcOpt_31, {h: 1 /* {TcContinue31:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a});
 }
 
 /* Text.ILex.Runner.case block in igno */
 function Text_ILex_Runner_case__igno_23351($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a, $b, $c) {
- return __tailRec(x24tcOpt_28, {h: 2 /* {TcContinue28:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b, a13: $c});
+ return __tailRec(x24tcOpt_31, {h: 2 /* {TcContinue31:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b, a13: $c});
 }
 
 /* Text.ILex.Runner.loop : (parser : P1 q e a) ->
 PST parser -> IBuffer n -> Ref q (LTENat n) -> Ref q (LTENat n) -> PIx parser -> (pos : Nat) ->
 Ix pos n => LoopRes parser */
 function Text_ILex_Runner_loop($0, $1, $2, $3, $4, $5, $6, $7, $8) {
- return __tailRec(x24tcOpt_28, {h: 3 /* {TcContinue28:3} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8});
+ return __tailRec(x24tcOpt_31, {h: 3 /* {TcContinue31:3} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8});
 }
 
 /* Text.ILex.Runner.case block in case block in loop */
 function Text_ILex_Runner_case__casex20blockx20inx20loop_22313($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a) {
- return __tailRec(x24tcOpt_28, {h: 4 /* {TcContinue28:4} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a});
+ return __tailRec(x24tcOpt_31, {h: 4 /* {TcContinue31:4} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a});
 }
 
 /* Text.ILex.Runner.case block in case block in case block in loop */
 function Text_ILex_Runner_case__casex20blockx20inx20casex20blockx20inx20loop_22369($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a, $b, $c, $d) {
- return __tailRec(x24tcOpt_28, {h: 5 /* {TcContinue28:5} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b, a13: $c, a14: $d});
+ return __tailRec(x24tcOpt_31, {h: 5 /* {TcContinue31:5} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b, a13: $c, a14: $d});
 }
 
 /* Text.ILex.Runner.step : (parser : P1 q e a) ->
 PST parser -> IBuffer n -> Ref q (LTENat n) -> Ref q (LTENat n) -> PIx parser -> PStepper k parser -> PByteStep k parser -> (pos : Nat) ->
 Ix pos n => LoopRes parser */
 function Text_ILex_Runner_step($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a) {
- return __tailRec(x24tcOpt_28, {h: 6 /* {TcContinue28:6} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a});
+ return __tailRec(x24tcOpt_31, {h: 6 /* {TcContinue31:6} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a});
 }
 
 /* Text.ILex.Runner.case block in step */
 function Text_ILex_Runner_case__step_23814($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a, $b, $c) {
- return __tailRec(x24tcOpt_28, {h: 7 /* {TcContinue28:7} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b, a13: $c});
+ return __tailRec(x24tcOpt_31, {h: 7 /* {TcContinue31:7} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b, a13: $c});
 }
 
 /* Text.ILex.Runner.succ : (parser : P1 q e a) ->
 PST parser -> IBuffer n -> Ref q (LTENat n) -> Ref q (LTENat n) -> PIx parser -> PStepper k parser -> PByteStep k parser -> PRun parser -> (pos : Nat) ->
 Ix pos n => LoopRes parser */
 function Text_ILex_Runner_succ($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a, $b) {
- return __tailRec(x24tcOpt_28, {h: 8 /* {TcContinue28:8} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b});
+ return __tailRec(x24tcOpt_31, {h: 8 /* {TcContinue31:8} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b});
 }
 
 /* Text.ILex.Runner.case block in succ */
 function Text_ILex_Runner_case__succ_22812($0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $a, $b, $c, $d) {
- return __tailRec(x24tcOpt_28, {h: 9 /* {TcContinue28:9} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b, a13: $c, a14: $d});
+ return __tailRec(x24tcOpt_31, {h: 9 /* {TcContinue31:9} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7, a9: $8, a10: $9, a11: $a, a12: $b, a13: $c, a14: $d});
 }
 
-/* {$tcOpt:29} */
-function x24tcOpt_29($0) {
+/* {$tcOpt:32} */
+function x24tcOpt_32($0) {
+ switch($0.a3.h) {
+  case 0: /* nil */ return {h: 0 /* {TcDone:32} */, a1: $0.a2};
+  case undefined: /* cons */ return {h: 1 /* {TcContinue32:1} */, a1: $0.a1, a2: $0.a1($0.a2)($0.a3.a1), a3: $0.a3.a2};
+ }
+}
+
+/* Prelude.Types.foldl */
+function Prelude_Types_foldl_Foldable_List($0, $1, $2) {
+ return __tailRec(x24tcOpt_32, {h: 1 /* {TcContinue32:1} */, a1: $0, a2: $1, a3: $2});
+}
+
+/* {$tcOpt:33} */
+function x24tcOpt_33($0) {
  switch($0.a1) {
   case 0n: {
    switch($0.a2.h) {
-    case undefined: /* cons */ return {h: 0 /* {TcDone:29} */, a1: {a1: $0.a2.a1}};
-    default: return {h: 0 /* {TcDone:29} */, a1: {h: 0}};
+    case undefined: /* cons */ return {h: 0 /* {TcDone:33} */, a1: {a1: $0.a2.a1}};
+    default: return {h: 0 /* {TcDone:33} */, a1: {h: 0}};
    }
   }
   default: {
    const $8 = ($0.a1-1n);
    switch($0.a2.h) {
-    case undefined: /* cons */ return {h: 1 /* {TcContinue29:1} */, a1: $8, a2: $0.a2.a2};
-    default: return {h: 0 /* {TcDone:29} */, a1: {h: 0}};
+    case undefined: /* cons */ return {h: 1 /* {TcContinue33:1} */, a1: $8, a2: $0.a2.a2};
+    default: return {h: 0 /* {TcDone:33} */, a1: {h: 0}};
    }
   }
  }
@@ -1572,43 +2179,43 @@ function x24tcOpt_29($0) {
 
 /* Prelude.Types.getAt : Nat -> List a -> Maybe a */
 function Prelude_Types_getAt($0, $1) {
- return __tailRec(x24tcOpt_29, {h: 1 /* {TcContinue29:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_33, {h: 1 /* {TcContinue33:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:30} */
-function x24tcOpt_30($0) {
+/* {$tcOpt:34} */
+function x24tcOpt_34($0) {
  switch($0.a2.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:30} */, a1: $0.a1};
-  case undefined: /* cons */ return {h: 1 /* {TcContinue30:1} */, a1: {a1: $0.a2.a1, a2: $0.a1}, a2: $0.a2.a2};
+  case 0: /* nil */ return {h: 0 /* {TcDone:34} */, a1: $0.a1};
+  case undefined: /* cons */ return {h: 1 /* {TcContinue34:1} */, a1: {a1: $0.a2.a1, a2: $0.a1}, a2: $0.a2.a2};
  }
 }
 
 /* Data.Vect.fromList' : Vect len elem -> (l : List elem) -> Vect (length l + len) elem */
 function Data_Vect_fromListx27($0, $1) {
- return __tailRec(x24tcOpt_30, {h: 1 /* {TcContinue30:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_34, {h: 1 /* {TcContinue34:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:31} */
-function x24tcOpt_31($0) {
+/* {$tcOpt:35} */
+function x24tcOpt_35($0) {
  switch($0.a2.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:31} */, a1: $0.a1};
-  case undefined: /* cons */ return {h: 1 /* {TcContinue31:1} */, a1: {a1: $0.a2.a1, a2: $0.a1}, a2: $0.a2.a2};
+  case 0: /* nil */ return {h: 0 /* {TcDone:35} */, a1: $0.a1};
+  case undefined: /* cons */ return {h: 1 /* {TcContinue35:1} */, a1: {a1: $0.a2.a1, a2: $0.a1}, a2: $0.a2.a2};
  }
 }
 
 /* Data.Vect.reverseOnto : Vect n elem -> Vect m elem -> Vect (n + m) elem */
 function Data_Vect_reverseOnto($0, $1) {
- return __tailRec(x24tcOpt_31, {h: 1 /* {TcContinue31:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_35, {h: 1 /* {TcContinue35:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:32} */
-function x24tcOpt_32($0) {
+/* {$tcOpt:36} */
+function x24tcOpt_36($0) {
  switch($0.a3.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:32} */, a1: $0.a2};
+  case 0: /* nil */ return {h: 0 /* {TcDone:36} */, a1: $0.a2};
   case undefined: /* cons */ {
    switch($0.a3.a1.h) {
-    case 1: /* Index */ return {h: 1 /* {TcContinue32:1} */, a1: $0.a1, a2: ($0.a2+('['+(Prelude_Show_show_Show_Nat($0.a3.a1.a1)+']'))), a3: $0.a3.a2};
-    case 0: /* Key */ return {h: 1 /* {TcContinue32:1} */, a1: $0.a1, a2: ($0.a2+JSON_FromJSON_n__13397_7283_formatKey($0.a1, $0.a3.a1.a1)), a3: $0.a3.a2};
+    case 1: /* Index */ return {h: 1 /* {TcContinue36:1} */, a1: $0.a1, a2: ($0.a2+('['+(Prelude_Show_show_Show_Nat($0.a3.a1.a1)+']'))), a3: $0.a3.a2};
+    case 0: /* Key */ return {h: 1 /* {TcContinue36:1} */, a1: $0.a1, a2: ($0.a2+JSON_FromJSON_n__13397_7283_formatKey($0.a1, $0.a3.a1.a1)), a3: $0.a3.a2};
    }
   }
  }
@@ -1616,54 +2223,72 @@ function x24tcOpt_32($0) {
 
 /* JSON.FromJSON.13397:7282:format */
 function JSON_FromJSON_n__13397_7282_format($0, $1, $2) {
- return __tailRec(x24tcOpt_32, {h: 1 /* {TcContinue32:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_36, {h: 1 /* {TcContinue36:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:33} */
-function x24tcOpt_33($0) {
+/* {$tcOpt:37} */
+function x24tcOpt_37($0) {
+ switch($0.a2.h) {
+  case 0: /* nil */ return {h: 0 /* {TcDone:37} */, a1: {h: 0}};
+  case undefined: /* cons */ {
+   switch($0.a1($0.a2.a1)) {
+    case 1: return {h: 0 /* {TcDone:37} */, a1: {a1: $0.a2.a1}};
+    case 0: return {h: 1 /* {TcContinue37:1} */, a1: $0.a1, a2: $0.a2.a2};
+   }
+  }
+ }
+}
+
+/* Data.List.find : (a -> Bool) -> List a -> Maybe a */
+function Data_List_find($0, $1) {
+ return __tailRec(x24tcOpt_37, {h: 1 /* {TcContinue37:1} */, a1: $0, a2: $1});
+}
+
+/* {$tcOpt:38} */
+function x24tcOpt_38($0) {
  switch($0.a3.h) {
   case undefined: /* cons */ {
    switch($0.a2($0.a3.a1)) {
-    case 1: return {h: 1 /* {TcContinue33:1} */, a1: {a1: $0.a1, a2: $0.a3.a1}, a2: $0.a2, a3: $0.a3.a2};
-    case 0: return {h: 1 /* {TcContinue33:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a2};
+    case 1: return {h: 1 /* {TcContinue38:1} */, a1: {a1: $0.a1, a2: $0.a3.a1}, a2: $0.a2, a3: $0.a3.a2};
+    case 0: return {h: 1 /* {TcContinue38:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3.a2};
    }
   }
-  case 0: /* nil */ return {h: 0 /* {TcDone:33} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, {h: 0})};
+  case 0: /* nil */ return {h: 0 /* {TcDone:38} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, {h: 0})};
  }
 }
 
 /* Prelude.Types.List.filterAppend : SnocList a -> (a -> Bool) -> List a -> List a */
 function Prelude_Types_List_filterAppend($0, $1, $2) {
- return __tailRec(x24tcOpt_33, {h: 1 /* {TcContinue33:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_38, {h: 1 /* {TcContinue38:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:34} */
-function x24tcOpt_34($0) {
+/* {$tcOpt:39} */
+function x24tcOpt_39($0) {
  switch($0.h) {
-  case 1: /* {TcContinue34:1} */ {
+  case 1: /* {TcContinue39:1} */ {
    switch($0.a3) {
-    case 0n: return {h: 0 /* {TcDone:34} */, a1: undefined};
+    case 0n: return {h: 0 /* {TcDone:39} */, a1: undefined};
     default: {
      const $4 = ($0.a3-1n);
      const $7 = Data_Array_Core_prim__arraySet($0.a2, $0.a4, $0.a5, $0.a6);
-     return {h: 2 /* {TcContinue34:2} */, a1: $0.a1, a2: $0.a2, a3: $4, a4: $0.a5, a5: $0.a4, a6: $7, a7: undefined, a8: Data_Buffer_Core_prim__getByteOffset($0.a1.a1, $0.a4, $0.a1.a2)};
+     return {h: 2 /* {TcContinue39:2} */, a1: $0.a1, a2: $0.a2, a3: $4, a4: $0.a5, a5: $0.a4, a6: $7, a7: undefined, a8: Data_Buffer_Core_prim__getByteOffset($0.a1.a1, $0.a4, $0.a1.a2)};
     }
    }
   }
-  case 2: /* {TcContinue34:2} */ {
+  case 2: /* {TcContinue39:2} */ {
    switch($0.a8) {
-    case 10: return {h: 1 /* {TcContinue34:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: ($0.a5+1n), a5: {a1: ($0.a4.a1+1n), a2: 0n}, a6: $0.a7};
+    case 10: return {h: 1 /* {TcContinue39:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: ($0.a5+1n), a5: {a1: ($0.a4.a1+1n), a2: 0n}, a6: $0.a7};
     default: {
      switch(Prelude_EqOrd_x3c_Ord_Bits8($0.a8, 128)) {
-      case 1: return {h: 1 /* {TcContinue34:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: ($0.a5+1n), a5: {a1: $0.a4.a1, a2: ($0.a4.a2+1n)}, a6: $0.a7};
-      case 0: return {h: 3 /* {TcContinue34:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: ($0.a5+1n), a5: $0.a4, a6: $0.a7};
+      case 1: return {h: 1 /* {TcContinue39:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: ($0.a5+1n), a5: {a1: $0.a4.a1, a2: ($0.a4.a2+1n)}, a6: $0.a7};
+      case 0: return {h: 3 /* {TcContinue39:3} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: ($0.a5+1n), a5: $0.a4, a6: $0.a7};
      }
     }
    }
   }
-  case 3: /* {TcContinue34:3} */ {
+  case 3: /* {TcContinue39:3} */ {
    switch($0.a3) {
-    case 0n: return {h: 0 /* {TcDone:34} */, a1: undefined};
+    case 0n: return {h: 0 /* {TcDone:39} */, a1: undefined};
     default: {
      const $43 = ($0.a3-1n);
      const $46 = Data_Array_Core_prim__arraySet($0.a2, $0.a4, $0.a5, $0.a6);
@@ -1679,8 +2304,8 @@ function x24tcOpt_34($0) {
       }
      }
      switch($4c) {
-      case 1: return {h: 1 /* {TcContinue34:1} */, a1: $0.a1, a2: $0.a2, a3: ($43+1n), a4: $0.a4, a5: {a1: $0.a5.a1, a2: ($0.a5.a2+1n)}, a6: undefined};
-      case 0: return {h: 3 /* {TcContinue34:3} */, a1: $0.a1, a2: $0.a2, a3: $43, a4: ($0.a4+1n), a5: $0.a5, a6: undefined};
+      case 1: return {h: 1 /* {TcContinue39:1} */, a1: $0.a1, a2: $0.a2, a3: ($43+1n), a4: $0.a4, a5: {a1: $0.a5.a1, a2: ($0.a5.a2+1n)}, a6: undefined};
+      case 0: return {h: 3 /* {TcContinue39:3} */, a1: $0.a1, a2: $0.a2, a3: $43, a4: ($0.a4+1n), a5: $0.a5, a6: undefined};
      }
     }
    }
@@ -1691,63 +2316,99 @@ function x24tcOpt_34($0) {
 /* Text.Bounds.fillMap : ByteVect n -> MArray s (S n) Position -> (k : Nat) -> Ix k n =>
 Position -> F1' s */
 function Text_Bounds_fillMap($0, $1, $2, $3, $4, $5) {
- return __tailRec(x24tcOpt_34, {h: 1 /* {TcContinue34:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
+ return __tailRec(x24tcOpt_39, {h: 1 /* {TcContinue39:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
 }
 
 /* Text.Bounds.case block in case block in fillMap */
 function Text_Bounds_case__casex20blockx20inx20fillMap_12910($0, $1, $2, $3, $4, $5, $6, $7) {
- return __tailRec(x24tcOpt_34, {h: 2 /* {TcContinue34:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7});
+ return __tailRec(x24tcOpt_39, {h: 2 /* {TcContinue39:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6, a8: $7});
 }
 
 /* Text.Bounds.skip : ByteVect n -> MArray s (S n) Position -> (k : Nat) -> Ix k n =>
 Position -> F1' s */
 function Text_Bounds_skip($0, $1, $2, $3, $4, $5) {
- return __tailRec(x24tcOpt_34, {h: 3 /* {TcContinue34:3} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
+ return __tailRec(x24tcOpt_39, {h: 3 /* {TcContinue39:3} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
 }
 
-/* {$tcOpt:35} */
-function x24tcOpt_35($0) {
+/* {$tcOpt:40} */
+function x24tcOpt_40($0) {
  switch($0.a2.h) {
-  case 0: /* Eps */ return {h: 0 /* {TcDone:35} */, a1: $0.a3};
+  case 0: /* Eps */ return {h: 0 /* {TcDone:40} */, a1: $0.a3};
   case 2: /* And */ {
    const $4 = Text_ILex_Internal_ENFA_enfa($0.a1, $0.a2.a2, $0.a3, $0.a4);
-   return {h: 1 /* {TcContinue35:1} */, a1: $0.a1, a2: $0.a2.a1, a3: $4, a4: undefined};
+   return {h: 1 /* {TcContinue40:1} */, a1: $0.a1, a2: $0.a2.a1, a3: $4, a4: undefined};
   }
   case 1: /* Ch */ {
    const $e = Text_ILex_Internal_Types_inc($0.a1, $0.a4);
    const $12 = Text_ILex_Internal_Types_insert1($e, {a1: {h: 0}, a2: {h: 0}, a3: Prelude_Types_List_mapAppend({h: 0}, $1c => ({a1: $1c, a2: $0.a3}), $0.a2.a1)}, $0.a1.a3, undefined);
-   return {h: 0 /* {TcDone:35} */, a1: $e};
+   return {h: 0 /* {TcDone:40} */, a1: $e};
   }
   case 3: /* Or */ {
    const $24 = Text_ILex_Internal_ENFA_enfa($0.a1, $0.a2.a1, $0.a3, $0.a4);
    const $2a = Text_ILex_Internal_ENFA_enfa($0.a1, $0.a2.a2, $0.a3, undefined);
    const $30 = Text_ILex_Internal_Types_inc($0.a1, undefined);
    const $34 = Text_ILex_Internal_Types_insert1($30, {a1: {h: 0}, a2: {a1: $24, a2: {a1: $2a, a2: {h: 0}}}, a3: {h: 0}}, $0.a1.a3, undefined);
-   return {h: 0 /* {TcDone:35} */, a1: $30};
+   return {h: 0 /* {TcDone:40} */, a1: $30};
   }
   case 4: /* Star */ {
    const $43 = Text_ILex_Internal_Types_inc($0.a1, $0.a4);
    const $47 = Text_ILex_Internal_ENFA_enfa($0.a1, $0.a2.a1, $43, undefined);
    const $4d = Text_ILex_Internal_Types_insert1($43, {a1: {h: 0}, a2: {a1: $47, a2: {a1: $0.a3, a2: {h: 0}}}, a3: {h: 0}}, $0.a1.a3, undefined);
-   return {h: 0 /* {TcDone:35} */, a1: $43};
+   return {h: 0 /* {TcDone:40} */, a1: $43};
   }
  }
 }
 
 /* Text.ILex.Internal.ENFA.enfa : DFAState s a => RExp8 b -> Nat -> F1 s Nat */
 function Text_ILex_Internal_ENFA_enfa($0, $1, $2, $3) {
- return __tailRec(x24tcOpt_35, {h: 1 /* {TcContinue35:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
+ return __tailRec(x24tcOpt_40, {h: 1 /* {TcContinue40:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
 }
 
-/* {$tcOpt:36} */
-function x24tcOpt_36($0) {
+/* {$tcOpt:41} */
+function x24tcOpt_41($0) {
+ switch($0.a1.h) {
+  case 0: /* nil */ return {h: 0 /* {TcDone:41} */, a1: 0};
+  case undefined: /* cons */ {
+   switch(Prelude_Types_elem(csegen_44()(), csegen_681()(), $0.a1.a1)($0.a1.a2)) {
+    case 1: return {h: 0 /* {TcDone:41} */, a1: 1};
+    case 0: return {h: 1 /* {TcContinue41:1} */, a1: $0.a1.a2};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.duplicate : List String -> Bool */
+function JSON_Wire_Check_duplicate($0) {
+ return __tailRec(x24tcOpt_41, {h: 1 /* {TcContinue41:1} */, a1: $0});
+}
+
+/* {$tcOpt:42} */
+function x24tcOpt_42($0) {
+ switch($0.a2.h) {
+  case 0: /* nil */ return {h: 0 /* {TcDone:42} */, a1: {h: 0}};
+  case undefined: /* cons */ {
+   switch($0.a1($0.a2.a1)) {
+    case 1: return {h: 1 /* {TcContinue42:1} */, a1: $0.a1, a2: $0.a2.a2};
+    case 0: return {h: 0 /* {TcDone:42} */, a1: {a1: $0.a2.a1, a2: $0.a2.a2}};
+   }
+  }
+ }
+}
+
+/* Data.List.dropWhile : (a -> Bool) -> List a -> List a */
+function Data_List_dropWhile($0, $1) {
+ return __tailRec(x24tcOpt_42, {h: 1 /* {TcContinue42:1} */, a1: $0, a2: $1});
+}
+
+/* {$tcOpt:43} */
+function x24tcOpt_43($0) {
  switch($0.a1) {
-  case 0n: return {h: 0 /* {TcDone:36} */, a1: $0.a2};
+  case 0n: return {h: 0 /* {TcDone:43} */, a1: $0.a2};
   default: {
    const $4 = ($0.a1-1n);
    switch($0.a2.h) {
-    case 0: /* nil */ return {h: 0 /* {TcDone:36} */, a1: {h: 0}};
-    case undefined: /* cons */ return {h: 1 /* {TcContinue36:1} */, a1: $4, a2: $0.a2.a2};
+    case 0: /* nil */ return {h: 0 /* {TcDone:43} */, a1: {h: 0}};
+    case undefined: /* cons */ return {h: 1 /* {TcContinue43:1} */, a1: $4, a2: $0.a2.a2};
    }
   }
  }
@@ -1755,22 +2416,47 @@ function x24tcOpt_36($0) {
 
 /* Data.List.drop : Nat -> List a -> List a */
 function Data_List_drop($0, $1) {
- return __tailRec(x24tcOpt_36, {h: 1 /* {TcContinue36:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_43, {h: 1 /* {TcContinue43:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:37} */
-function x24tcOpt_37($0) {
+/* {$tcOpt:44} */
+function x24tcOpt_44($0) {
+ switch($0.a2.h) {
+  case 0: /* nil */ return {h: 0 /* {TcDone:44} */, a1: 1};
+  case undefined: /* cons */ {
+   const $9 = $a => {
+    switch(Prelude_Types_foldMap_Foldable_List(csegen_251(), kind => Prelude_Types_elem(csegen_44()(), csegen_325()(), kind)(JSON_Wire_Description_representationKinds($0.a1, $a.a2)), JSON_Wire_Description_representationKinds($0.a1, $0.a2.a1.a2))) {
+     case 1: return 0;
+     case 0: return 1;
+    }
+   };
+   const $5 = Prelude_Types_foldMap_Foldable_List(csegen_290(), $9, $0.a2.a2);
+   switch($5) {
+    case 1: return {h: 1 /* {TcContinue44:1} */, a1: $0.a1, a2: $0.a2.a2};
+    case 0: return {h: 0 /* {TcDone:44} */, a1: 0};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.disjointArmKinds : RepresentationProfile -> List (String, ValueShape) -> Bool */
+function JSON_Wire_Check_disjointArmKinds($0, $1) {
+ return __tailRec(x24tcOpt_44, {h: 1 /* {TcContinue44:1} */, a1: $0, a2: $1});
+}
+
+/* {$tcOpt:45} */
+function x24tcOpt_45($0) {
  switch($0.h) {
-  case 1: /* {TcContinue37:1} */ return {h: 2 /* {TcContinue37:2} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a6, a6: $0.a5, a7: Data_Array_Index_tryNatToFin($0.a4, $0.a3)};
-  case 2: /* {TcContinue37:2} */ {
+  case 1: /* {TcContinue45:1} */ return {h: 2 /* {TcContinue45:2} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $0.a4, a5: $0.a6, a6: $0.a5, a7: Data_Array_Index_tryNatToFin($0.a4, $0.a3)};
+  case 2: /* {TcContinue45:2} */ {
    switch($0.a7.h) {
     case undefined: /* just */ {
      const $d = Data_Array_Core_prim__arraySet($0.a6, $0.a7.a1, {a1: $0.a1}, $0.a5);
-     return {h: 0 /* {TcDone:37} */, a1: ($0.a2.value={a1: $0.a4, a2: $0.a6})};
+     return {h: 0 /* {TcDone:45} */, a1: ($0.a2.value={a1: $0.a4, a2: $0.a6})};
     }
     case 0: /* nothing */ {
      const $1b = Data_Array_Mutable_mgrow($0.a4, $0.a6, $0.a4, {h: 0}, $0.a5);
-     return {h: 1 /* {TcContinue37:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: ($0.a4+$0.a4), a5: $1b, a6: undefined};
+     return {h: 1 /* {TcContinue45:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: ($0.a4+$0.a4), a5: $1b, a6: undefined};
     }
    }
   }
@@ -1779,16 +2465,16 @@ function x24tcOpt_37($0) {
 
 /* Text.ILex.Internal.Types.9500:9393:go */
 function Text_ILex_Internal_Types_n__9500_9393_go($0, $1, $2, $3, $4, $5) {
- return __tailRec(x24tcOpt_37, {h: 1 /* {TcContinue37:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
+ return __tailRec(x24tcOpt_45, {h: 1 /* {TcContinue45:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5});
 }
 
 /* Text.ILex.Internal.Types.case block in insert1,go */
 function Text_ILex_Internal_Types_case__insert1x2cgo_9410($0, $1, $2, $3, $4, $5, $6) {
- return __tailRec(x24tcOpt_37, {h: 2 /* {TcContinue37:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6});
+ return __tailRec(x24tcOpt_45, {h: 2 /* {TcContinue45:2} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4, a6: $5, a7: $6});
 }
 
-/* {$tcOpt:38} */
-function x24tcOpt_38($0) {
+/* {$tcOpt:46} */
+function x24tcOpt_46($0) {
  switch($0.a4.h) {
   case undefined: /* cons */ {
    switch($0.a5.h) {
@@ -1797,56 +2483,56 @@ function x24tcOpt_38($0) {
      const $f = {a1: $0.a4.a1, a2: $0.a4.a2};
      const $12 = {a1: $0.a5.a1, a2: $0.a5.a2};
      switch($0.a1.a1.a3(Text_ILex_Char_Range_upperBound($0.a1, $0.a4.a1))(Text_ILex_Char_Range_upperBound($0.a1, $0.a5.a1))) {
-      case 1: return {h: 1 /* {TcContinue38:1} */, a1: $0.a1, a2: $0.a2, a3: $4, a4: $0.a4.a2, a5: $12};
-      case 0: return {h: 1 /* {TcContinue38:1} */, a1: $0.a1, a2: $0.a2, a3: $4, a4: $f, a5: $0.a5.a2};
+      case 1: return {h: 1 /* {TcContinue46:1} */, a1: $0.a1, a2: $0.a2, a3: $4, a4: $0.a4.a2, a5: $12};
+      case 0: return {h: 1 /* {TcContinue46:1} */, a1: $0.a1, a2: $0.a2, a3: $4, a4: $f, a5: $0.a5.a2};
      }
     }
-    default: return {h: 0 /* {TcDone:38} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {h: 0})};
+    default: return {h: 0 /* {TcDone:46} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {h: 0})};
    }
   }
-  default: return {h: 0 /* {TcDone:38} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {h: 0})};
+  default: return {h: 0 /* {TcDone:46} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a3, {h: 0})};
  }
 }
 
 /* Text.ILex.Char.Set.inters : WithBounds t => Neg t =>
 SnocList (RangeOf t) -> List (RangeOf t) -> List (RangeOf t) -> List (RangeOf t) */
 function Text_ILex_Char_Set_inters($0, $1, $2, $3, $4) {
- return __tailRec(x24tcOpt_38, {h: 1 /* {TcContinue38:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4});
+ return __tailRec(x24tcOpt_46, {h: 1 /* {TcContinue46:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4});
 }
 
-/* {$tcOpt:39} */
-function x24tcOpt_39($0) {
+/* {$tcOpt:47} */
+function x24tcOpt_47($0) {
  switch($0.a3) {
-  case 0n: return {h: 0 /* {TcDone:39} */, a1: $0.a2};
+  case 0n: return {h: 0 /* {TcDone:47} */, a1: $0.a2};
   default: {
    const $4 = ($0.a3-1n);
-   return {h: 1 /* {TcContinue39:1} */, a1: $0.a1, a2: (($0.a2*10n)+(BigInt(Data_Buffer_Core_prim__getByte($0.a1, $0.a4))-48n)), a3: $4, a4: ($0.a4+1n)};
+   return {h: 1 /* {TcContinue47:1} */, a1: $0.a1, a2: (($0.a2*10n)+(BigInt(Data_Buffer_Core_prim__getByte($0.a1, $0.a4))-48n)), a3: $4, a4: ($0.a4+1n)};
   }
  }
 }
 
 /* Text.ILex.Util.decimalBV : IBuffer n -> Integer -> (k : Nat) -> Ix k n => Integer */
 function Text_ILex_Util_decimalBV($0, $1, $2, $3) {
- return __tailRec(x24tcOpt_39, {h: 1 /* {TcContinue39:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
+ return __tailRec(x24tcOpt_47, {h: 1 /* {TcContinue47:1} */, a1: $0, a2: $1, a3: $2, a4: $3});
 }
 
-/* {$tcOpt:40} */
-function x24tcOpt_40($0) {
+/* {$tcOpt:48} */
+function x24tcOpt_48($0) {
  switch($0.a1.h) {
   case 0: /* nil */ {
    switch($0.a2.h) {
-    case 0: /* nil */ return {h: 0 /* {TcDone:40} */, a1: 1};
-    case undefined: /* cons */ return {h: 0 /* {TcDone:40} */, a1: 0};
+    case 0: /* nil */ return {h: 0 /* {TcDone:48} */, a1: 1};
+    case undefined: /* cons */ return {h: 0 /* {TcDone:48} */, a1: 0};
    }
   }
   case undefined: /* cons */ {
    switch($0.a2.h) {
-    case 0: /* nil */ return {h: 0 /* {TcDone:40} */, a1: 2};
+    case 0: /* nil */ return {h: 0 /* {TcDone:48} */, a1: 2};
     case undefined: /* cons */ {
      switch(Prelude_EqOrd_compare_Ord_Integer($0.a1.a1, $0.a2.a1)) {
-      case 0: return {h: 0 /* {TcDone:40} */, a1: 0};
-      case 2: return {h: 0 /* {TcDone:40} */, a1: 2};
-      case 1: return {h: 1 /* {TcContinue40:1} */, a1: $0.a1.a2, a2: $0.a2.a2};
+      case 0: return {h: 0 /* {TcDone:48} */, a1: 0};
+      case 2: return {h: 0 /* {TcDone:48} */, a1: 2};
+      case 1: return {h: 1 /* {TcContinue48:1} */, a1: $0.a1.a2, a2: $0.a2.a2};
      }
     }
    }
@@ -1860,47 +2546,81 @@ function x24tcOpt_40($0) {
 (0 _ : (CodesBefore right left -> CodesBefore originalRight originalLeft)) ->
 CodesComparison originalLeft originalRight */
 function Value_Unicode_Order_compareCodesWorker($0, $1) {
- return __tailRec(x24tcOpt_40, {h: 1 /* {TcContinue40:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_48, {h: 1 /* {TcContinue48:1} */, a1: $0, a2: $1});
 }
 
-/* {$tcOpt:41} */
-function x24tcOpt_41($0) {
+/* {$tcOpt:49} */
+function x24tcOpt_49($0) {
  switch($0.a2.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:41} */, a1: undefined};
+  case 0: /* nil */ return {h: 0 /* {TcDone:49} */, a1: undefined};
   case undefined: /* cons */ {
    const $4 = $0.a1($0.a2.a1)($0.a3);
-   return {h: 1 /* {TcContinue41:1} */, a1: $0.a1, a2: $0.a2.a2, a3: undefined};
+   return {h: 1 /* {TcContinue49:1} */, a1: $0.a1, a2: $0.a2.a2, a3: undefined};
   }
  }
 }
 
 /* Data.Linear.Traverse1.traverse1_List : (a -> F1' s) -> List a -> F1' s */
 function Data_Linear_Traverse1_traverse1_List($0, $1, $2) {
- return __tailRec(x24tcOpt_41, {h: 1 /* {TcContinue41:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_49, {h: 1 /* {TcContinue49:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:42} */
-function x24tcOpt_42($0) {
+/* {$tcOpt:50} */
+function x24tcOpt_50($0) {
  switch($0.a3.h) {
-  case undefined: /* cons */ return {h: 1 /* {TcContinue42:1} */, a1: {a1: $0.a1, a2: $0.a2($0.a3.a1)}, a2: $0.a2, a3: $0.a3.a2};
-  case 0: /* nil */ return {h: 0 /* {TcDone:42} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, {h: 0})};
+  case undefined: /* cons */ return {h: 1 /* {TcContinue50:1} */, a1: {a1: $0.a1, a2: $0.a2($0.a3.a1)}, a2: $0.a2, a3: $0.a3.a2};
+  case 0: /* nil */ return {h: 0 /* {TcDone:50} */, a1: Prelude_Types_SnocList_x3cx3ex3e($0.a1, {h: 0})};
  }
 }
 
 /* Prelude.Types.List.mapAppend : SnocList b -> (a -> b) -> List a -> List b */
 function Prelude_Types_List_mapAppend($0, $1, $2) {
- return __tailRec(x24tcOpt_42, {h: 1 /* {TcContinue42:1} */, a1: $0, a2: $1, a3: $2});
+ return __tailRec(x24tcOpt_50, {h: 1 /* {TcContinue50:1} */, a1: $0, a2: $1, a3: $2});
 }
 
-/* {$tcOpt:43} */
-function x24tcOpt_43($0) {
+/* {$tcOpt:51} */
+function x24tcOpt_51($0) {
+ switch($0.a2.h) {
+  case 0: /* nil */ return {h: 0 /* {TcDone:51} */, a1: $0.a1};
+  case undefined: /* cons */ return {h: 1 /* {TcContinue51:1} */, a1: {a1: $0.a2.a1, a2: $0.a1}, a2: $0.a2.a2};
+ }
+}
+
+/* Prelude.Types.List.reverseOnto : List a -> List a -> List a */
+function Prelude_Types_List_reverseOnto($0, $1) {
+ return __tailRec(x24tcOpt_51, {h: 1 /* {TcContinue51:1} */, a1: $0, a2: $1});
+}
+
+/* {$tcOpt:52} */
+function x24tcOpt_52($0) {
+ switch($0.a2.h) {
+  case 0: /* nil */ return {h: 0 /* {TcDone:52} */, a1: {h: 0}};
+  default: {
+   switch($0.a1) {
+    case 0n: return {h: 0 /* {TcDone:52} */, a1: {a1: $0.a2.a1}};
+    default: {
+     const $8 = ($0.a1-1n);
+     return {h: 1 /* {TcContinue52:1} */, a1: $8, a2: $0.a2.a2};
+    }
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.argumentAt : Nat -> List a -> Maybe a */
+function JSON_Wire_Check_argumentAt($0, $1) {
+ return __tailRec(x24tcOpt_52, {h: 1 /* {TcContinue52:1} */, a1: $0, a2: $1});
+}
+
+/* {$tcOpt:53} */
+function x24tcOpt_53($0) {
  switch($0.a4) {
-  case 0n: return {h: 0 /* {TcDone:43} */, a1: 0};
+  case 0n: return {h: 0 /* {TcDone:53} */, a1: 0};
   default: {
    const $4 = ($0.a4-1n);
    switch($0.a3(Data_Buffer_Core_prim__getByteOffset($0.a2.a1, $0.a5, $0.a2.a2))) {
-    case 1: return {h: 0 /* {TcDone:43} */, a1: 1};
-    case 0: return {h: 1 /* {TcContinue43:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $4, a5: ($0.a5+1n)};
+    case 1: return {h: 0 /* {TcDone:53} */, a1: 1};
+    case 0: return {h: 1 /* {TcContinue53:1} */, a1: $0.a1, a2: $0.a2, a3: $0.a3, a4: $4, a5: ($0.a5+1n)};
    }
   }
  }
@@ -1908,20 +2628,20 @@ function x24tcOpt_43($0) {
 
 /* Data.ByteVect.6697:3023:go */
 function Data_ByteVect_n__6697_3023_go($0, $1, $2, $3, $4) {
- return __tailRec(x24tcOpt_43, {h: 1 /* {TcContinue43:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4});
+ return __tailRec(x24tcOpt_53, {h: 1 /* {TcContinue53:1} */, a1: $0, a2: $1, a3: $2, a4: $3, a5: $4});
 }
 
-/* {$tcOpt:44} */
-function x24tcOpt_44($0) {
+/* {$tcOpt:54} */
+function x24tcOpt_54($0) {
  switch($0.a1.h) {
-  case 0: /* nil */ return {h: 0 /* {TcDone:44} */, a1: $0.a2};
-  case undefined: /* cons */ return {h: 1 /* {TcContinue44:1} */, a1: $0.a1.a1, a2: {a1: $0.a1.a2, a2: $0.a2}};
+  case 0: /* nil */ return {h: 0 /* {TcDone:54} */, a1: $0.a2};
+  case undefined: /* cons */ return {h: 1 /* {TcContinue54:1} */, a1: $0.a1.a1, a2: {a1: $0.a1.a2, a2: $0.a2}};
  }
 }
 
 /* Prelude.Types.SnocList.(<>>) : SnocList a -> List a -> List a */
 function Prelude_Types_SnocList_x3cx3ex3e($0, $1) {
- return __tailRec(x24tcOpt_44, {h: 1 /* {TcContinue44:1} */, a1: $0, a2: $1});
+ return __tailRec(x24tcOpt_54, {h: 1 /* {TcContinue54:1} */, a1: $0, a2: $1});
 }
 
 /* {__mainExpression:0} */
@@ -1929,80 +2649,363 @@ function __mainExpression_0() {
  return PrimIO_unsafePerformIO($2 => Main_main($2));
 }
 
-/* {csegen:6} */
-const csegen_6 = __lazy(function () {
- const $0 = b => a => func => $1 => {
-  switch($1.h) {
-   case 0: /* Left */ return {h: 0 /* Left */, a1: $1.a1};
-   case 1: /* Right */ return {h: 1 /* Right */, a1: func($1.a1)};
+/* {csegen:12} */
+const csegen_12 = __lazy(function () {
+ const $1 = $2 => $3 => {
+  const $4 = Value_Unicode_scalarString($2);
+  switch($4.h) {
+   case 0: /* Left */ return {h: 0};
+   case 1: /* Right */ return Value_StringKeySortedAssoc_lookupValue($4.a1, $3);
   }
  };
- const $a = b => a => $b => $c => {
-  switch($b.h) {
-   case 0: /* Left */ return {h: 0 /* Left */, a1: $b.a1};
-   case 1: /* Right */ {
-    switch($c.h) {
-     case 1: /* Right */ return {h: 1 /* Right */, a1: $b.a1($c.a1)};
-     case 0: /* Left */ return {h: 0 /* Left */, a1: $c.a1};
+ const $0 = {a1: $1, a2: $b => Prelude_Types_List_mapAppend({h: 0}, $f => Value_StringKeySortedAssoc_bindingContent($f), $b)};
+ const $13 = $14 => {
+  switch($14.h) {
+   case 0: /* JNull */ return 'Null';
+   case 4: /* JBool */ return 'Boolean';
+   case 2: /* JDouble */ return 'Double';
+   case 3: /* JDecimal */ return 'Decimal';
+   case 1: /* JInteger */ return 'Integer';
+   case 5: /* JString */ return 'String';
+   case 6: /* JArray */ return 'Array';
+   case 7: /* JsonObject */ return 'Object';
+  }
+ };
+ const $16 = $17 => $18 => {
+  const $19 = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($18)))), $24 => JSON_Parser_json(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($18)));
+  switch($19.h) {
+   case 0: /* Left */ return {h: 0 /* Left */, a1: Text_ByteBounds_toParseError($17, Data_Buffer_Core_toString(Data_Buffer_Core_fromString(JSON_Parser_prepareText($18)), 0n, Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($18))))), $19.a1)};
+   case 1: /* Right */ return {h: 1 /* Right */, a1: $19.a1};
+  }
+ };
+ const $40 = $41 => {
+  switch($41.h) {
+   case 7: /* JsonObject */ return {a1: $41.a1};
+   default: return {h: 0};
+  }
+ };
+ const $44 = $45 => {
+  switch($45.h) {
+   case 6: /* JArray */ return {a1: $45.a1};
+   default: return {h: 0};
+  }
+ };
+ const $48 = $49 => {
+  switch($49.h) {
+   case 4: /* JBool */ return {a1: $49.a1};
+   default: return {h: 0};
+  }
+ };
+ const $4c = $4d => {
+  switch($4d.h) {
+   case 2: /* JDouble */ return {a1: $4d.a1};
+   case 3: /* JDecimal */ return {a1: JSON_Parser_jdouble($4d.a1)};
+   case 1: /* JInteger */ return {a1: Number($4d.a1)};
+   default: return {h: 0};
+  }
+ };
+ const $55 = $56 => {
+  switch($56.h) {
+   case 1: /* JInteger */ return {a1: $56.a1};
+   default: return {h: 0};
+  }
+ };
+ const $59 = $5a => {
+  switch($5a.h) {
+   case 5: /* JString */ return {a1: $5a.a1};
+   default: return {h: 0};
+  }
+ };
+ const $5d = $5e => {
+  switch($5e.h) {
+   case 0: /* JNull */ return 1;
+   default: return 0;
+  }
+ };
+ return {a1: $0, a2: $13, a3: $16, a4: $40, a5: $44, a6: $48, a7: $4c, a8: $55, a9: $59, a10: $5d};
+});
+
+/* {csegen:13} */
+const csegen_13 = __lazy(function () {
+ return $0 => JSON_FromJSON_fromJSON_FromJSON_Int64(csegen_12(), $0);
+});
+
+/* {csegen:15} */
+const csegen_15 = __lazy(function () {
+ return $0 => JSON_FromJSON_fromJSON_FromJSON_Bits64(csegen_12(), $0);
+});
+
+/* {csegen:26} */
+const csegen_26 = __lazy(function () {
+ return () => {
+  const $0 = b => a => func => $1 => {
+   switch($1.h) {
+    case 0: /* Left */ return {h: 0 /* Left */, a1: $1.a1};
+    case 1: /* Right */ return {h: 1 /* Right */, a1: func($1.a1)};
+   }
+  };
+  const $a = b => a => $b => $c => {
+   switch($b.h) {
+    case 0: /* Left */ return {h: 0 /* Left */, a1: $b.a1};
+    case 1: /* Right */ {
+     switch($c.h) {
+      case 1: /* Right */ return {h: 1 /* Right */, a1: $b.a1($c.a1)};
+      case 0: /* Left */ return {h: 0 /* Left */, a1: $c.a1};
+     }
     }
    }
-  }
+  };
+  return {a1: $0, a2: a => $8 => ({h: 1 /* Right */, a1: $8}), a3: $a};
  };
- return {a1: $0, a2: a => $8 => ({h: 1 /* Right */, a1: $8}), a3: $a};
 });
 
-/* {csegen:24} */
-const csegen_24 = __lazy(function () {
- return {a1: acc => elem => func => init => input => Prelude_Types_foldr_Foldable_List(func, init, input), a2: elem => acc => func => init => input => Prelude_Types_foldl_Foldable_List(func, init, input), a3: elem => $b => Prelude_Types_null_Foldable_List($b), a4: elem => acc => m => $f => funcM => init => input => Prelude_Types_foldlM_Foldable_List($f, funcM, init, input), a5: elem => $16 => $16, a6: a => m => $18 => f => $19 => Prelude_Types_foldMap_Foldable_List($18, f, $19)};
+/* {csegen:44} */
+const csegen_44 = __lazy(function () {
+ return () => ({a1: acc => elem => func => init => input => Prelude_Types_foldr_Foldable_List(func, init, input), a2: elem => acc => func => init => input => Prelude_Types_foldl_Foldable_List(func, init, input), a3: elem => $b => Prelude_Types_null_Foldable_List($b), a4: elem => acc => m => $f => funcM => init => input => Prelude_Types_foldlM_Foldable_List($f, funcM, init, input), a5: elem => $16 => $16, a6: a => m => $18 => f => $19 => Prelude_Types_foldMap_Foldable_List($18, f, $19)});
 });
 
-/* {csegen:30} */
-const csegen_30 = __lazy(function () {
- return Prelude_Interfaces_sequence(csegen_6(), {a1: b => a => func => $5 => Prelude_Types_List_mapAppend({h: 0}, func, $5), a2: csegen_24(), a3: b => a => f => $d => $e => $f => Prelude_Types_traverse_Traversable_List($d, $e, $f)});
+/* {csegen:50} */
+const csegen_50 = __lazy(function () {
+ return Prelude_Interfaces_sequence(csegen_26()(), {a1: b => a => func => $6 => Prelude_Types_List_mapAppend({h: 0}, func, $6), a2: csegen_44()(), a3: b => a => f => $f => $10 => $11 => Prelude_Types_traverse_Traversable_List($f, $10, $11)});
 });
 
-/* {csegen:97} */
-const csegen_97 = __lazy(function () {
- return {a1: {h: 2 /* And */, a1: Text_ILex_Interfaces_jsonSpace(), a2: {h: 4 /* Star */, a1: Text_ILex_Interfaces_jsonSpace()}}, a2: {h: 1 /* Ign */}};
+/* {csegen:56} */
+const csegen_56 = __lazy(function () {
+ return {a1: $1 => $2 => Prelude_Types_List_tailRecAppend($1, $2), a2: {h: 0}};
 });
 
-/* {csegen:98} */
-const csegen_98 = __lazy(function () {
- return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('n'.codePointAt(0)))};
+/* {csegen:57} */
+const csegen_57 = __lazy(function () {
+ return wireFields => JSON_Wire_Codec_buildObjectValue(Prelude_Types_foldMap_Foldable_List(csegen_56(), $6 => $6, wireFields));
 });
 
-/* {csegen:99} */
-const csegen_99 = __lazy(function () {
- return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('u'.codePointAt(0)))};
+/* {csegen:69} */
+const csegen_69 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireRecipient', a2: {a1: 'Salutation.Types.Recipient', a2: {h: 5 /* Reference */, a1: 'Salutation.Types.Recipient', a2: {h: 0}}, a3: 'R26:Salutation.Types.Recipient[]'}, a3: {a1: {a1: 'name', a2: {h: 3 /* StringType */}, a3: {h: 0}}, a2: {h: 0}}, a4: {h: 0}};
+});
+
+/* {csegen:75} */
+const csegen_75 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireRecipient', a2: 'Recipient', a3: 0n, a4: {h: 0 /* RecordBody */, a1: 'Salutation.Types.MkRecipient', a2: {a1: {a1: 'name', a2: 'name', a3: {h: 3 /* StringType */}}, a2: {h: 0}}}};
+});
+
+/* {csegen:76} */
+const csegen_76 = __lazy(function () {
+ return {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.JSON.wireRecipient'), a2: csegen_69(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.Types.Recipient'), a2: 'Recipient', a3: {h: 0 /* RecordBinding */, a1: {a1: {a1: 'name', a2: 'name'}, a2: {h: 0}}}}, a4: csegen_75(), a5: {h: 0}};
+});
+
+/* {csegen:83} */
+const csegen_83 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireIntegers', a2: {a1: 'Salutation.Types.Integers', a2: {h: 5 /* Reference */, a1: 'Salutation.Types.Integers', a2: {h: 0}}, a3: 'R25:Salutation.Types.Integers[]'}, a3: {a1: {a1: 'signed', a2: {h: 2 /* Integer64Type */, a1: 0}, a3: {h: 0}}, a2: {a1: {a1: 'unsigned', a2: {h: 2 /* Integer64Type */, a1: 1}, a3: {h: 0}}, a2: {h: 0}}}, a4: {h: 0}};
+});
+
+/* {csegen:93} */
+const csegen_93 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireIntegers', a2: 'Integers', a3: 0n, a4: {h: 0 /* RecordBody */, a1: 'Salutation.Types.MkIntegers', a2: {a1: {a1: 'signed', a2: 'signed', a3: {h: 2 /* Integer64Type */, a1: 0}}, a2: {a1: {a1: 'unsigned', a2: 'unsigned', a3: {h: 2 /* Integer64Type */, a1: 1}}, a2: {h: 0}}}}};
+});
+
+/* {csegen:94} */
+const csegen_94 = __lazy(function () {
+ return {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.JSON.wireIntegers'), a2: csegen_83(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.Types.Integers'), a2: 'Integers', a3: {h: 0 /* RecordBinding */, a1: {a1: {a1: 'signed', a2: 'signed'}, a2: {a1: {a1: 'unsigned', a2: 'unsigned'}, a2: {h: 0}}}}}, a4: csegen_93(), a5: {h: 0}};
 });
 
 /* {csegen:100} */
 const csegen_100 = __lazy(function () {
- return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('l'.codePointAt(0)))};
+ return {h: 5 /* Reference */, a1: 'Prelude.Basics.List', a2: {a1: {h: 2 /* Integer64Type */, a1: 0}, a2: {h: 0}}};
 });
 
-/* {csegen:107} */
-const csegen_107 = __lazy(function () {
- return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('t'.codePointAt(0)))};
+/* {csegen:104} */
+const csegen_104 = __lazy(function () {
+ return {h: 5 /* Reference */, a1: 'Prelude.Basics.List', a2: {a1: {h: 2 /* Integer64Type */, a1: 1}, a2: {h: 0}}};
 });
 
 /* {csegen:108} */
 const csegen_108 = __lazy(function () {
+ return {h: 5 /* Reference */, a1: 'Prelude.Types.Maybe', a2: {a1: {h: 2 /* Integer64Type */, a1: 0}, a2: {h: 0}}};
+});
+
+/* {csegen:112} */
+const csegen_112 = __lazy(function () {
+ return {h: 5 /* Reference */, a1: 'Prelude.Types.Maybe', a2: {a1: {h: 2 /* Integer64Type */, a1: 1}, a2: {h: 0}}};
+});
+
+/* {csegen:121} */
+const csegen_121 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireIntegerBatch', a2: {a1: 'Salutation.Types.IntegerBatch', a2: {h: 5 /* Reference */, a1: 'Salutation.Types.IntegerBatch', a2: {h: 0}}, a3: 'R29:Salutation.Types.IntegerBatch[]'}, a3: {a1: {a1: 'values', a2: {h: 5 /* Reference */, a1: 'Salutation.Types.Integers', a2: {h: 0}}, a3: {a1: {a1: {h: 0}, a2: {h: 5 /* Reference */, a1: 'Salutation.Types.Integers', a2: {h: 0}}, a3: {h: 5 /* Reference */, a1: 'Salutation.Types.Integers', a2: {h: 0}}, a4: 'R25:Salutation.Types.Integers[]', a5: 'Salutation.JSON.wireIntegers'}, a2: {h: 0}}}, a2: {a1: {a1: 'signedValues', a2: csegen_100(), a3: {a1: {a1: {h: 0}, a2: csegen_100(), a3: csegen_100(), a4: 'R19:Prelude.Basics.List[I64]', a5: 'Prelude.Basics.List'}, a2: {h: 0}}}, a2: {a1: {a1: 'unsignedValues', a2: csegen_104(), a3: {a1: {a1: {h: 0}, a2: csegen_104(), a3: csegen_104(), a4: 'R19:Prelude.Basics.List[U64]', a5: 'Prelude.Basics.List'}, a2: {h: 0}}}, a2: {a1: {a1: 'optionalSigned', a2: csegen_108(), a3: {a1: {a1: {h: 0}, a2: csegen_108(), a3: csegen_108(), a4: 'R19:Prelude.Types.Maybe[I64]', a5: 'Prelude.Types.Maybe'}, a2: {h: 0}}}, a2: {a1: {a1: 'nullableUnsigned', a2: csegen_112(), a3: {a1: {a1: {h: 0}, a2: csegen_112(), a3: csegen_112(), a4: 'R19:Prelude.Types.Maybe[U64]', a5: 'Salutation.JSON.wireNullable'}, a2: {h: 0}}}, a2: {h: 0}}}}}}, a4: {h: 0}};
+});
+
+/* {csegen:141} */
+const csegen_141 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireIntegerBatch', a2: 'IntegerBatch', a3: 0n, a4: {h: 0 /* RecordBody */, a1: 'Salutation.Types.MkIntegerBatch', a2: {a1: {a1: 'values', a2: 'values', a3: {h: 5 /* Reference */, a1: 'Salutation.JSON.wireIntegers', a2: {h: 0}}}, a2: {a1: {a1: 'signedValues', a2: 'signedValues', a3: csegen_100()}, a2: {a1: {a1: 'unsignedValues', a2: 'unsignedValues', a3: csegen_104()}, a2: {a1: {a1: 'optionalSigned', a2: 'optionalSigned', a3: csegen_108()}, a2: {a1: {a1: 'nullableUnsigned', a2: 'nullableUnsigned', a3: {h: 5 /* Reference */, a1: 'Salutation.JSON.wireNullable', a2: {a1: {h: 2 /* Integer64Type */, a1: 1}, a2: {h: 0}}}}, a2: {h: 0}}}}}}}};
+});
+
+/* {csegen:144} */
+const csegen_144 = __lazy(function () {
+ return {a1: 'Prelude.Basics.List', a2: {a1: 'Prelude.Basics.List', a2: {h: 5 /* Reference */, a1: 'Prelude.Basics.List', a2: {a1: {h: 4 /* Parameter */, a1: 0n}, a2: {h: 0}}}, a3: 'R19:Prelude.Basics.List[P0;]'}, a3: {h: 0}, a4: {h: 0}};
+});
+
+/* {csegen:146} */
+const csegen_146 = __lazy(function () {
+ return {a1: 'Prelude.Basics.List', a2: 'List', a3: 1n, a4: {h: 4 /* ListBody */, a1: 'Prelude.Basics.Nil', a2: 'Prelude.Basics.(::)'}};
+});
+
+/* {csegen:147} */
+const csegen_147 = __lazy(function () {
+ return {a1: Language_Reflection_Syntax_fromString_FromString_Name('Prelude.Basics.List'), a2: csegen_144(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Prelude.Basics.List'), a2: 'List', a3: {h: 5 /* ListBinding */}}, a4: csegen_146(), a5: {h: 0}};
+});
+
+/* {csegen:149} */
+const csegen_149 = __lazy(function () {
+ return {a1: 'Prelude.Types.Maybe', a2: {h: 5 /* Reference */, a1: 'Prelude.Types.Maybe', a2: {a1: {h: 4 /* Parameter */, a1: 0n}, a2: {h: 0}}}, a3: 'R19:Prelude.Types.Maybe[P0;]'};
+});
+
+/* {csegen:150} */
+const csegen_150 = __lazy(function () {
+ return {a1: 'Prelude.Types.Maybe', a2: csegen_149(), a3: {h: 0}, a4: {h: 0}};
+});
+
+/* {csegen:152} */
+const csegen_152 = __lazy(function () {
+ return {a1: 'Prelude.Types.Maybe', a2: 'Maybe', a3: 1n, a4: {h: 6 /* PresenceBody */, a1: 'Prelude.Types.Nothing', a2: 'Prelude.Types.Just'}};
+});
+
+/* {csegen:154} */
+const csegen_154 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireNullable', a2: csegen_149(), a3: {h: 0}, a4: {h: 0}};
+});
+
+/* {csegen:156} */
+const csegen_156 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireNullable', a2: 'NullableMaybe', a3: 1n, a4: {h: 7 /* NullableBody */, a1: 'Prelude.Types.Nothing', a2: 'Prelude.Types.Just'}};
+});
+
+/* {csegen:166} */
+const csegen_166 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireGreeting', a2: {a1: 'Salutation.Types.Greeting', a2: {h: 5 /* Reference */, a1: 'Salutation.Types.Greeting', a2: {h: 0}}, a3: 'R25:Salutation.Types.Greeting[]'}, a3: {a1: {a1: 'message', a2: {h: 3 /* StringType */}, a3: {h: 0}}, a2: {h: 0}}, a4: {h: 0}};
+});
+
+/* {csegen:172} */
+const csegen_172 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireGreeting', a2: 'Greeting', a3: 0n, a4: {h: 0 /* RecordBody */, a1: 'Salutation.Types.MkGreeting', a2: {a1: {a1: 'message', a2: 'message', a3: {h: 3 /* StringType */}}, a2: {h: 0}}}};
+});
+
+/* {csegen:173} */
+const csegen_173 = __lazy(function () {
+ return {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.JSON.wireGreeting'), a2: csegen_166(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.Types.Greeting'), a2: 'Greeting', a3: {h: 0 /* RecordBinding */, a1: {a1: {a1: 'message', a2: 'message'}, a2: {h: 0}}}}, a4: csegen_172(), a5: {h: 0}};
+});
+
+/* {csegen:177} */
+const csegen_177 = __lazy(function () {
+ return {h: 5 /* Reference */, a1: 'Prelude.Basics.List', a2: {a1: {h: 5 /* Reference */, a1: 'Salutation.Types.Greeting', a2: {h: 0}}, a2: {h: 0}}};
+});
+
+/* {csegen:184} */
+const csegen_184 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireGreetResponse', a2: {a1: 'Salutation.Types.GreetResponse', a2: {h: 5 /* Reference */, a1: 'Salutation.Types.GreetResponse', a2: {h: 0}}, a3: 'R30:Salutation.Types.GreetResponse[]'}, a3: {a1: {a1: 'greetings', a2: csegen_177(), a3: {a1: {a1: {h: 0}, a2: csegen_177(), a3: csegen_177(), a4: 'R19:Prelude.Basics.List[R25:Salutation.Types.Greeting[]]', a5: 'Prelude.Basics.List'}, a2: {a1: {a1: {a1: 0n, a2: {h: 0}}, a2: {h: 5 /* Reference */, a1: 'Salutation.Types.Greeting', a2: {h: 0}}, a3: {h: 5 /* Reference */, a1: 'Salutation.Types.Greeting', a2: {h: 0}}, a4: 'R25:Salutation.Types.Greeting[]', a5: 'Salutation.JSON.wireGreeting'}, a2: {h: 0}}}}, a2: {h: 0}}, a4: {h: 0}};
+});
+
+/* {csegen:193} */
+const csegen_193 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireGreetResponse', a2: 'GreetResponse', a3: 0n, a4: {h: 0 /* RecordBody */, a1: 'Salutation.Types.MkGreetResponse', a2: {a1: {a1: 'greetings', a2: 'greetings', a3: {h: 5 /* Reference */, a1: 'Prelude.Basics.List', a2: {a1: {h: 5 /* Reference */, a1: 'Salutation.JSON.wireGreeting', a2: {h: 0}}, a2: {h: 0}}}}, a2: {h: 0}}}};
+});
+
+/* {csegen:200} */
+const csegen_200 = __lazy(function () {
+ return {h: 5 /* Reference */, a1: 'Prelude.Basics.List', a2: {a1: {h: 5 /* Reference */, a1: 'Salutation.Types.Recipient', a2: {h: 0}}, a2: {h: 0}}};
+});
+
+/* {csegen:207} */
+const csegen_207 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireGreetRequest', a2: {a1: 'Salutation.Types.GreetRequest', a2: {h: 5 /* Reference */, a1: 'Salutation.Types.GreetRequest', a2: {h: 0}}, a3: 'R29:Salutation.Types.GreetRequest[]'}, a3: {a1: {a1: 'recipients', a2: csegen_200(), a3: {a1: {a1: {h: 0}, a2: csegen_200(), a3: csegen_200(), a4: 'R19:Prelude.Basics.List[R26:Salutation.Types.Recipient[]]', a5: 'Prelude.Basics.List'}, a2: {a1: {a1: {a1: 0n, a2: {h: 0}}, a2: {h: 5 /* Reference */, a1: 'Salutation.Types.Recipient', a2: {h: 0}}, a3: {h: 5 /* Reference */, a1: 'Salutation.Types.Recipient', a2: {h: 0}}, a4: 'R26:Salutation.Types.Recipient[]', a5: 'Salutation.JSON.wireRecipient'}, a2: {h: 0}}}}, a2: {h: 0}}, a4: {h: 0}};
+});
+
+/* {csegen:216} */
+const csegen_216 = __lazy(function () {
+ return {a1: 'Salutation.JSON.wireGreetRequest', a2: 'GreetRequest', a3: 0n, a4: {h: 0 /* RecordBody */, a1: 'Salutation.Types.MkGreetRequest', a2: {a1: {a1: 'recipients', a2: 'recipients', a3: {h: 5 /* Reference */, a1: 'Prelude.Basics.List', a2: {a1: {h: 5 /* Reference */, a1: 'Salutation.JSON.wireRecipient', a2: {h: 0}}, a2: {h: 0}}}}, a2: {h: 0}}}};
+});
+
+/* {csegen:251} */
+const csegen_251 = __lazy(function () {
+ return {a1: $1 => $2 => Prelude_Interfaces_Bool_Semigroup_x3cx2bx3e_Semigroup_AnyBool($1, $2), a2: 0};
+});
+
+/* {csegen:290} */
+const csegen_290 = __lazy(function () {
+ return {a1: $1 => $2 => Prelude_Interfaces_Bool_Semigroup_x3cx2bx3e_Semigroup_AllBool($1, $2), a2: 1};
+});
+
+/* {csegen:296} */
+const csegen_296 = __lazy(function () {
+ return $0 => Prelude_EqOrd_x3dx3d_Eq_Char($0, '0');
+});
+
+/* {csegen:299} */
+const csegen_299 = __lazy(function () {
+ return $0 => $1 => $2 => Text_ILex_Stack_init({h: 3 /* PI */}, $0, $1, $2);
+});
+
+/* {csegen:300} */
+const csegen_300 = __lazy(function () {
+ return $0 => $1 => $2 => JSON_Parser_jsonEOI($0, $1, $2);
+});
+
+/* {csegen:319} */
+const csegen_319 = __lazy(function () {
+ return () => ({a1: $1 => s => o => bs => buf => rf => rt => sk => ({a1: s, a2: bs, a3: buf, a4: o, a5: (o+bs.a1), a6: rf, a7: rt, a8: sk.a8, a9: sk.a9, a10: sk.a10, a11: sk.a11, a12: sk.a12}), a2: $13 => $14 => $14.a1, a3: $17 => $18 => $18.a2, a4: $1b => $1c => $1c.a3, a5: $1f => $20 => $20.a4, a6: $23 => $24 => $24.a5, a7: $27 => $28 => $28.a6, a8: $2b => $2c => $2c.a7, a9: $2f => $30 => $30.a8});
+});
+
+/* {csegen:321} */
+const csegen_321 = __lazy(function () {
+ return $0 => ({a1: 11, a2: JSON_Parser_JIni(), a3: csegen_299(), a4: JSON_Parser_jsonTransFor(1), a5: x => $a => ({h: 0}), a6: JSON_Parser_jsonErr(), a7: csegen_300(), a8: csegen_319()()});
+});
+
+/* {csegen:325} */
+const csegen_325 = __lazy(function () {
+ return () => ({a1: $1 => $2 => JSON_Wire_Description_x3dx3d_Eq_RepresentationKind($1, $2), a2: $7 => $8 => JSON_Wire_Description_x2fx3d_Eq_RepresentationKind($7, $8)});
+});
+
+/* {csegen:327} */
+const csegen_327 = __lazy(function () {
+ return {a1: {h: 2 /* And */, a1: Text_ILex_Interfaces_jsonSpace(), a2: {h: 4 /* Star */, a1: Text_ILex_Interfaces_jsonSpace()}}, a2: {h: 1 /* Ign */}};
+});
+
+/* {csegen:328} */
+const csegen_328 = __lazy(function () {
+ return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('n'.codePointAt(0)))};
+});
+
+/* {csegen:329} */
+const csegen_329 = __lazy(function () {
+ return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('u'.codePointAt(0)))};
+});
+
+/* {csegen:330} */
+const csegen_330 = __lazy(function () {
+ return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('l'.codePointAt(0)))};
+});
+
+/* {csegen:337} */
+const csegen_337 = __lazy(function () {
+ return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('t'.codePointAt(0)))};
+});
+
+/* {csegen:338} */
+const csegen_338 = __lazy(function () {
  return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('r'.codePointAt(0)))};
 });
 
-/* {csegen:109} */
-const csegen_109 = __lazy(function () {
+/* {csegen:339} */
+const csegen_339 = __lazy(function () {
  return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('e'.codePointAt(0)))};
 });
 
-/* {csegen:116} */
-const csegen_116 = __lazy(function () {
+/* {csegen:346} */
+const csegen_346 = __lazy(function () {
  return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('f'.codePointAt(0)))};
 });
 
-/* {csegen:128} */
-const csegen_128 = __lazy(function () {
+/* {csegen:358} */
+const csegen_358 = __lazy(function () {
  const $d = $e => {
   const $10 = ($e.a1.a9.value);
   switch($10.h) {
@@ -2025,7 +3028,7 @@ const csegen_128 = __lazy(function () {
   }
  };
  const $c = {h: 0 /* Run */, a1: $d};
- const $0 = {a1: {h: 2 /* And */, a1: csegen_98(), a2: {h: 2 /* And */, a1: csegen_99(), a2: {h: 2 /* And */, a1: csegen_100(), a2: csegen_100()}}}, a2: $c};
+ const $0 = {a1: {h: 2 /* And */, a1: csegen_328(), a2: {h: 2 /* And */, a1: csegen_329(), a2: {h: 2 /* And */, a1: csegen_330(), a2: csegen_330()}}}, a2: $c};
  const $4e = $4f => {
   const $51 = ($4f.a1.a9.value);
   switch($51.h) {
@@ -2048,7 +3051,7 @@ const csegen_128 = __lazy(function () {
   }
  };
  const $4d = {h: 0 /* Run */, a1: $4e};
- const $41 = {a1: {h: 2 /* And */, a1: csegen_107(), a2: {h: 2 /* And */, a1: csegen_108(), a2: {h: 2 /* And */, a1: csegen_99(), a2: csegen_109()}}}, a2: $4d};
+ const $41 = {a1: {h: 2 /* And */, a1: csegen_337(), a2: {h: 2 /* And */, a1: csegen_338(), a2: {h: 2 /* And */, a1: csegen_329(), a2: csegen_339()}}}, a2: $4d};
  const $9c = $9d => {
   const $9f = ($9d.a1.a9.value);
   switch($9f.h) {
@@ -2071,14 +3074,14 @@ const csegen_128 = __lazy(function () {
   }
  };
  const $9b = {h: 0 /* Run */, a1: $9c};
- const $86 = {a1: {h: 2 /* And */, a1: csegen_116(), a2: {h: 2 /* And */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('a'.codePointAt(0)))}, a2: {h: 2 /* And */, a1: csegen_100(), a2: {h: 2 /* And */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('s'.codePointAt(0)))}, a2: csegen_109()}}}}, a2: $9b};
+ const $86 = {a1: {h: 2 /* And */, a1: csegen_346(), a2: {h: 2 /* And */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('a'.codePointAt(0)))}, a2: {h: 2 /* And */, a1: csegen_330(), a2: {h: 2 /* And */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('s'.codePointAt(0)))}, a2: csegen_339()}}}}, a2: $9b};
  const $85 = {a1: $86, a2: {h: 0}};
  const $40 = {a1: $41, a2: $85};
  return {a1: $0, a2: $40};
 });
 
-/* {csegen:132} */
-const csegen_132 = __lazy(function () {
+/* {csegen:362} */
+const csegen_362 = __lazy(function () {
  const $4 = $5 => {
   const $8 = ($5.a1.a6.value);
   const $d = ($5.a1.a7.value);
@@ -2115,18 +3118,18 @@ const csegen_132 = __lazy(function () {
  return {a1: $0, a2: {h: 0}};
 });
 
-/* {csegen:133} */
-const csegen_133 = __lazy(function () {
+/* {csegen:363} */
+const csegen_363 = __lazy(function () {
  return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('-'.codePointAt(0)))};
 });
 
-/* {csegen:135} */
-const csegen_135 = __lazy(function () {
- return {h: 2 /* And */, a1: {h: 3 /* Or */, a1: csegen_133(), a2: {h: 0 /* Eps */}}, a2: Text_ILex_RExp_decimal()};
+/* {csegen:365} */
+const csegen_365 = __lazy(function () {
+ return {h: 2 /* And */, a1: {h: 3 /* Or */, a1: csegen_363(), a2: {h: 0 /* Eps */}}, a2: Text_ILex_RExp_decimal()};
 });
 
-/* {csegen:139} */
-const csegen_139 = __lazy(function () {
+/* {csegen:369} */
+const csegen_369 = __lazy(function () {
  const $4 = $5 => {
   const $8 = ($5.a1.a6.value);
   const $d = ($5.a1.a7.value);
@@ -2159,17 +3162,17 @@ const csegen_139 = __lazy(function () {
   }
  };
  const $3 = {h: 0 /* Run */, a1: $4};
- const $0 = {a1: csegen_135(), a2: $3};
- return {a1: $0, a2: csegen_132()};
+ const $0 = {a1: csegen_365(), a2: $3};
+ return {a1: $0, a2: csegen_362()};
 });
 
-/* {csegen:148} */
-const csegen_148 = __lazy(function () {
+/* {csegen:378} */
+const csegen_378 = __lazy(function () {
  return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('\"'.codePointAt(0)))};
 });
 
-/* {csegen:152} */
-const csegen_152 = __lazy(function () {
+/* {csegen:382} */
+const csegen_382 = __lazy(function () {
  const $4 = $5 => {
   const $9 = ($5.a1.a6.value);
   let $8;
@@ -2185,12 +3188,12 @@ const csegen_152 = __lazy(function () {
   return JSON_Parser_JStr();
  };
  const $3 = {h: 0 /* Run */, a1: $4};
- const $0 = {a1: csegen_148(), a2: $3};
+ const $0 = {a1: csegen_378(), a2: $3};
  return {a1: $0, a2: {h: 0}};
 });
 
-/* {csegen:154} */
-const csegen_154 = __lazy(function () {
+/* {csegen:384} */
+const csegen_384 = __lazy(function () {
  const $7 = $8 => {
   const $c = ($8.a1.a6.value);
   let $b;
@@ -2227,22 +3230,17 @@ const csegen_154 = __lazy(function () {
  };
  const $37 = {h: 0 /* Run */, a1: $38};
  const $31 = {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('['.codePointAt(0)))}, a2: $37};
- const $30 = {a1: $31, a2: csegen_152()};
+ const $30 = {a1: $31, a2: csegen_382()};
  return {a1: $0, a2: $30};
 });
 
-/* {csegen:155} */
-const csegen_155 = __lazy(function () {
- return Prelude_Types_List_tailRecAppend(csegen_154(), {h: 0});
+/* {csegen:385} */
+const csegen_385 = __lazy(function () {
+ return Prelude_Types_List_tailRecAppend(csegen_384(), {h: 0});
 });
 
-/* {csegen:178} */
-const csegen_178 = __lazy(function () {
- return () => ({a1: $1 => s => o => bs => buf => rf => rt => sk => ({a1: s, a2: bs, a3: buf, a4: o, a5: (o+bs.a1), a6: rf, a7: rt, a8: sk.a8, a9: sk.a9, a10: sk.a10, a11: sk.a11, a12: sk.a12}), a2: $13 => $14 => $14.a1, a3: $17 => $18 => $18.a2, a4: $1b => $1c => $1c.a3, a5: $1f => $20 => $20.a4, a6: $23 => $24 => $24.a5, a7: $27 => $28 => $28.a6, a8: $2b => $2c => $2c.a7, a9: $2f => $30 => $30.a8});
-});
-
-/* {csegen:180} */
-const csegen_180 = __lazy(function () {
+/* {csegen:391} */
+const csegen_391 = __lazy(function () {
  const $0 = $1 => {
   const $4 = ($1.a1.a8.value);
   let $3;
@@ -2280,7 +3278,7 @@ const csegen_180 = __lazy(function () {
      }
      case 0: /* Left */ {
       const $4b = ($1.a1.a6.value);
-      const $4a = Text_ILex_Interfaces_case__casex20blockx20inx20bounds_17943(csegen_178()(), $1.a1, $4b, ($1.a1.a7.value));
+      const $4a = Text_ILex_Interfaces_case__casex20blockx20inx20bounds_17943(csegen_319()(), $1.a1, $4b, ($1.a1.a7.value));
       const $5b = ($1.a1.a12.value);
       switch($5b.h) {
        case undefined: /* just */ return JSON_Parser_JDone();
@@ -2318,66 +3316,56 @@ const csegen_180 = __lazy(function () {
  return {h: 0 /* Run */, a1: $0};
 });
 
-/* {csegen:182} */
-const csegen_182 = __lazy(function () {
- return {a1: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32(']'.codePointAt(0)))}, a2: csegen_180()}, a2: {h: 0}};
+/* {csegen:393} */
+const csegen_393 = __lazy(function () {
+ return {a1: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32(']'.codePointAt(0)))}, a2: csegen_391()}, a2: {h: 0}};
 });
 
-/* {csegen:184} */
-const csegen_184 = __lazy(function () {
+/* {csegen:395} */
+const csegen_395 = __lazy(function () {
  return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32(','.codePointAt(0)))};
 });
 
-/* {csegen:193} */
-const csegen_193 = __lazy(function () {
- return {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('}'.codePointAt(0)))}, a2: csegen_180()};
+/* {csegen:404} */
+const csegen_404 = __lazy(function () {
+ return {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('}'.codePointAt(0)))}, a2: csegen_391()};
 });
 
-/* {csegen:224} */
-const csegen_224 = __lazy(function () {
+/* {csegen:435} */
+const csegen_435 = __lazy(function () {
  return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('\u{5c}'.codePointAt(0)))};
 });
 
-/* {csegen:277} */
-const csegen_277 = __lazy(function () {
+/* {csegen:488} */
+const csegen_488 = __lazy(function () {
  return () => $0 => $1 => $1.a12;
 });
 
-/* {csegen:279} */
-const csegen_279 = __lazy(function () {
+/* {csegen:490} */
+const csegen_490 = __lazy(function () {
  return $0 => $1 => {
   const $2 = ($0.a12.value);
-  return Prelude_Types_maybe(() => $a => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_277()(), $0, csegen_178()(), '[', {h: 0}, $a), () => $17 => $18 => $17, $2)(undefined);
+  return Prelude_Types_maybe(() => $a => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_488()(), $0, csegen_319()(), '[', {h: 0}, $a), () => $17 => $18 => $17, $2)(undefined);
  };
 });
 
-/* {csegen:310} */
-const csegen_310 = __lazy(function () {
+/* {csegen:521} */
+const csegen_521 = __lazy(function () {
  return {h: 2 /* And */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_digit()}, a2: {h: 4 /* Star */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_digit()}}};
 });
 
-/* {csegen:323} */
-const csegen_323 = __lazy(function () {
+/* {csegen:534} */
+const csegen_534 = __lazy(function () {
  return {a1: {a1: {a1: $3 => $4 => Prelude_EqOrd_x3dx3d_Eq_Bits32($3, $4), a2: $9 => $a => Prelude_EqOrd_x2fx3d_Eq_Bits32($9, $a)}, a2: $f => $10 => Prelude_EqOrd_compare_Ord_Bits32($f, $10), a3: $15 => $16 => Prelude_EqOrd_x3c_Ord_Bits32($15, $16), a4: $1b => $1c => Prelude_EqOrd_x3e_Ord_Bits32($1b, $1c), a5: $21 => $22 => Prelude_EqOrd_x3cx3d_Ord_Bits32($21, $22), a6: $27 => $28 => Prelude_EqOrd_x3ex3d_Ord_Bits32($27, $28), a7: $2d => $2e => Prelude_EqOrd_max_Ord_Bits32($2d, $2e), a8: $33 => $34 => Prelude_EqOrd_min_Ord_Bits32($33, $34)}, a2: 0, a3: 4294967295};
 });
 
-/* {csegen:328} */
-const csegen_328 = __lazy(function () {
+/* {csegen:539} */
+const csegen_539 = __lazy(function () {
  return {a1: {a1: $2 => $3 => _add32u($2, $3), a2: $7 => $8 => _mul32u($7, $8), a3: $c => Number(_truncUBigInt32($c))}, a2: $f => _sub32u(0, $f), a3: $13 => $14 => _sub32u($13, $14)};
 });
 
-/* {csegen:341} */
-const csegen_341 = __lazy(function () {
- return $0 => $1 => $2 => Text_ILex_Stack_init({h: 3 /* PI */}, $0, $1, $2);
-});
-
-/* {csegen:342} */
-const csegen_342 = __lazy(function () {
- return $0 => $1 => $2 => JSON_Parser_jsonEOI($0, $1, $2);
-});
-
-/* {csegen:365} */
-const csegen_365 = __lazy(function () {
+/* {csegen:572} */
+const csegen_572 = __lazy(function () {
  let $1;
  switch(Prelude_EqOrd_x3cx3d_Ord_Bits32(_truncUInt32('0'.codePointAt(0)), _truncUInt32('9'.codePointAt(0)))) {
   case 1: {
@@ -2392,76 +3380,167 @@ const csegen_365 = __lazy(function () {
  return Text_ILex_Char_Set_range($1);
 });
 
-/* {csegen:390} */
-const csegen_390 = __lazy(function () {
+/* {csegen:597} */
+const csegen_597 = __lazy(function () {
  return {a1: $1 => $2 => (($1===$2)?1:0), a2: $6 => $7 => Prelude_Types_x2fx3d_Eq_Nat($6, $7)};
 });
 
-/* {csegen:398} */
-const csegen_398 = __lazy(function () {
- return {a1: csegen_390(), a2: $3 => $4 => Prelude_EqOrd_compare_Ord_Integer($3, $4), a3: $9 => $a => Prelude_Types_x3c_Ord_Nat($9, $a), a4: $f => $10 => Prelude_Types_x3e_Ord_Nat($f, $10), a5: $15 => $16 => Prelude_Types_x3cx3d_Ord_Nat($15, $16), a6: $1b => $1c => Prelude_Types_x3ex3d_Ord_Nat($1b, $1c), a7: $21 => $22 => Prelude_Types_max_Ord_Nat($21, $22), a8: $27 => $28 => Prelude_Types_min_Ord_Nat($27, $28)};
+/* {csegen:605} */
+const csegen_605 = __lazy(function () {
+ return {a1: csegen_597(), a2: $3 => $4 => Prelude_EqOrd_compare_Ord_Integer($3, $4), a3: $9 => $a => Prelude_Types_x3c_Ord_Nat($9, $a), a4: $f => $10 => Prelude_Types_x3e_Ord_Nat($f, $10), a5: $15 => $16 => Prelude_Types_x3cx3d_Ord_Nat($15, $16), a6: $1b => $1c => Prelude_Types_x3ex3d_Ord_Nat($1b, $1c), a7: $21 => $22 => Prelude_Types_max_Ord_Nat($21, $22), a8: $27 => $28 => Prelude_Types_min_Ord_Nat($27, $28)};
 });
 
-/* {csegen:404} */
-const csegen_404 = __lazy(function () {
+/* {csegen:611} */
+const csegen_611 = __lazy(function () {
  return {a1: $1 => $2 => Prelude_EqOrd_x3dx3d_Eq_Bits8($1, $2), a2: $7 => $8 => Prelude_EqOrd_x2fx3d_Eq_Bits8($7, $8)};
 });
 
-/* {csegen:412} */
-const csegen_412 = __lazy(function () {
- return {a1: csegen_404(), a2: $3 => $4 => Prelude_EqOrd_compare_Ord_Bits8($3, $4), a3: $9 => $a => Prelude_EqOrd_x3c_Ord_Bits8($9, $a), a4: $f => $10 => Prelude_EqOrd_x3e_Ord_Bits8($f, $10), a5: $15 => $16 => Prelude_EqOrd_x3cx3d_Ord_Bits8($15, $16), a6: $1b => $1c => Prelude_EqOrd_x3ex3d_Ord_Bits8($1b, $1c), a7: $21 => $22 => Prelude_EqOrd_max_Ord_Bits8($21, $22), a8: $27 => $28 => Prelude_EqOrd_min_Ord_Bits8($27, $28)};
+/* {csegen:619} */
+const csegen_619 = __lazy(function () {
+ return {a1: csegen_611(), a2: $3 => $4 => Prelude_EqOrd_compare_Ord_Bits8($3, $4), a3: $9 => $a => Prelude_EqOrd_x3c_Ord_Bits8($9, $a), a4: $f => $10 => Prelude_EqOrd_x3e_Ord_Bits8($f, $10), a5: $15 => $16 => Prelude_EqOrd_x3cx3d_Ord_Bits8($15, $16), a6: $1b => $1c => Prelude_EqOrd_x3ex3d_Ord_Bits8($1b, $1c), a7: $21 => $22 => Prelude_EqOrd_max_Ord_Bits8($21, $22), a8: $27 => $28 => Prelude_EqOrd_min_Ord_Bits8($27, $28)};
 });
 
-/* {csegen:413} */
-const csegen_413 = __lazy(function () {
- return {a1: csegen_412(), a2: 0, a3: 255};
+/* {csegen:620} */
+const csegen_620 = __lazy(function () {
+ return {a1: csegen_619(), a2: 0, a3: 255};
 });
 
-/* {csegen:416} */
-const csegen_416 = __lazy(function () {
+/* {csegen:623} */
+const csegen_623 = __lazy(function () {
  return {a1: $1 => $2 => _add8u($1, $2), a2: $6 => $7 => _mul8u($6, $7), a3: $b => Number(_truncUBigInt8($b))};
 });
 
-/* {csegen:421} */
-const csegen_421 = __lazy(function () {
- return {a1: csegen_416(), a2: $3 => _sub8u(0, $3), a3: $7 => $8 => _sub8u($7, $8)};
+/* {csegen:628} */
+const csegen_628 = __lazy(function () {
+ return {a1: csegen_623(), a2: $3 => _sub8u(0, $3), a3: $7 => $8 => _sub8u($7, $8)};
 });
 
-/* {csegen:424} */
-const csegen_424 = __lazy(function () {
+/* {csegen:631} */
+const csegen_631 = __lazy(function () {
  return $0 => $0.a2;
 });
 
-/* {csegen:442} */
-const csegen_442 = __lazy(function () {
+/* {csegen:634} */
+const csegen_634 = __lazy(function () {
+ return {a1: $1 => $2 => Prelude_Types_x3dx3d_Eq_x28Listx20x24ax29(csegen_597(), $1, $2), a2: $9 => $a => Prelude_Types_x2fx3d_Eq_x28Listx20x24ax29(csegen_597(), $9, $a)};
+});
+
+/* {csegen:649} */
+const csegen_649 = __lazy(function () {
  return $0 => $1 => Text_ILex_Internal_NFA_joinNNode($0, $1);
 });
 
-/* {csegen:447} */
-const csegen_447 = __lazy(function () {
+/* {csegen:654} */
+const csegen_654 = __lazy(function () {
  const $a = a => b => {
-  switch(Text_ILex_Char_Range_eqRangeOf(csegen_404(), a, b)) {
+  switch(Text_ILex_Char_Range_eqRangeOf(csegen_611(), a, b)) {
    case 1: return 0;
    case 0: return 1;
   }
  };
- const $1 = {a1: $3 => $4 => Text_ILex_Char_Range_eqRangeOf(csegen_404(), $3, $4), a2: $a};
- return Language_Reflection_Derive_mkOrd($1, $12 => $13 => Text_ILex_Char_Range_ordRangeOf(csegen_412(), $12, $13));
+ const $1 = {a1: $3 => $4 => Text_ILex_Char_Range_eqRangeOf(csegen_611(), $3, $4), a2: $a};
+ return Language_Reflection_Derive_mkOrd($1, $12 => $13 => Text_ILex_Char_Range_ordRangeOf(csegen_619(), $12, $13));
 });
 
-/* {csegen:451} */
-const csegen_451 = __lazy(function () {
+/* {csegen:658} */
+const csegen_658 = __lazy(function () {
  return Text_ILex_Char_UTF8_bytes(Text_ILex_Char_UTF8_MinAddByte(), Text_ILex_Char_UTF8_MaxAddByte());
 });
 
-/* {csegen:453} */
-const csegen_453 = __lazy(function () {
+/* {csegen:660} */
+const csegen_660 = __lazy(function () {
  return {a1: $1 => $2 => ($1+$2), a2: ''};
 });
 
-/* {csegen:455} */
-const csegen_455 = __lazy(function () {
+/* {csegen:662} */
+const csegen_662 = __lazy(function () {
  return $0 => Prelude_EqOrd_x3dx3d_Eq_Bits8(10, $0);
+});
+
+/* {csegen:678} */
+const csegen_678 = __lazy(function () {
+ return {a1: 'kind', a2: {a1: 'token', a2: {h: 0}}};
+});
+
+/* {csegen:681} */
+const csegen_681 = __lazy(function () {
+ return () => ({a1: $1 => $2 => Prelude_EqOrd_x3dx3d_Eq_String($1, $2), a2: $7 => $8 => Prelude_EqOrd_x2fx3d_Eq_String($7, $8)});
+});
+
+/* {csegen:682} */
+const csegen_682 = __lazy(function () {
+ return n => JSON_Wire_Codec_buildObjectValue({a1: {a1: 'kind', a2: {h: 5 /* JString */, a1: 'integer'}}, a2: {a1: {a1: 'token', a2: {h: 5 /* JString */, a1: Prelude_Show_show_Show_Nat(n)}}, a2: {h: 0}}});
+});
+
+/* {csegen:684} */
+const csegen_684 = __lazy(function () {
+ return bits => {
+  const $0 = JSON_Wire_Binary64_encodeFiniteBits(bits);
+  switch($0.h) {
+   case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $0.a1}};
+   case 1: /* Right */ return {h: 1 /* Right */, a1: $0.a1};
+  }
+ };
+});
+
+/* {csegen:692} */
+const csegen_692 = __lazy(function () {
+ return $0 => Text_ParseError_interpolate_Interpolation_x28InnerErrorx20x24ex29($3 => JSON_Object_interpolate_Interpolation_ObjectError($3), $0);
+});
+
+/* {csegen:694} */
+const csegen_694 = __lazy(function () {
+ return () => $0 => $0.a1;
+});
+
+/* {csegen:696} */
+const csegen_696 = __lazy(function () {
+ return $0 => $0.a1;
+});
+
+/* {csegen:697} */
+const csegen_697 = __lazy(function () {
+ return $0 => $0.a1;
+});
+
+/* {csegen:700} */
+const csegen_700 = __lazy(function () {
+ return {a1: $1 => $2 => Prelude_EqOrd_x3dx3d_Eq_x28x7cx28x28Builtinx2ePairx20x24ax29x20x24bx29x2cx28x28Builtinx2eMkPairx20x24ax29x20x24bx29x7cx29(csegen_634(), csegen_681()(), $1, $2), a2: $c => $d => Prelude_EqOrd_x2fx3d_Eq_x28x7cx28x28Builtinx2ePairx20x24ax29x20x24bx29x2cx28x28Builtinx2eMkPairx20x24ax29x20x24bx29x7cx29(csegen_634(), csegen_681()(), $c, $d)};
+});
+
+/* {csegen:701} */
+const csegen_701 = __lazy(function () {
+ return reference => ({a1: reference.a1, a2: reference.a5});
+});
+
+/* {csegen:702} */
+const csegen_702 = __lazy(function () {
+ return $0 => $0.a3;
+});
+
+/* {csegen:711} */
+const csegen_711 = __lazy(function () {
+ return () => shape => {
+  switch(Prelude_Types_elem(csegen_44()(), csegen_325()(), 0)(JSON_Wire_Description_representationKinds(0, shape))) {
+   case 1: return {h: 0 /* Left */, a1: 'Wire graph: nested Nullable has ambiguous null representation'};
+   case 0: return {h: 1 /* Right */, a1: {h: 14 /* NullableValue */, a1: shape}};
+  }
+ };
+});
+
+/* {csegen:717} */
+const csegen_717 = __lazy(function () {
+ return Prelude_Interfaces_sum({a1: $3 => $4 => ($3+$4), a2: $8 => $9 => ($8*$9), a3: $d => Prelude_Types_prim__integerToNat($d)}, csegen_44()());
+});
+
+/* {csegen:722} */
+const csegen_722 = __lazy(function () {
+ return {a1: x => Prelude_Show_show_Show_String(x), a2: d => x => Prelude_Show_showPrec_Show_String(d, x)};
+});
+
+/* {csegen:723} */
+const csegen_723 = __lazy(function () {
+ return $0 => $0.a1;
 });
 
 /* prim__sub_Integer : Integer -> Integer -> Integer */
@@ -2471,7 +3550,12 @@ function prim__sub_Integer($0, $1) {
 
 /* Main.main : IO () */
 function Main_main($0) {
- return Main_register($3 => Main_exchange($3), $0);
+ return Main_register($3 => Main_exchange($3), $7 => Main_integers($7), $0);
+}
+
+/* Main.integers : String -> String */
+function Main_integers($0) {
+ return Prelude_Types_either(() => $3 => Main_raise($3), () => $7 => $7, Salutation_JSON_integersJSON($0));
 }
 
 /* Main.exchange : String -> String */
@@ -2479,179 +3563,330 @@ function Main_exchange($0) {
  return Prelude_Types_either(() => $3 => Main_raise($3), () => $7 => $7, Salutation_JSON_greetJSON($0));
 }
 
-/* Salutation.JSON.toJsonGreeting : Encoder v => Greeting -> Either String v */
-function Salutation_JSON_toJsonGreeting($0, $1) {
- const $a = Value_Unicode_scalarString('message');
- let $9;
- switch($a.h) {
-  case 0: /* Left */ {
-   $9 = {h: 0 /* Left */, a1: 'JSON: isolated surrogate object key'};
-   break;
+/* Salutation.JSON.{wireDecode:2174} */
+function Salutation_JSON_wireDecode_2174($0) {
+ const $2 = wireObject => {
+  const $3 = JSON_Wire_Codec_readRequired('values', JSON_Wire_Codec_wireDecodeValue(Salutation_JSON_wireIntegers()), wireObject);
+  switch($3.h) {
+   case 0: /* Left */ return {h: 0 /* Left */, a1: $3.a1};
+   case 1: /* Right */ {
+    const $c = JSON_Wire_Codec_readRequired('signedValues', $10 => JSON_Wire_Codec_readList(csegen_13(), $10), wireObject);
+    switch($c.h) {
+     case 0: /* Left */ return {h: 0 /* Left */, a1: $c.a1};
+     case 1: /* Right */ {
+      const $17 = JSON_Wire_Codec_readRequired('unsignedValues', $1b => JSON_Wire_Codec_readList(csegen_15(), $1b), wireObject);
+      switch($17.h) {
+       case 0: /* Left */ return {h: 0 /* Left */, a1: $17.a1};
+       case 1: /* Right */ {
+        const $26 = json => {
+         const $27 = JSON_FromJSON_fromJSON_FromJSON_Int64(csegen_12(), json);
+         switch($27.h) {
+          case 0: /* Left */ return {h: 0 /* Left */, a1: $27.a1};
+          case 1: /* Right */ return {h: 1 /* Right */, a1: {a1: $27.a1}};
+         }
+        };
+        const $22 = JSON_Wire_Codec_readOptional('optionalSigned', {h: 0}, $26, wireObject);
+        switch($22.h) {
+         case 0: /* Left */ return {h: 0 /* Left */, a1: $22.a1};
+         case 1: /* Right */ {
+          const $31 = JSON_Wire_Codec_readRequired('nullableUnsigned', $35 => JSON_Wire_Codec_readNullable({h: 0}, $39 => ({a1: $39}), csegen_15(), $35), wireObject);
+          switch($31.h) {
+           case 0: /* Left */ return {h: 0 /* Left */, a1: $31.a1};
+           case 1: /* Right */ return {h: 1 /* Right */, a1: {a1: $3.a1, a2: $c.a1, a3: $17.a1, a4: $22.a1, a5: $31.a1}};
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
   }
-  case 1: /* Right */ {
-   $9 = {h: 1 /* Right */, a1: $a.a1};
-   break;
-  }
- }
- const $7 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($9, _ => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_ToJSON_toJSON_ToJSON_String($0, $1), value => ({h: 1 /* Right */, a1: {a1: 'message', a2: value}})));
- const $6 = {a1: $7, a2: {h: 0}};
- const $3 = csegen_30()($6);
- return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($3, $1b => JSON_Encoder_objectChecked($0, $1b));
+ };
+ return JSON_Wire_Codec_readObject($2, $0);
 }
 
-/* Salutation.JSON.toJsonGreetResponse : Encoder v => GreetResponse -> Either String v */
-function Salutation_JSON_toJsonGreetResponse($0, $1) {
- const $a = Value_Unicode_scalarString('greetings');
- let $9;
- switch($a.h) {
+/* Salutation.JSON.{wireEncode:2173} */
+function Salutation_JSON_wireEncode_2173($0) {
+ const $8 = JSON_Wire_Codec_wireEncodeValue(Salutation_JSON_wireIntegers())($0.a1);
+ let $7;
+ switch($8.h) {
   case 0: /* Left */ {
-   $9 = {h: 0 /* Left */, a1: 'JSON: isolated surrogate object key'};
+   $7 = {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: 'values'}, a2: $8.a1.a1}, a2: $8.a1.a2}};
    break;
   }
   case 1: /* Right */ {
-   $9 = {h: 1 /* Right */, a1: $a.a1};
+   $7 = {h: 1 /* Right */, a1: {a1: {a1: 'values', a2: $8.a1}, a2: {h: 0}}};
    break;
   }
  }
- const $7 = Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($9, _ => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_ToJSON_toJSON_ToJSON_x28Listx20x24ax29($14 => $15 => $16 => Salutation_JSON_toJsonGreeting($15, $16), $0, $1), value => ({h: 1 /* Right */, a1: {a1: 'greetings', a2: value}})));
- const $6 = {a1: $7, a2: {h: 0}};
- const $3 = csegen_30()($6);
- return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($3, $22 => JSON_Encoder_objectChecked($0, $22));
+ const $1c = JSON_Wire_Codec_encodeListValues(wireListValue => ({h: 1 /* Right */, a1: {h: 1 /* JInteger */, a1: wireListValue}}), $0.a2);
+ let $1b;
+ switch($1c.h) {
+  case 0: /* Left */ {
+   $1b = {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: 'signedValues'}, a2: $1c.a1.a1}, a2: $1c.a1.a2}};
+   break;
+  }
+  case 1: /* Right */ {
+   $1b = {h: 1 /* Right */, a1: {a1: {a1: 'signedValues', a2: {h: 6 /* JArray */, a1: $1c.a1}}, a2: {h: 0}}};
+   break;
+  }
+ }
+ const $32 = JSON_Wire_Codec_encodeListValues(wireListValue => ({h: 1 /* Right */, a1: {h: 1 /* JInteger */, a1: wireListValue}}), $0.a3);
+ let $31;
+ switch($32.h) {
+  case 0: /* Left */ {
+   $31 = {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: 'unsignedValues'}, a2: $32.a1.a1}, a2: $32.a1.a2}};
+   break;
+  }
+  case 1: /* Right */ {
+   $31 = {h: 1 /* Right */, a1: {a1: {a1: 'unsignedValues', a2: {h: 6 /* JArray */, a1: $32.a1}}, a2: {h: 0}}};
+   break;
+  }
+ }
+ let $47;
+ switch($0.a4.h) {
+  case 0: /* nothing */ {
+   $47 = {h: 1 /* Right */, a1: {h: 0}};
+   break;
+  }
+  case undefined: /* just */ {
+   $47 = {h: 1 /* Right */, a1: {a1: {a1: 'optionalSigned', a2: {h: 1 /* JInteger */, a1: $0.a4.a1}}, a2: {h: 0}}};
+   break;
+  }
+ }
+ let $52;
+ switch($0.a5.h) {
+  case 0: /* nothing */ {
+   $52 = {h: 1 /* Right */, a1: {a1: {a1: 'nullableUnsigned', a2: {h: 0 /* JNull */}}, a2: {h: 0}}};
+   break;
+  }
+  case undefined: /* just */ {
+   $52 = {h: 1 /* Right */, a1: {a1: {a1: 'nullableUnsigned', a2: {h: 1 /* JInteger */, a1: $0.a5.a1}}, a2: {h: 0}}};
+   break;
+  }
+ }
+ const $51 = {a1: $52, a2: {h: 0}};
+ const $46 = {a1: $47, a2: $51};
+ const $30 = {a1: $31, a2: $46};
+ const $1a = {a1: $1b, a2: $30};
+ const $6 = {a1: $7, a2: $1a};
+ const $3 = csegen_50()($6);
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($3, csegen_57());
+}
+
+/* Salutation.JSON.{wireDecode:1886} */
+function Salutation_JSON_wireDecode_1886($0) {
+ const $2 = wireObject => {
+  const $3 = JSON_Wire_Codec_readRequired('signed', csegen_13(), wireObject);
+  switch($3.h) {
+   case 0: /* Left */ return {h: 0 /* Left */, a1: $3.a1};
+   case 1: /* Right */ {
+    const $a = JSON_Wire_Codec_readRequired('unsigned', csegen_15(), wireObject);
+    switch($a.h) {
+     case 0: /* Left */ return {h: 0 /* Left */, a1: $a.a1};
+     case 1: /* Right */ return {h: 1 /* Right */, a1: {a1: $3.a1, a2: $a.a1}};
+    }
+   }
+  }
+ };
+ return JSON_Wire_Codec_readObject($2, $0);
+}
+
+/* Salutation.JSON.{wireEncode:1885} */
+function Salutation_JSON_wireEncode_1885($0) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(csegen_50()({a1: {h: 1 /* Right */, a1: {a1: {a1: 'signed', a2: {h: 1 /* JInteger */, a1: $0.a1}}, a2: {h: 0}}}, a2: {a1: {h: 1 /* Right */, a1: {a1: {a1: 'unsigned', a2: {h: 1 /* JInteger */, a1: $0.a2}}, a2: {h: 0}}}, a2: {h: 0}}}), csegen_57());
+}
+
+/* Salutation.JSON.{wireDecode:1625} */
+function Salutation_JSON_wireDecode_1625($0) {
+ const $2 = wireObject => {
+  const $3 = JSON_Wire_Codec_readRequired('greetings', $7 => JSON_Wire_Codec_readList(JSON_Wire_Codec_wireDecodeValue(Salutation_JSON_wireGreeting()), $7), wireObject);
+  switch($3.h) {
+   case 0: /* Left */ return {h: 0 /* Left */, a1: $3.a1};
+   case 1: /* Right */ return {h: 1 /* Right */, a1: $3.a1};
+  }
+ };
+ return JSON_Wire_Codec_readObject($2, $0);
+}
+
+/* Salutation.JSON.{wireEncode:1624} */
+function Salutation_JSON_wireEncode_1624($0) {
+ const $7 = JSON_Wire_Codec_encodeListValues(wireListValue => JSON_Wire_Codec_wireEncodeValue(Salutation_JSON_wireGreeting())(wireListValue), $0);
+ let $6;
+ switch($7.h) {
+  case 0: /* Left */ {
+   $6 = {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: 'greetings'}, a2: $7.a1.a1}, a2: $7.a1.a2}};
+   break;
+  }
+  case 1: /* Right */ {
+   $6 = {h: 1 /* Right */, a1: {a1: {a1: 'greetings', a2: {h: 6 /* JArray */, a1: $7.a1}}, a2: {h: 0}}};
+   break;
+  }
+ }
+ const $5 = {a1: $6, a2: {h: 0}};
+ const $2 = csegen_50()($5);
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($2, csegen_57());
+}
+
+/* Salutation.JSON.{wireDecode:1479} */
+function Salutation_JSON_wireDecode_1479($0) {
+ const $2 = wireObject => {
+  const $3 = JSON_Wire_Codec_readRequired('message', $7 => JSON_Wire_Codec_readString($7), wireObject);
+  switch($3.h) {
+   case 0: /* Left */ return {h: 0 /* Left */, a1: $3.a1};
+   case 1: /* Right */ return {h: 1 /* Right */, a1: $3.a1};
+  }
+ };
+ return JSON_Wire_Codec_readObject($2, $0);
+}
+
+/* Salutation.JSON.{wireEncode:1478} */
+function Salutation_JSON_wireEncode_1478($0) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(csegen_50()({a1: {h: 1 /* Right */, a1: {a1: {a1: 'message', a2: {h: 5 /* JString */, a1: $0}}, a2: {h: 0}}}, a2: {h: 0}}), csegen_57());
+}
+
+/* Salutation.JSON.{wireDecode:1218} */
+function Salutation_JSON_wireDecode_1218($0) {
+ const $2 = wireObject => {
+  const $3 = JSON_Wire_Codec_readRequired('recipients', $7 => JSON_Wire_Codec_readList(JSON_Wire_Codec_wireDecodeValue(Salutation_JSON_wireRecipient()), $7), wireObject);
+  switch($3.h) {
+   case 0: /* Left */ return {h: 0 /* Left */, a1: $3.a1};
+   case 1: /* Right */ return {h: 1 /* Right */, a1: $3.a1};
+  }
+ };
+ return JSON_Wire_Codec_readObject($2, $0);
+}
+
+/* Salutation.JSON.{wireEncode:1217} */
+function Salutation_JSON_wireEncode_1217($0) {
+ const $7 = JSON_Wire_Codec_encodeListValues(wireListValue => JSON_Wire_Codec_wireEncodeValue(Salutation_JSON_wireRecipient())(wireListValue), $0);
+ let $6;
+ switch($7.h) {
+  case 0: /* Left */ {
+   $6 = {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: 'recipients'}, a2: $7.a1.a1}, a2: $7.a1.a2}};
+   break;
+  }
+  case 1: /* Right */ {
+   $6 = {h: 1 /* Right */, a1: {a1: {a1: 'recipients', a2: {h: 6 /* JArray */, a1: $7.a1}}, a2: {h: 0}}};
+   break;
+  }
+ }
+ const $5 = {a1: $6, a2: {h: 0}};
+ const $2 = csegen_50()($5);
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($2, csegen_57());
+}
+
+/* Salutation.JSON.{wireDecode:1072} */
+function Salutation_JSON_wireDecode_1072($0) {
+ const $2 = wireObject => {
+  const $3 = JSON_Wire_Codec_readRequired('name', $7 => JSON_Wire_Codec_readString($7), wireObject);
+  switch($3.h) {
+   case 0: /* Left */ return {h: 0 /* Left */, a1: $3.a1};
+   case 1: /* Right */ return {h: 1 /* Right */, a1: $3.a1};
+  }
+ };
+ return JSON_Wire_Codec_readObject($2, $0);
+}
+
+/* Salutation.JSON.{wireEncode:1071} */
+function Salutation_JSON_wireEncode_1071($0) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(csegen_50()({a1: {h: 1 /* Right */, a1: {a1: {a1: 'name', a2: {h: 5 /* JString */, a1: $0}}, a2: {h: 0}}}, a2: {h: 0}}), csegen_57());
+}
+
+/* Salutation.JSON.wireRecipientMetadata : WireMetadata */
+const Salutation_JSON_wireRecipientMetadata = __lazy(function () {
+ return csegen_76();
+});
+
+/* Salutation.JSON.wireRecipient : WireDefinition Recipient */
+const Salutation_JSON_wireRecipient = __lazy(function () {
+ return JSON_Wire_Codec_trustedWireDefinition(Salutation_JSON_wireRecipientMetadata(), $4 => Salutation_JSON_wireEncode_1071($4), $8 => Salutation_JSON_wireDecode_1072($8));
+});
+
+/* Salutation.JSON.wireIntegersMetadata : WireMetadata */
+const Salutation_JSON_wireIntegersMetadata = __lazy(function () {
+ return csegen_94();
+});
+
+/* Salutation.JSON.wireIntegers : WireDefinition Integers */
+const Salutation_JSON_wireIntegers = __lazy(function () {
+ return JSON_Wire_Codec_trustedWireDefinition(Salutation_JSON_wireIntegersMetadata(), $4 => Salutation_JSON_wireEncode_1885($4), $8 => Salutation_JSON_wireDecode_1886($8));
+});
+
+/* Salutation.JSON.wireIntegerBatchMetadata : WireMetadata */
+const Salutation_JSON_wireIntegerBatchMetadata = __lazy(function () {
+ return {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.JSON.wireIntegerBatch'), a2: csegen_121(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.Types.IntegerBatch'), a2: 'IntegerBatch', a3: {h: 0 /* RecordBinding */, a1: {a1: {a1: 'values', a2: 'values'}, a2: {a1: {a1: 'signedValues', a2: 'signedValues'}, a2: {a1: {a1: 'unsignedValues', a2: 'unsignedValues'}, a2: {a1: {a1: 'optionalSigned', a2: 'optionalSigned'}, a2: {a1: {a1: 'nullableUnsigned', a2: 'nullableUnsigned'}, a2: {h: 0}}}}}}}}, a4: csegen_141(), a5: {a1: csegen_94(), a2: {a1: csegen_147(), a2: {a1: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Prelude.Types.Maybe'), a2: csegen_150(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Prelude.Types.Maybe'), a2: 'Maybe', a3: {h: 7 /* PresenceBinding */, a1: 'Nothing', a2: 'Just'}}, a4: csegen_152(), a5: {h: 0}}, a2: {a1: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.JSON.wireNullable'), a2: csegen_154(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Prelude.Types.Maybe'), a2: 'NullableMaybe', a3: {h: 8 /* NullableBinding */, a1: 'Nothing', a2: 'Just'}}, a4: csegen_156(), a5: {h: 0}}, a2: {h: 0}}}}}};
+});
+
+/* Salutation.JSON.wireIntegerBatch : WireDefinition IntegerBatch */
+const Salutation_JSON_wireIntegerBatch = __lazy(function () {
+ return JSON_Wire_Codec_trustedWireDefinition(Salutation_JSON_wireIntegerBatchMetadata(), $4 => Salutation_JSON_wireEncode_2173($4), $8 => Salutation_JSON_wireDecode_2174($8));
+});
+
+/* Salutation.JSON.wireGreetingMetadata : WireMetadata */
+const Salutation_JSON_wireGreetingMetadata = __lazy(function () {
+ return csegen_173();
+});
+
+/* Salutation.JSON.wireGreeting : WireDefinition Greeting */
+const Salutation_JSON_wireGreeting = __lazy(function () {
+ return JSON_Wire_Codec_trustedWireDefinition(Salutation_JSON_wireGreetingMetadata(), $4 => Salutation_JSON_wireEncode_1478($4), $8 => Salutation_JSON_wireDecode_1479($8));
+});
+
+/* Salutation.JSON.wireGreetResponseMetadata : WireMetadata */
+const Salutation_JSON_wireGreetResponseMetadata = __lazy(function () {
+ return {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.JSON.wireGreetResponse'), a2: csegen_184(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.Types.GreetResponse'), a2: 'GreetResponse', a3: {h: 0 /* RecordBinding */, a1: {a1: {a1: 'greetings', a2: 'greetings'}, a2: {h: 0}}}}, a4: csegen_193(), a5: {a1: csegen_147(), a2: {a1: csegen_173(), a2: {h: 0}}}};
+});
+
+/* Salutation.JSON.wireGreetResponse : WireDefinition GreetResponse */
+const Salutation_JSON_wireGreetResponse = __lazy(function () {
+ return JSON_Wire_Codec_trustedWireDefinition(Salutation_JSON_wireGreetResponseMetadata(), $4 => Salutation_JSON_wireEncode_1624($4), $8 => Salutation_JSON_wireDecode_1625($8));
+});
+
+/* Salutation.JSON.wireGreetRequestMetadata : WireMetadata */
+const Salutation_JSON_wireGreetRequestMetadata = __lazy(function () {
+ return {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.JSON.wireGreetRequest'), a2: csegen_207(), a3: {a1: Language_Reflection_Syntax_fromString_FromString_Name('Salutation.Types.GreetRequest'), a2: 'GreetRequest', a3: {h: 0 /* RecordBinding */, a1: {a1: {a1: 'recipients', a2: 'recipients'}, a2: {h: 0}}}}, a4: csegen_216(), a5: {a1: csegen_147(), a2: {a1: csegen_76(), a2: {h: 0}}}};
+});
+
+/* Salutation.JSON.wireGreetRequest : WireDefinition GreetRequest */
+const Salutation_JSON_wireGreetRequest = __lazy(function () {
+ return JSON_Wire_Codec_trustedWireDefinition(Salutation_JSON_wireGreetRequestMetadata(), $4 => Salutation_JSON_wireEncode_1217($4), $8 => Salutation_JSON_wireDecode_1218($8));
+});
+
+/* Salutation.JSON.integersJSON : String -> Either String String */
+function Salutation_JSON_integersJSON($0) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(Salutation_JSON_graphCodecIntegerBatch(), codec => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_decodeGraphText(codec, $0), value => JSON_Wire_Codec_encodeGraphText(codec, value)));
 }
 
 /* Salutation.JSON.greetJSON : String -> Either String String */
 function Salutation_JSON_greetJSON($0) {
- const $7 = $8 => $9 => {
-  const $a = Value_Unicode_scalarString($8);
-  switch($a.h) {
-   case 0: /* Left */ return {h: 0};
-   case 1: /* Right */ return Value_StringKeySortedAssoc_lookupValue($a.a1, $9);
-  }
- };
- const $6 = {a1: $7, a2: $11 => Prelude_Types_List_mapAppend({h: 0}, $15 => Value_StringKeySortedAssoc_bindingContent($15), $11)};
- const $19 = $1a => {
-  switch($1a.h) {
-   case 0: /* JNull */ return 'Null';
-   case 4: /* JBool */ return 'Boolean';
-   case 2: /* JDouble */ return 'Double';
-   case 3: /* JDecimal */ return 'Decimal';
-   case 1: /* JInteger */ return 'Integer';
-   case 5: /* JString */ return 'String';
-   case 6: /* JArray */ return 'Array';
-   case 7: /* JsonObject */ return 'Object';
-  }
- };
- const $1c = $1d => $1e => {
-  const $1f = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($1e)))), $2a => JSON_Parser_json(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($1e)));
-  switch($1f.h) {
-   case 0: /* Left */ return {h: 0 /* Left */, a1: Text_ByteBounds_toParseError($1d, Data_Buffer_Core_toString(Data_Buffer_Core_fromString(JSON_Parser_prepareText($1e)), 0n, Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($1e))))), $1f.a1)};
-   case 1: /* Right */ return {h: 1 /* Right */, a1: $1f.a1};
-  }
- };
- const $46 = $47 => {
-  switch($47.h) {
-   case 7: /* JsonObject */ return {a1: $47.a1};
-   default: return {h: 0};
-  }
- };
- const $4a = $4b => {
-  switch($4b.h) {
-   case 6: /* JArray */ return {a1: $4b.a1};
-   default: return {h: 0};
-  }
- };
- const $4e = $4f => {
-  switch($4f.h) {
-   case 4: /* JBool */ return {a1: $4f.a1};
-   default: return {h: 0};
-  }
- };
- const $52 = $53 => {
-  switch($53.h) {
-   case 2: /* JDouble */ return {a1: $53.a1};
-   case 3: /* JDecimal */ return {a1: JSON_Parser_jdouble($53.a1)};
-   case 1: /* JInteger */ return {a1: Number($53.a1)};
-   default: return {h: 0};
-  }
- };
- const $5b = $5c => {
-  switch($5c.h) {
-   case 1: /* JInteger */ return {a1: $5c.a1};
-   default: return {h: 0};
-  }
- };
- const $5f = $60 => {
-  switch($60.h) {
-   case 5: /* JString */ return {a1: $60.a1};
-   default: return {h: 0};
-  }
- };
- const $63 = $64 => {
-  switch($64.h) {
-   case 0: /* JNull */ return 1;
-   default: return 0;
-  }
- };
- const $5 = {a1: $6, a2: $19, a3: $1c, a4: $46, a5: $4a, a6: $4e, a7: $52, a8: $5b, a9: $5f, a10: $63};
- const $70 = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0)))), $7b => JSON_Parser_json(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)));
- let $6f;
- switch($70.h) {
-  case 0: /* Left */ {
-   $6f = {h: 0 /* Left */, a1: Text_ByteBounds_toParseError({h: 0}, Data_Buffer_Core_toString(Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)), 0n, Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0))))), $70.a1)};
-   break;
-  }
-  case 1: /* Right */ {
-   $6f = {h: 1 /* Right */, a1: $70.a1};
-   break;
-  }
- }
- const $3 = JSON_FromJSON_case__decodeVia_7563($5, $67 => $68 => $69 => $6a => Salutation_JSON_fromJsonGreetRequest($69, $6a), $0, $6f);
- let $2;
- switch($3.h) {
-  case 0: /* Left */ {
-   $2 = {h: 0 /* Left */, a1: JSON_FromJSON_interpolate_Interpolation_DecodingErr($3.a1)};
-   break;
-  }
-  case 1: /* Right */ {
-   $2 = {h: 1 /* Right */, a1: $3.a1};
-   break;
-  }
- }
- return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($2, request => JSON_ToJSON_encode($9e => $9f => $a0 => Salutation_JSON_toJsonGreetResponse($9f, $a0), Salutation_greet(request)));
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(Salutation_JSON_graphCodecGreetRequest(), requestCodec => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(Salutation_JSON_graphCodecGreetResponse(), responseCodec => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_decodeGraphText(requestCodec, $0), request => JSON_Wire_Codec_encodeGraphText(responseCodec, Salutation_greet(request)))));
 }
 
-/* Salutation.JSON.fromJsonRecipient : Value v obj => Parser v Recipient */
-function Salutation_JSON_fromJsonRecipient($0, $1) {
- const $8 = $9 => {
-  const $a = JSON_FromJSON_explicitParseField($0.a1, $0, $10 => JSON_FromJSON_fromJSON_FromJSON_String($0, $10), $9, 'name');
-  switch($a.h) {
-   case 1: /* Right */ return {h: 1 /* Right */, a1: $a.a1};
-   case 0: /* Left */ return {h: 0 /* Left */, a1: $a.a1};
-  }
- };
- return JSON_FromJSON_withValue($0, 'Object', $0.a4, () => 'Recipient', $8, $1);
-}
+/* Salutation.JSON.graphCodecIntegerBatch : Either String (GraphCodec IntegerBatch) */
+const Salutation_JSON_graphCodecIntegerBatch = __lazy(function () {
+ return JSON_Wire_Codec_trustedAuthoredGraphCodec({a1: 'Salutation.JSON.wireIntegerBatch', a2: {h: 0}, a3: {a1: csegen_93(), a2: {a1: csegen_146(), a2: {a1: csegen_152(), a2: {a1: csegen_156(), a2: {a1: csegen_141(), a2: {h: 0}}}}}}}, {a1: csegen_83(), a2: {a1: csegen_144(), a2: {a1: csegen_150(), a2: {a1: csegen_154(), a2: {a1: csegen_121(), a2: {h: 0}}}}}}, JSON_Wire_Codec_wireEncodeValue(Salutation_JSON_wireIntegerBatch()), JSON_Wire_Codec_wireDecodeValue(Salutation_JSON_wireIntegerBatch()));
+});
 
-/* Salutation.JSON.fromJsonGreetRequest : Value v obj => Parser v GreetRequest */
-function Salutation_JSON_fromJsonGreetRequest($0, $1) {
- const $8 = $9 => {
-  const $a = JSON_FromJSON_explicitParseField($0.a1, $0, $10 => JSON_FromJSON_fromJSON_FromJSON_x28Listx20x24ax29($13 => $14 => $15 => $16 => Salutation_JSON_fromJsonRecipient($15, $16), $0, $10), $9, 'recipients');
-  switch($a.h) {
-   case 1: /* Right */ return {h: 1 /* Right */, a1: $a.a1};
-   case 0: /* Left */ return {h: 0 /* Left */, a1: $a.a1};
-  }
- };
- return JSON_FromJSON_withValue($0, 'Object', $0.a4, () => 'GreetRequest', $8, $1);
-}
+/* Salutation.JSON.graphCodecGreetResponse : Either String (GraphCodec GreetResponse) */
+const Salutation_JSON_graphCodecGreetResponse = __lazy(function () {
+ return JSON_Wire_Codec_trustedAuthoredGraphCodec({a1: 'Salutation.JSON.wireGreetResponse', a2: {h: 0}, a3: {a1: csegen_146(), a2: {a1: csegen_172(), a2: {a1: csegen_193(), a2: {h: 0}}}}}, {a1: csegen_144(), a2: {a1: csegen_166(), a2: {a1: csegen_184(), a2: {h: 0}}}}, JSON_Wire_Codec_wireEncodeValue(Salutation_JSON_wireGreetResponse()), JSON_Wire_Codec_wireDecodeValue(Salutation_JSON_wireGreetResponse()));
+});
 
-/* Salutation.2645:876:greeting */
-function Salutation_n__2645_876_greeting($0, $1) {
+/* Salutation.JSON.graphCodecGreetRequest : Either String (GraphCodec GreetRequest) */
+const Salutation_JSON_graphCodecGreetRequest = __lazy(function () {
+ return JSON_Wire_Codec_trustedAuthoredGraphCodec({a1: 'Salutation.JSON.wireGreetRequest', a2: {h: 0}, a3: {a1: csegen_146(), a2: {a1: csegen_75(), a2: {a1: csegen_216(), a2: {h: 0}}}}}, {a1: csegen_144(), a2: {a1: csegen_69(), a2: {a1: csegen_207(), a2: {h: 0}}}}, JSON_Wire_Codec_wireEncodeValue(Salutation_JSON_wireGreetRequest()), JSON_Wire_Codec_wireDecodeValue(Salutation_JSON_wireGreetRequest()));
+});
+
+/* Salutation.2663:1017:greeting */
+function Salutation_n__2663_1017_greeting($0, $1) {
  return ('Hello, '+($1+'!'));
 }
 
 /* Salutation.greet : GreetRequest -> GreetResponse */
 function Salutation_greet($0) {
- return Prelude_Types_List_mapAppend({h: 0}, $4 => Salutation_n__2645_876_greeting($0, $4), $0);
+ return Prelude_Types_List_mapAppend({h: 0}, $4 => Salutation_n__2663_1017_greeting($0, $4), $0);
 }
 
 /* Prelude.Basics.uncurry : (a -> b -> c) -> (a, b) -> c */
@@ -2972,6 +4207,16 @@ function Prelude_Types_isAlpha($0) {
  }
 }
 
+/* Prelude.Types.elemBy : Foldable t => (a -> a -> Bool) -> a -> t a -> Bool */
+function Prelude_Types_elemBy($0, $1, $2) {
+ return $0.a6(undefined)(undefined)(csegen_251())($1($2));
+}
+
+/* Prelude.Types.elem : Foldable t => Eq a => a -> t a -> Bool */
+function Prelude_Types_elem($0, $1, $2) {
+ return Prelude_Types_elemBy($0, $1.a1, $2);
+}
+
 /* Prelude.Types.either : Lazy (a -> c) -> Lazy (b -> c) -> Either a b -> c */
 function Prelude_Types_either($0, $1, $2) {
  switch($2.h) {
@@ -2986,10 +4231,26 @@ function Prelude_Types_countFrom($0, $1) {
 }
 
 /* Prelude.Num.mod */
+function Prelude_Num_mod_Integral_Integer($0, $1) {
+ switch(Prelude_EqOrd_x3dx3d_Eq_Integer($1, 0n)) {
+  case 0: return _modBigInt($0, $1);
+  default: return _crashExp('Unhandled input for Prelude.Num.case block in mod at Prelude.Num:94:3--96:44');
+ }
+}
+
+/* Prelude.Num.mod */
 function Prelude_Num_mod_Integral_Bits8($0, $1) {
  switch(Prelude_EqOrd_x3dx3d_Eq_Bits8($1, 0)) {
   case 0: return ($0%$1);
   default: return _crashExp('Unhandled input for Prelude.Num.case block in mod at Prelude.Num:271:3--273:42');
+ }
+}
+
+/* Prelude.Num.div */
+function Prelude_Num_div_Integral_Integer($0, $1) {
+ switch(Prelude_EqOrd_x3dx3d_Eq_Integer($1, 0n)) {
+  case 0: return _divBigInt($0, $1);
+  default: return _crashExp('Unhandled input for Prelude.Num.case block in div at Prelude.Num:91:3--93:44');
  }
 }
 
@@ -3077,6 +4338,14 @@ function Prelude_EqOrd_compare_Ord_Bits32($0, $1) {
     case 0: return 2;
    }
   }
+ }
+}
+
+/* Prelude.EqOrd.> */
+function Prelude_EqOrd_x3e_Ord_Integer($0, $1) {
+ switch((($0>$1)?1:0)) {
+  case 0: return 0;
+  default: return 1;
  }
 }
 
@@ -3225,6 +4494,14 @@ function Prelude_EqOrd_x3dx3d_Eq_Bits32($0, $1) {
  }
 }
 
+/* Prelude.EqOrd.== */
+function Prelude_EqOrd_x3dx3d_Eq_x28x7cx28x28Builtinx2ePairx20x24ax29x20x24bx29x2cx28x28Builtinx2eMkPairx20x24ax29x20x24bx29x7cx29($0, $1, $2, $3) {
+ switch($0.a1($2.a1)($3.a1)) {
+  case 1: return $1.a1($2.a2)($3.a2);
+  case 0: return 0;
+ }
+}
+
 /* Prelude.EqOrd.< */
 function Prelude_EqOrd_x3c_Ord_Integer($0, $1) {
  switch((($0<$1)?1:0)) {
@@ -3314,8 +4591,24 @@ function Prelude_EqOrd_x3cx3d_Ord_Bits32($0, $1) {
 }
 
 /* Prelude.EqOrd./= */
+function Prelude_EqOrd_x2fx3d_Eq_String($0, $1) {
+ switch(Prelude_EqOrd_x3dx3d_Eq_String($0, $1)) {
+  case 1: return 0;
+  case 0: return 1;
+ }
+}
+
+/* Prelude.EqOrd./= */
 function Prelude_EqOrd_x2fx3d_Eq_Ordering($0, $1) {
  switch(Prelude_EqOrd_x3dx3d_Eq_Ordering($0, $1)) {
+  case 1: return 0;
+  case 0: return 1;
+ }
+}
+
+/* Prelude.EqOrd./= */
+function Prelude_EqOrd_x2fx3d_Eq_Integer($0, $1) {
+ switch(Prelude_EqOrd_x3dx3d_Eq_Integer($0, $1)) {
   case 1: return 0;
   case 0: return 1;
  }
@@ -3345,9 +4638,30 @@ function Prelude_EqOrd_x2fx3d_Eq_Bits32($0, $1) {
  }
 }
 
+/* Prelude.EqOrd./= */
+function Prelude_EqOrd_x2fx3d_Eq_x28x7cx28x28Builtinx2ePairx20x24ax29x20x24bx29x2cx28x28Builtinx2eMkPairx20x24ax29x20x24bx29x7cx29($0, $1, $2, $3) {
+ switch(Prelude_EqOrd_x3dx3d_Eq_x28x7cx28x28Builtinx2ePairx20x24ax29x20x24bx29x2cx28x28Builtinx2eMkPairx20x24ax29x20x24bx29x7cx29($0, $1, $2, $3)) {
+  case 1: return 0;
+  case 0: return 1;
+ }
+}
+
 /* Prelude.EqOrd.compareInteger : Integer -> Integer -> Ordering */
 function Prelude_EqOrd_compareInteger($0, $1) {
  return Prelude_EqOrd_compare_Ord_Integer($0, $1);
+}
+
+/* Prelude.Interfaces.Num.Monoid.neutral */
+function Prelude_Interfaces_Num_Monoid_neutral_Monoid_Additivex24a($0) {
+ return $0.a3(0n);
+}
+
+/* Prelude.Interfaces.Bool.Semigroup.<+> */
+function Prelude_Interfaces_Bool_Semigroup_x3cx2bx3e_Semigroup_AnyBool($0, $1) {
+ switch($0) {
+  case 1: return 1;
+  case 0: return $1;
+ }
 }
 
 /* Prelude.Interfaces.Bool.Semigroup.<+> */
@@ -3358,9 +4672,34 @@ function Prelude_Interfaces_Bool_Semigroup_x3cx2bx3e_Semigroup_AllBool($0, $1) {
  }
 }
 
+/* Prelude.Interfaces.Num.Semigroup.<+> */
+function Prelude_Interfaces_Num_Semigroup_x3cx2bx3e_Semigroup_Additivex24a($0) {
+ return $0.a1;
+}
+
+/* Prelude.Interfaces.traverse_ : Applicative f => Foldable t => (a -> f b) -> t a -> f () */
+function Prelude_Interfaces_traverse_($0, $1, $2) {
+ return $1.a1(undefined)(undefined)($b => $c => Prelude_Interfaces_x2ax3e($0, $2($b), $c))($0.a2(undefined)(undefined));
+}
+
+/* Prelude.Interfaces.sum : Num a => Foldable t => t a -> a */
+function Prelude_Interfaces_sum($0, $1) {
+ return $1.a6(undefined)(undefined)({a1: $b => $c => Prelude_Interfaces_Num_Semigroup_x3cx2bx3e_Semigroup_Additivex24a($0)($b)($c), a2: Prelude_Interfaces_Num_Monoid_neutral_Monoid_Additivex24a($0)})($17 => $17);
+}
+
 /* Prelude.Interfaces.sequence : Applicative f => Traversable t => t (f a) -> f (t a) */
 function Prelude_Interfaces_sequence($0, $1) {
  return $1.a3(undefined)(undefined)(undefined)($0)($d => $d);
+}
+
+/* Prelude.Interfaces.(*>) : Applicative f => f a -> f b -> f b */
+function Prelude_Interfaces_x2ax3e($0, $1, $2) {
+ const $d = $0.a1;
+ const $c = $d(undefined)(undefined);
+ const $b = $c($14 => $15 => $15);
+ const $a = $b($1);
+ const $4 = $0.a3(undefined)(undefined)($a);
+ return $4($2);
 }
 
 /* Prelude.Show.2434:11878:asciiTab */
@@ -3404,6 +4743,11 @@ function Prelude_Show_show_Show_Char($0) {
 /* Prelude.Show.show */
 function Prelude_Show_show_Show_x28Listx20x24ax29($0, $1) {
  return ('['+(Prelude_Show_n__3215_12599_showx27($0, $1, '', $1)+']'));
+}
+
+/* Prelude.Show.showPrec */
+function Prelude_Show_showPrec_Show_String($0, $1) {
+ return Prelude_Show_show_Show_String($1);
 }
 
 /* Prelude.Show.showPrec */
@@ -3562,44 +4906,734 @@ function PrimIO_unsafeCreateWorld($0) {
  return $0(_idrisworld);
 }
 
-/* JSON.ToJSON.toJSON */
-function JSON_ToJSON_toJSON_ToJSON_String($0, $1) {
- return {h: 1 /* Right */, a1: $0.a2($1)};
-}
-
-/* JSON.ToJSON.toJSON */
-function JSON_ToJSON_toJSON_ToJSON_x28Listx20x24ax29($0, $1, $2) {
- const $3 = Prelude_Types_traverse_Traversable_List(csegen_6(), $0(undefined)($1), $2);
- switch($3.h) {
-  case 0: /* Left */ return {h: 0 /* Left */, a1: $3.a1};
-  case 1: /* Right */ return {h: 1 /* Right */, a1: $1.a6($3.a1)};
+/* Data.String.3857:9599:unlines' */
+function Data_String_n__3857_9599_unlinesx27($0) {
+ switch($0.h) {
+  case 0: /* nil */ return {h: 0};
+  case undefined: /* cons */ return {a1: $0.a1, a2: {a1: '\n', a2: Data_String_n__3857_9599_unlinesx27($0.a2)}};
  }
 }
 
-/* JSON.ToJSON.encodeVia : (0 v : Type) -> Encoder v => ToJSON a => a -> Either String String */
-function JSON_ToJSON_encodeVia($0, $1, $2) {
- return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($1(undefined)($0)($2), $0.a1);
+/* Data.String.split : (Char -> Bool) -> String -> List1 String */
+function Data_String_split($0, $1) {
+ return Data_List1_map_Functor_List1($4 => Prelude_Types_fastPack($4), Data_List_split($0, Prelude_Types_fastUnpack($1)));
 }
 
-/* JSON.ToJSON.encode : ToJSON a => a -> Either String String */
-function JSON_ToJSON_encode($0, $1) {
- const $b = $c => {
-  switch(JSON_Parser_finiteDouble($c)) {
-   case 1: return {h: 1 /* Right */, a1: {h: 2 /* JDouble */, a1: $c}};
-   case 0: return {h: 0 /* Left */, a1: 'JSON: non-finite Double'};
+/* Data.String.singleton : Char -> String */
+function Data_String_singleton($0) {
+ return ($0+'');
+}
+
+/* Data.String.replicate : Nat -> Char -> String */
+function Data_String_replicate($0, $1) {
+ return Prelude_Types_fastPack(Data_List_replicateTR({h: 0}, $0, $1));
+}
+
+/* Data.String.padLeft : Nat -> Char -> String -> String */
+function Data_String_padLeft($0, $1, $2) {
+ return (Data_String_replicate(Prelude_Types_prim__integerToNat(($0-Prelude_Types_String_length($2))), $1)+$2);
+}
+
+/* Data.String.lines' : List Char -> List (List Char) */
+function Data_String_linesx27($0) {
+ return Data_String_n__3990_9729_linesHelp($0, {h: 0}, $0);
+}
+
+/* Data.String.lines : String -> List String */
+function Data_String_lines($0) {
+ return Prelude_Types_List_mapAppend({h: 0}, $4 => Prelude_Types_fastPack($4), Data_String_linesx27(Prelude_Types_fastUnpack($0)));
+}
+
+/* Data.String.indent : Nat -> String -> String */
+function Data_String_indent($0, $1) {
+ return (Data_String_replicate($0, ' ')+$1);
+}
+
+/* Data.String.fastUnlines : List String -> String */
+function Data_String_fastUnlines($0) {
+ return Prelude_Types_fastConcat(Data_String_n__3857_9599_unlinesx27($0));
+}
+
+/* Data.Maybe.isJust : Maybe a -> Bool */
+function Data_Maybe_isJust($0) {
+ switch($0.h) {
+  case 0: /* nothing */ return 0;
+  case undefined: /* just */ return 1;
+ }
+}
+
+/* Data.Maybe.fromMaybe : Lazy a -> Maybe a -> a */
+function Data_Maybe_fromMaybe($0, $1) {
+ switch($1.h) {
+  case 0: /* nothing */ return $0();
+  case undefined: /* just */ return $1.a1;
+ }
+}
+
+/* Data.Nat.pred : Nat -> Nat */
+function Data_Nat_pred($0) {
+ switch($0) {
+  case 0n: return 0n;
+  default: return ($0-1n);
+ }
+}
+
+/* Data.List1.map */
+function Data_List1_map_Functor_List1($0, $1) {
+ return {a1: $0($1.a1), a2: Prelude_Types_List_mapAppend({h: 0}, $0, $1.a2)};
+}
+
+/* Data.List1.singleton : a -> List1 a */
+function Data_List1_singleton($0) {
+ return {a1: $0, a2: {h: 0}};
+}
+
+/* Data.List.7787:8508:split */
+function Data_List_n__7787_8508_split($0, $1, $2) {
+ return Data_List_n__7787_8509_splitRec($0, $1, $2, $2, $9 => $9);
+}
+
+/* Data.List.zip */
+function Data_List_zip_Zippable_List($0, $1) {
+ return Data_List_zipWith_Zippable_List($4 => $5 => ({a1: $4, a2: $5}), $0, $1);
+}
+
+/* Data.List.zipWith */
+function Data_List_zipWith_Zippable_List($0, $1, $2) {
+ switch($1.h) {
+  case 0: /* nil */ return {h: 0};
+  default: {
+   switch($2.h) {
+    case 0: /* nil */ return {h: 0};
+    default: return {a1: $0($1.a1)($2.a1), a2: Data_List_zipWith_Zippable_List($0, $1.a2, $2.a2)};
+   }
+  }
+ }
+}
+
+/* Data.List.take : Nat -> List a -> List a */
+function Data_List_take($0, $1) {
+ switch($0) {
+  case 0n: return {h: 0};
+  default: {
+   const $3 = ($0-1n);
+   switch($1.h) {
+    case undefined: /* cons */ return {a1: $1.a1, a2: Data_List_take($3, $1.a2)};
+    default: return {h: 0};
+   }
+  }
+ }
+}
+
+/* Data.List.split : (a -> Bool) -> List a -> List1 (List a) */
+function Data_List_split($0, $1) {
+ const $2 = Data_List_break$($0, $1);
+ switch($2.a2.h) {
+  case 0: /* nil */ return Data_List1_singleton($2.a1);
+  case undefined: /* cons */ return {a1: $2.a1, a2: Data_List_split($0, $2.a2.a2)};
+ }
+}
+
+/* Data.List.span : (a -> Bool) -> List a -> (List a, List a) */
+function Data_List_span($0, $1) {
+ switch($1.h) {
+  case 0: /* nil */ return {a1: {h: 0}, a2: {h: 0}};
+  case undefined: /* cons */ {
+   switch($0($1.a1)) {
+    case 1: {
+     const $8 = Data_List_span($0, $1.a2);
+     return {a1: {a1: $1.a1, a2: $8.a1}, a2: $8.a2};
+    }
+    case 0: return {a1: {h: 0}, a2: {a1: $1.a1, a2: $1.a2}};
+   }
+  }
+ }
+}
+
+/* Data.List.sortBy : (a -> a -> Ordering) -> List a -> List a */
+function Data_List_sortBy($0, $1) {
+ switch($1.h) {
+  case 0: /* nil */ return {h: 0};
+  case undefined: /* cons */ {
+   switch($1.a2.h) {
+    case 0: /* nil */ return {a1: $1.a1, a2: {h: 0}};
+    default: {
+     const $6 = Data_List_n__7787_8508_split($1, $0, $1);
+     return Data_List_mergeBy($0, Data_List_sortBy($0, $6.a1), Data_List_sortBy($0, $6.a2));
+    }
+   }
+  }
+  default: {
+   const $15 = Data_List_n__7787_8508_split($1, $0, $1);
+   return Data_List_mergeBy($0, Data_List_sortBy($0, $15.a1), Data_List_sortBy($0, $15.a2));
+  }
+ }
+}
+
+/* Data.List.sort : Ord a => List a -> List a */
+function Data_List_sort($0, $1) {
+ return Data_List_sortBy($0.a2, $1);
+}
+
+/* Data.List.mergeBy : (a -> a -> Ordering) -> List a -> List a -> List a */
+function Data_List_mergeBy($0, $1, $2) {
+ switch($1.h) {
+  case 0: /* nil */ return $2;
+  default: {
+   switch($2.h) {
+    case 0: /* nil */ return $1;
+    default: {
+     switch($0($1.a1)($2.a1)) {
+      case 0: return {a1: $1.a1, a2: Data_List_mergeBy($0, $1.a2, {a1: $2.a1, a2: $2.a2})};
+      default: return {a1: $2.a1, a2: Data_List_mergeBy($0, {a1: $1.a1, a2: $1.a2}, $2.a2)};
+     }
+    }
+   }
+  }
+ }
+}
+
+/* Data.List.lookup : Eq a => a -> List (a, b) -> Maybe b */
+function Data_List_lookup($0, $1, $2) {
+ return Data_List_lookupBy($0.a1, $1, $2);
+}
+
+/* Data.List.break : (a -> Bool) -> List a -> (List a, List a) */
+function Data_List_break$($0, $1) {
+ const $3 = $4 => {
+  switch($0($4)) {
+   case 1: return 0;
+   case 0: return 1;
   }
  };
- const $3 = {a1: $5 => JSON_Parser_encodeJSONValue($5), a2: $9 => ({h: 5 /* JString */, a1: $9}), a3: $b, a4: $14 => ({h: 1 /* JInteger */, a1: $14}), a5: $17 => ({h: 4 /* JBool */, a1: $17}), a6: $1a => ({h: 6 /* JArray */, a1: $1a}), a7: $1d => ({h: 7 /* JsonObject */, a1: $1d}), a8: {h: 0 /* JNull */}};
- return JSON_ToJSON_encodeVia($3, $0, $1);
+ return Data_List_span($3, $1);
 }
 
-/* JSON.Encoder.objectChecked : Encoder v => List (String, v) -> Either String v */
-function JSON_Encoder_objectChecked($0, $1) {
- const $2 = JSON_Object_checkedAssoc($1);
- switch($2.h) {
-  case 0: /* Left */ return {h: 0 /* Left */, a1: JSON_Object_show_Show_ObjectError($2.a1)};
-  case 1: /* Right */ return {h: 1 /* Right */, a1: $0.a7($2.a1)};
+/* Language.Reflection.Syntax.fromString */
+function Language_Reflection_Syntax_fromString_FromString_Name($0) {
+ return Language_Reflection_Syntax_n__4997_10648_run($0, Data_String_split($6 => Prelude_EqOrd_x3dx3d_Eq_Char('.', $6), $0), {h: 0});
+}
+
+/* Data.Vect.map */
+function Data_Vect_map_Functor_x28Vectx20x24nx29($0, $1) {
+ switch($1.h) {
+  case 0: /* nil */ return {h: 0};
+  case undefined: /* cons */ return {a1: $0($1.a1), a2: Data_Vect_map_Functor_x28Vectx20x24nx29($0, $1.a2)};
  }
+}
+
+/* Data.Vect.reverse : Vect len elem -> Vect len elem */
+function Data_Vect_reverse($0) {
+ return Data_Vect_reverseOnto({h: 0}, $0);
+}
+
+/* Data.Vect.fromList : (xs : List elem) -> Vect (length xs) elem */
+function Data_Vect_fromList($0) {
+ return Data_Vect_reverse(Data_Vect_fromListx27({h: 0}, $0));
+}
+
+/* Language.Reflection.Derive.mkOrd : Eq a => (a -> a -> Ordering) -> Ord a */
+function Language_Reflection_Derive_mkOrd($0, $1) {
+ const $24 = a => b => {
+  switch(Prelude_EqOrd_x3dx3d_Eq_Ordering($1(a)(b), 2)) {
+   case 1: return a;
+   case 0: return b;
+  }
+ };
+ const $2d = a => b => {
+  switch(Prelude_EqOrd_x3dx3d_Eq_Ordering($1(a)(b), 0)) {
+   case 1: return a;
+   case 0: return b;
+  }
+ };
+ return {a1: $0, a2: $1, a3: a => b => Prelude_EqOrd_x3dx3d_Eq_Ordering($1(a)(b), 0), a4: a => b => Prelude_EqOrd_x3dx3d_Eq_Ordering($1(a)(b), 2), a5: a => b => Prelude_EqOrd_x2fx3d_Eq_Ordering($1(a)(b), 2), a6: a => b => Prelude_EqOrd_x2fx3d_Eq_Ordering($1(a)(b), 0), a7: $24, a8: $2d};
+}
+
+/* JSON.Wire.Binary64.tokenBits : String -> Either String Bits64 */
+function JSON_Wire_Binary64_tokenBits($0) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Numeric_numberToken($0), token => JSON_Wire_Binary64_checkFinite(JSON_Wire_Binary64_doubleBits(JSON_Wire_Binary64_numberValue(token))));
+}
+
+/* JSON.Wire.Binary64.readFiniteHex : String -> Either String Bits64 */
+function JSON_Wire_Binary64_readFiniteHex($0) {
+ let $1;
+ switch(((Prelude_Types_List_lengthTR(Prelude_Types_fastUnpack($0))===16n)?1:0)) {
+  case 1: {
+   $1 = Prelude_Types_foldMap_Foldable_List(csegen_290(), char => Prelude_Types_elem(csegen_44()(), {a1: $14 => $15 => Prelude_EqOrd_x3dx3d_Eq_Char($14, $15), a2: $1a => $1b => Prelude_EqOrd_x2fx3d_Eq_Char($1a, $1b)}, char)(Prelude_Types_fastUnpack('0123456789abcdef')), Prelude_Types_fastUnpack($0));
+   break;
+  }
+  case 0: {
+   $1 = 0;
+   break;
+  }
+ }
+ switch($1) {
+  case 1: return JSON_Wire_Binary64_checkFinite(JSON_Wire_Binary64_hexBits($0));
+  case 0: return {h: 0 /* Left */, a1: 'Wire binary64: expected 16 lowercase hexadecimal digits'};
+ }
+}
+
+/* JSON.Wire.Binary64.readFiniteBits : JSON -> Either String Bits64 */
+function JSON_Wire_Binary64_readFiniteBits($0) {
+ switch($0.h) {
+  case 3: /* JDecimal */ return JSON_Wire_Binary64_tokenBits($0.a1);
+  case 1: /* JInteger */ return JSON_Wire_Binary64_tokenBits(Prelude_Show_show_Show_Integer($0.a1));
+  case 2: /* JDouble */ return JSON_Wire_Binary64_checkFinite(JSON_Wire_Binary64_doubleBits($0.a1));
+  default: return {h: 0 /* Left */, a1: 'Wire binary64: expected JSON number'};
+ }
+}
+
+/* JSON.Wire.Binary64.finiteWireBits : Bits64 -> Bool */
+function JSON_Wire_Binary64_finiteWireBits($0) {
+ return Prelude_EqOrd_x2fx3d_Eq_Integer(Prelude_Num_mod_Integral_Integer(Prelude_Num_div_Integral_Integer($0, 4503599627370496n), 2048n), 2047n);
+}
+
+/* JSON.Wire.Binary64.finiteBitsHex : Bits64 -> Either String String */
+function JSON_Wire_Binary64_finiteBitsHex($0) {
+ const $1 = JSON_Wire_Binary64_checkFinite($0);
+ switch($1.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: $1.a1};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: JSON_Wire_Binary64_bitsHex($1.a1)};
+ }
+}
+
+/* JSON.Wire.Binary64.encodeFiniteBits : Bits64 -> Either String JSON */
+function JSON_Wire_Binary64_encodeFiniteBits($0) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Binary64_checkFinite($0), checked => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Numeric_numberToken(JSON_Wire_Binary64_numberText(JSON_Wire_Binary64_bitsDouble(checked))), token => ({h: 1 /* Right */, a1: {h: 3 /* JDecimal */, a1: token}})));
+}
+
+/* JSON.Wire.Binary64.checkFinite : Bits64 -> Either String Bits64 */
+function JSON_Wire_Binary64_checkFinite($0) {
+ switch(JSON_Wire_Binary64_finiteWireBits($0)) {
+  case 1: return {h: 1 /* Right */, a1: $0};
+  case 0: return {h: 0 /* Left */, a1: 'Wire binary64: non-finite value'};
+ }
+}
+
+/* JSON.Wire.Numeric.case block in legacyIntegerToken */
+function JSON_Wire_Numeric_case__legacyIntegerToken_10678($0, $1, $2) {
+ switch($2.h) {
+  case 1: /* Right */ {
+   switch($2.a1.h) {
+    case 1: /* JInteger */ return {h: 1 /* Right */, a1: $2.a1};
+    default: return {h: 0 /* Left */, a1: 'Wire graph: expected natural integer literal'};
+   }
+  }
+  default: return {h: 0 /* Left */, a1: 'Wire graph: expected natural integer literal'};
+ }
+}
+
+/* JSON.Wire.Numeric.case block in case block in naturalToken */
+function JSON_Wire_Numeric_case__casex20blockx20inx20naturalToken_9892($0, $1, $2, $3, $4, $5, $6, $7, $8) {
+ let $a;
+ switch($8.a2.h) {
+  case 0: /* nil */ {
+   $a = 0n;
+   break;
+  }
+  case undefined: /* cons */ {
+   $a = Prelude_Types_List_lengthTR($8.a2.a2);
+   break;
+  }
+ }
+ const $e = Data_List_dropWhile(csegen_296(), Prelude_Types_List_filterAppend({h: 0}, $16 => Prelude_EqOrd_x2fx3d_Eq_Char($16, '.'), $6));
+ switch(Prelude_Types_null_Foldable_List($e)) {
+  case 1: return () => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Numeric_rejectSignedZero($1, $4), $24 => ({h: 1 /* Right */, a1: 0n}));
+  case 0: {
+   switch($4) {
+    case 1: return () => ({h: 0 /* Left */, a1: 'Wire numeric: expected nonnegative value'});
+    case 0: {
+     const $28 = Prelude_Types_List_reverse($e);
+     const $2b = Prelude_Types_List_reverse(Data_List_dropWhile(csegen_296(), $28));
+     const $32 = (Prelude_Types_List_lengthTR($e)-Prelude_Types_List_lengthTR($2b));
+     let $39;
+     switch($7.h) {
+      case 0: /* nil */ {
+       $39 = 0n;
+       break;
+      }
+      case undefined: /* cons */ {
+       $39 = _bigIntOfString(Prelude_Types_fastPack($7.a2));
+       break;
+      }
+     }
+     const $3e = (($39-$a)+$32);
+     const $43 = (Prelude_Types_List_lengthTR($2b)+$3e);
+     const $48 = Prelude_Types_String_length(Prelude_Show_show_Show_Integer($1.a1));
+     switch(Prelude_EqOrd_x3c_Ord_Integer($3e, 0n)) {
+      case 1: return () => ({h: 0 /* Left */, a1: 'Wire numeric: expected exact integral decimal value'});
+      case 0: {
+       switch(Prelude_EqOrd_x3e_Ord_Integer($43, $48)) {
+        case 1: return () => ({h: 0 /* Left */, a1: 'Wire numeric: value exceeds upper'});
+        case 0: {
+         const $58 = (_bigIntOfString(Prelude_Types_fastPack($2b))*JSON_Wire_Numeric_power10(Prelude_Types_prim__integerToNat($3e)));
+         switch(Prelude_EqOrd_x3e_Ord_Integer($58, $1.a1)) {
+          case 1: return () => ({h: 0 /* Left */, a1: 'Wire numeric: value exceeds upper'});
+          case 0: return () => ({h: 1 /* Right */, a1: Prelude_Types_prim__integerToNat($58)});
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Numeric.case block in naturalToken */
+function JSON_Wire_Numeric_case__naturalToken_9858($0, $1, $2, $3, $4, $5, $6) {
+ return JSON_Wire_Numeric_case__casex20blockx20inx20naturalToken_9892($0, $1, $2, $3, $4, $5, $6.a1, $6.a2, Data_List_break$($14 => Prelude_EqOrd_x3dx3d_Eq_Char($14, '.'), $6.a1));
+}
+
+/* JSON.Wire.Numeric.case block in numberToken */
+function JSON_Wire_Numeric_case__numberToken_9643($0, $1) {
+ switch($1.h) {
+  case 1: /* Right */ {
+   switch($1.a1.h) {
+    case 3: /* JDecimal */ {
+     switch(Prelude_EqOrd_x3dx3d_Eq_String($1.a1.a1, $0)) {
+      case 1: return {h: 1 /* Right */, a1: $0};
+      case 0: return {h: 0 /* Left */, a1: 'Wire numeric: expected a complete number token without whitespace'};
+     }
+    }
+    default: return {h: 0 /* Left */, a1: 'Wire numeric: invalid JSON number token'};
+   }
+  }
+  default: return {h: 0 /* Left */, a1: 'Wire numeric: invalid JSON number token'};
+ }
+}
+
+/* JSON.Wire.Numeric.case block in integer64 */
+function JSON_Wire_Numeric_case__integer64_9573($0, $1, $2) {
+ let $4;
+ switch(Prelude_EqOrd_x3ex3d_Ord_Integer($0, $2.a1)) {
+  case 1: {
+   $4 = Prelude_EqOrd_x3cx3d_Ord_Integer($0, $2.a2);
+   break;
+  }
+  case 0: {
+   $4 = 0;
+   break;
+  }
+ }
+ switch($4) {
+  case 1: return {h: 1 /* Right */, a1: $0};
+  case 0: return {h: 0 /* Left */, a1: 'Wire: integer outside 64-bit range'};
+ }
+}
+
+/* JSON.Wire.Numeric.rejectSignedZero : NumericBinding -> Bool -> Either String () */
+function JSON_Wire_Numeric_rejectSignedZero($0, $1) {
+ switch($0.a3) {
+  case 0: return {h: 1 /* Right */, a1: undefined};
+  case 1: {
+   switch($1) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire numeric: negative zero is excluded'};
+    case 0: return {h: 1 /* Right */, a1: undefined};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Numeric.power10 : Nat -> Integer */
+function JSON_Wire_Numeric_power10($0) {
+ switch($0) {
+  case 0n: return 1n;
+  default: {
+   const $2 = ($0-1n);
+   return (JSON_Wire_Numeric_power10($2)*10n);
+  }
+ }
+}
+
+/* JSON.Wire.Numeric.numberToken : String -> Either String String */
+function JSON_Wire_Numeric_numberToken($0) {
+ const $4 = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0)))), csegen_321(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)));
+ let $3;
+ switch($4.h) {
+  case 0: /* Left */ {
+   $3 = {h: 0 /* Left */, a1: Text_ByteBounds_toParseError({h: 0}, Data_Buffer_Core_toString(Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)), 0n, Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0))))), $4.a1)};
+   break;
+  }
+  case 1: /* Right */ {
+   $3 = {h: 1 /* Right */, a1: $4.a1};
+   break;
+  }
+ }
+ return JSON_Wire_Numeric_case__numberToken_9643($0, $3);
+}
+
+/* JSON.Wire.Numeric.naturalToken : NumericBinding -> String -> Either String Nat */
+function JSON_Wire_Numeric_naturalToken($0, $1) {
+ const $6 = token => {
+  let $8;
+  switch(Prelude_EqOrd_x3c_Ord_Integer($0.a1, 0n)) {
+   case 1: {
+    $8 = {h: 0 /* Left */, a1: 'Wire numeric: invalid negative upper'};
+    break;
+   }
+   case 0: {
+    $8 = {h: 1 /* Right */, a1: undefined};
+    break;
+   }
+  }
+  const $10 = $11 => {
+   const $13 = Prelude_Types_fastUnpack(token);
+   let $16;
+   switch($13.h) {
+    case undefined: /* cons */ {
+     switch($13.a1) {
+      case '-': {
+       $16 = 1;
+       break;
+      }
+      default: $16 = 0;
+     }
+     break;
+    }
+    default: $16 = 0;
+   }
+   let $19;
+   switch($16) {
+    case 1: {
+     $19 = Data_List_drop(1n, $13);
+     break;
+    }
+    case 0: {
+     $19 = $13;
+     break;
+    }
+   }
+   const $27 = c => {
+    switch(Prelude_EqOrd_x3dx3d_Eq_Char(c, 'e')) {
+     case 1: return 1;
+     case 0: return Prelude_EqOrd_x3dx3d_Eq_Char(c, 'E');
+    }
+   };
+   const $25 = Data_List_break$($27, $19);
+   const $12 = JSON_Wire_Numeric_case__naturalToken_9858($1, $0, token, $13, $16, $19, $25);
+   return $12();
+  };
+  return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($8, $10);
+ };
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Numeric_numberToken($1), $6);
+}
+
+/* JSON.Wire.Numeric.legacyIntegerToken : String -> Either String JSON */
+function JSON_Wire_Numeric_legacyIntegerToken($0) {
+ const $5 = _ => {
+  const $a = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0)))), $15 => JSON_Parser_json(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)));
+  let $9;
+  switch($a.h) {
+   case 0: /* Left */ {
+    $9 = {h: 0 /* Left */, a1: Text_ByteBounds_toParseError({h: 0}, Data_Buffer_Core_toString(Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)), 0n, Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0))))), $a.a1)};
+    break;
+   }
+   case 1: /* Right */ {
+    $9 = {h: 1 /* Right */, a1: $a.a1};
+    break;
+   }
+  }
+  return JSON_Wire_Numeric_case__legacyIntegerToken_10678($0, _, $9);
+ };
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Numeric_numberToken($0), $5);
+}
+
+/* JSON.Wire.Numeric.integer64Bounds : Integer64Kind -> (Integer, Integer) */
+function JSON_Wire_Numeric_integer64Bounds($0) {
+ switch($0) {
+  case 0: return {a1: -9223372036854775808n, a2: 9223372036854775807n};
+  case 1: return {a1: 0n, a2: 18446744073709551615n};
+ }
+}
+
+/* JSON.Wire.Numeric.integer64 : Integer64Kind -> JSON -> Either String Integer */
+function JSON_Wire_Numeric_integer64($0, $1) {
+ switch($1.h) {
+  case 1: /* JInteger */ return JSON_Wire_Numeric_case__integer64_9573($1.a1, $0, JSON_Wire_Numeric_integer64Bounds($0));
+  default: return {h: 0 /* Left */, a1: 'Wire: expected a 64-bit integer literal'};
+ }
+}
+
+/* JSON.Wire.Numeric.boundNatural : NumericBinding -> JSON -> Either String Nat */
+function JSON_Wire_Numeric_boundNatural($0, $1) {
+ switch($1.h) {
+  case 1: /* JInteger */ {
+   switch(Prelude_EqOrd_x3c_Ord_Integer($0.a1, 0n)) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire numeric: invalid negative upper'};
+    case 0: {
+     switch(Prelude_EqOrd_x3c_Ord_Integer($1.a1, 0n)) {
+      case 1: return {h: 0 /* Left */, a1: 'Wire numeric: expected nonnegative value'};
+      case 0: {
+       switch(Prelude_EqOrd_x3e_Ord_Integer($1.a1, $0.a1)) {
+        case 1: return {h: 0 /* Left */, a1: 'Wire numeric: value exceeds upper'};
+        case 0: return {h: 1 /* Right */, a1: Prelude_Types_prim__integerToNat($1.a1)};
+       }
+      }
+     }
+    }
+   }
+  }
+  case 3: /* JDecimal */ return JSON_Wire_Numeric_naturalToken($0, $1.a1);
+  default: return {h: 0 /* Left */, a1: 'Wire numeric: expected exact JSON number'};
+ }
+}
+
+/* JSON.Wire.Description.== */
+function JSON_Wire_Description_x3dx3d_Eq_RepresentationKind($0, $1) {
+ switch($0) {
+  case 0: {
+   switch($1) {
+    case 0: return 1;
+    default: return 0;
+   }
+  }
+  case 1: {
+   switch($1) {
+    case 1: return 1;
+    default: return 0;
+   }
+  }
+  case 2: {
+   switch($1) {
+    case 2: return 1;
+    default: return 0;
+   }
+  }
+  case 3: {
+   switch($1) {
+    case 3: return 1;
+    default: return 0;
+   }
+  }
+  case 4: {
+   switch($1) {
+    case 4: return 1;
+    default: return 0;
+   }
+  }
+  case 5: {
+   switch($1) {
+    case 5: return 1;
+    default: return 0;
+   }
+  }
+  default: return 0;
+ }
+}
+
+/* JSON.Wire.Description./= */
+function JSON_Wire_Description_x2fx3d_Eq_RepresentationKind($0, $1) {
+ switch(JSON_Wire_Description_x3dx3d_Eq_RepresentationKind($0, $1)) {
+  case 1: return 0;
+  case 0: return 1;
+ }
+}
+
+/* JSON.Wire.Description.selectUntaggedShape : RepresentationProfile -> RepresentationKind -> List (String,
+ValueShape) -> Either String ValueShape */
+function JSON_Wire_Description_selectUntaggedShape($0, $1, $2) {
+ const $3 = Prelude_Types_List_filterAppend({h: 0}, $7 => Prelude_Types_elem(csegen_44()(), csegen_325()(), $1)(JSON_Wire_Description_representationKinds($0, $7.a2)), $2);
+ switch($3.h) {
+  case undefined: /* cons */ {
+   switch($3.a1.h) {
+    case undefined: /* cons */ {
+     switch($3.a2.h) {
+      case 0: /* nil */ return {h: 1 /* Right */, a1: $3.a1.a2};
+      default: return {h: 0 /* Left */, a1: 'Wire graph: ambiguous untagged representation'};
+     }
+    }
+    default: return {h: 0 /* Left */, a1: 'Wire graph: ambiguous untagged representation'};
+   }
+  }
+  case 0: /* nil */ return {h: 0 /* Left */, a1: 'Wire graph: no matching untagged representation'};
+  default: return {h: 0 /* Left */, a1: 'Wire graph: ambiguous untagged representation'};
+ }
+}
+
+/* JSON.Wire.Description.representationKinds : RepresentationProfile -> ValueShape -> List RepresentationKind */
+function JSON_Wire_Description_representationKinds($0, $1) {
+ switch($1.h) {
+  case 8: /* NullValue */ return {a1: 0, a2: {h: 0}};
+  case 6: /* BooleanValue */ return {a1: 1, a2: {h: 0}};
+  case 7: /* NeverValue */ return {h: 0};
+  case 0: /* NaturalValue */ return JSON_Wire_Description_numericKinds($0);
+  case 1: /* BoundNaturalValue */ return JSON_Wire_Description_numericKinds($0);
+  case 2: /* Integer64Value */ return {a1: 2, a2: {h: 0}};
+  case 5: /* FiniteBinary64Value */ return JSON_Wire_Description_numericKinds($0);
+  case 3: /* StringValue */ return {a1: 3, a2: {h: 0}};
+  case 4: /* ScalarValue */ return {a1: 3, a2: {h: 0}};
+  case 13: /* EnumValue */ return {a1: 3, a2: {h: 0}};
+  case 9: /* ArrayValue */ return {a1: 4, a2: {h: 0}};
+  case 10: /* DynamicObjectValue */ return {a1: 5, a2: {h: 0}};
+  case 15: /* ObjectValue */ return {a1: 5, a2: {h: 0}};
+  case 11: /* TaggedValue */ return {a1: 5, a2: {h: 0}};
+  case 14: /* NullableValue */ return {a1: 0, a2: JSON_Wire_Description_representationKinds($0, $1.a1)};
+  case 12: /* UntaggedValue */ return JSON_Wire_Description_armKinds($0, $1.a2);
+ }
+}
+
+/* JSON.Wire.Description.numericKinds : RepresentationProfile -> List RepresentationKind */
+function JSON_Wire_Description_numericKinds($0) {
+ switch($0) {
+  case 0: return {a1: 2, a2: {h: 0}};
+  case 1: return {a1: 5, a2: {h: 0}};
+ }
+}
+
+/* JSON.Wire.Description.checkWireObjectKey : String -> Either String () */
+function JSON_Wire_Description_checkWireObjectKey($0) {
+ const $1 = Value_Unicode_scalarString($0);
+ switch($1.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: 'Wire: isolated surrogate object key'};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: undefined};
+ }
+}
+
+/* JSON.Wire.Description.armKinds : RepresentationProfile -> List (String, ValueShape) -> List RepresentationKind */
+function JSON_Wire_Description_armKinds($0, $1) {
+ switch($1.h) {
+  case 0: /* nil */ return {h: 0};
+  case undefined: /* cons */ return Prelude_Types_List_tailRecAppend(JSON_Wire_Description_representationKinds($0, $1.a1.a2), JSON_Wire_Description_armKinds($0, $1.a2));
+ }
+}
+
+/* Value.Unicode.with block in scalarString */
+function Value_Unicode_with__scalarString_5417($0, $1, $2) {
+ switch($1) {
+  case 1: return {h: 1 /* Right */, a1: $0};
+  case 0: return {h: 0 /* Left */, a1: undefined};
+ }
+}
+
+/* Value.Unicode.scalarString : String -> Either UnicodeError ScalarString */
+function Value_Unicode_scalarString($0) {
+ return Value_Unicode_with__scalarString_5417($0, Value_Unicode_isScalarString($0), undefined);
+}
+
+/* Value.Unicode.scalarCharacter : Char -> Bool */
+function Value_Unicode_scalarCharacter($0) {
+ const $1 = _truncInt32($0.codePointAt(0));
+ switch(Prelude_EqOrd_x3ex3d_Ord_Int($1, Number(_truncBigInt32(0n)))) {
+  case 1: {
+   switch(Prelude_EqOrd_x3cx3d_Ord_Int($1, Number(_truncBigInt32(1114111n)))) {
+    case 1: {
+     switch(Prelude_EqOrd_x3c_Ord_Int($1, Number(_truncBigInt32(55296n)))) {
+      case 1: return 1;
+      case 0: return Prelude_EqOrd_x3e_Ord_Int($1, Number(_truncBigInt32(57343n)));
+     }
+    }
+    case 0: return 0;
+   }
+  }
+  case 0: return 0;
+ }
+}
+
+/* Value.Unicode.isScalarString : String -> Bool */
+function Value_Unicode_isScalarString($0) {
+ return Value_Unicode_scalarCharacters(Prelude_Types_fastUnpack($0));
 }
 
 /* JSON.Parser.case block in checkedNumberToken */
@@ -3714,70 +5748,79 @@ function JSON_Parser_prepareText($0) {
  return Prelude_Types_fastPack(Prelude_Types_SnocList_x3cx3ex3e(JSON_Parser_n__15796_9018_go($0, 0, 0, {h: 0}, Prelude_Types_fastUnpack($0)), {h: 0}));
 }
 
+/* JSON.Parser.objectFromLegacyPairs : List (String, JSON) -> Either String JSON */
+function JSON_Parser_objectFromLegacyPairs($0) {
+ const $1 = JSON_Object_checkedAssoc($0);
+ switch($1.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: JSON_Object_show_Show_ObjectError($1.a1)};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: {h: 7 /* JsonObject */, a1: $1.a1}};
+ }
+}
+
 /* JSON.Parser.jsonTransFor : Bool -> Lex1 q JSz SK */
 function JSON_Parser_jsonTransFor($0) {
  let $15;
  switch($0) {
   case 1: {
-   $15 = csegen_132();
+   $15 = csegen_362();
    break;
   }
   case 0: {
-   $15 = csegen_139();
+   $15 = csegen_369();
    break;
   }
  }
- const $13 = Prelude_Types_List_tailRecAppend($15, csegen_155());
- const $f = Prelude_Types_List_tailRecAppend(csegen_128(), $13);
- const $c = {a1: csegen_97(), a2: $f};
+ const $13 = Prelude_Types_List_tailRecAppend($15, csegen_385());
+ const $f = Prelude_Types_List_tailRecAppend(csegen_358(), $13);
+ const $c = {a1: csegen_327(), a2: $f};
  const $a = Text_ILex_Lexer_dfa($c);
  const $7 = {a1: JSON_Parser_JIni(), a2: $a};
  let $34;
  switch($0) {
   case 1: {
-   $34 = csegen_132();
+   $34 = csegen_362();
    break;
   }
   case 0: {
-   $34 = csegen_139();
+   $34 = csegen_369();
    break;
   }
  }
- const $32 = Prelude_Types_List_tailRecAppend($34, Prelude_Types_List_tailRecAppend(csegen_154(), csegen_182()));
- const $2e = Prelude_Types_List_tailRecAppend(csegen_128(), $32);
- const $2b = {a1: csegen_97(), a2: $2e};
+ const $32 = Prelude_Types_List_tailRecAppend($34, Prelude_Types_List_tailRecAppend(csegen_384(), csegen_393()));
+ const $2e = Prelude_Types_List_tailRecAppend(csegen_358(), $32);
+ const $2b = {a1: csegen_327(), a2: $2e};
  const $29 = Text_ILex_Lexer_dfa($2b);
  const $26 = {a1: JSON_Parser_ANew(), a2: $29};
  let $4d;
  switch($0) {
   case 1: {
-   $4d = csegen_132();
+   $4d = csegen_362();
    break;
   }
   case 0: {
-   $4d = csegen_139();
+   $4d = csegen_369();
    break;
   }
  }
- const $4b = Prelude_Types_List_tailRecAppend($4d, csegen_155());
- const $47 = Prelude_Types_List_tailRecAppend(csegen_128(), $4b);
- const $44 = {a1: csegen_97(), a2: $47};
+ const $4b = Prelude_Types_List_tailRecAppend($4d, csegen_385());
+ const $47 = Prelude_Types_List_tailRecAppend(csegen_358(), $4b);
+ const $44 = {a1: csegen_327(), a2: $47};
  const $42 = Text_ILex_Lexer_dfa($44);
  const $3f = {a1: JSON_Parser_ACom(), a2: $42};
  let $bb;
  switch($0) {
   case 1: {
-   $bb = csegen_132();
+   $bb = csegen_362();
    break;
   }
   case 0: {
-   $bb = csegen_139();
+   $bb = csegen_369();
    break;
   }
  }
- const $b9 = Prelude_Types_List_tailRecAppend($bb, csegen_155());
- const $b5 = Prelude_Types_List_tailRecAppend(csegen_128(), $b9);
- const $b2 = {a1: csegen_97(), a2: $b5};
+ const $b9 = Prelude_Types_List_tailRecAppend($bb, csegen_385());
+ const $b5 = Prelude_Types_List_tailRecAppend(csegen_358(), $b9);
+ const $b2 = {a1: csegen_327(), a2: $b5};
  const $b0 = Text_ILex_Lexer_dfa($b2);
  const $ad = {a1: JSON_Parser_OCol(), a2: $b0};
  const $cc = $cd => {
@@ -3823,7 +5866,7 @@ function JSON_Parser_jsonTransFor($0) {
   }
  };
  const $cb = {h: 0 /* Run */, a1: $cc};
- const $c8 = {a1: csegen_148(), a2: $cb};
+ const $c8 = {a1: csegen_378(), a2: $cb};
  const $132 = $133 => {
   const $136 = ($133.a1.a6.value);
   const $13b = ($133.a1.a7.value);
@@ -3847,56 +5890,56 @@ function JSON_Parser_jsonTransFor($0) {
   return JSON_Parser_JStr();
  };
  const $16e = {h: 0 /* Run */, a1: $16f};
- const $168 = {a1: {h: 2 /* And */, a1: csegen_224(), a2: csegen_148()}, a2: $16e};
+ const $168 = {a1: {h: 2 /* And */, a1: csegen_435(), a2: csegen_378()}, a2: $16e};
  const $188 = $189 => {
   const $18c = ($189.a1.a11.value);
   const $18b = ($189.a1.a11.value={a1: $18c, a2: '\n'});
   return JSON_Parser_JStr();
  };
  const $187 = {h: 0 /* Run */, a1: $188};
- const $181 = {a1: {h: 2 /* And */, a1: csegen_224(), a2: csegen_98()}, a2: $187};
+ const $181 = {a1: {h: 2 /* And */, a1: csegen_435(), a2: csegen_328()}, a2: $187};
  const $1a1 = $1a2 => {
   const $1a5 = ($1a2.a1.a11.value);
   const $1a4 = ($1a2.a1.a11.value={a1: $1a5, a2: '\u{c}'});
   return JSON_Parser_JStr();
  };
  const $1a0 = {h: 0 /* Run */, a1: $1a1};
- const $19a = {a1: {h: 2 /* And */, a1: csegen_224(), a2: csegen_116()}, a2: $1a0};
+ const $19a = {a1: {h: 2 /* And */, a1: csegen_435(), a2: csegen_346()}, a2: $1a0};
  const $1bd = $1be => {
   const $1c1 = ($1be.a1.a11.value);
   const $1c0 = ($1be.a1.a11.value={a1: $1c1, a2: '\u{8}'});
   return JSON_Parser_JStr();
  };
  const $1bc = {h: 0 /* Run */, a1: $1bd};
- const $1b3 = {a1: {h: 2 /* And */, a1: csegen_224(), a2: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('b'.codePointAt(0)))}}, a2: $1bc};
+ const $1b3 = {a1: {h: 2 /* And */, a1: csegen_435(), a2: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('b'.codePointAt(0)))}}, a2: $1bc};
  const $1d6 = $1d7 => {
   const $1da = ($1d7.a1.a11.value);
   const $1d9 = ($1d7.a1.a11.value={a1: $1da, a2: '\r'});
   return JSON_Parser_JStr();
  };
  const $1d5 = {h: 0 /* Run */, a1: $1d6};
- const $1cf = {a1: {h: 2 /* And */, a1: csegen_224(), a2: csegen_108()}, a2: $1d5};
+ const $1cf = {a1: {h: 2 /* And */, a1: csegen_435(), a2: csegen_338()}, a2: $1d5};
  const $1ef = $1f0 => {
   const $1f3 = ($1f0.a1.a11.value);
   const $1f2 = ($1f0.a1.a11.value={a1: $1f3, a2: '\u{9}'});
   return JSON_Parser_JStr();
  };
  const $1ee = {h: 0 /* Run */, a1: $1ef};
- const $1e8 = {a1: {h: 2 /* And */, a1: csegen_224(), a2: csegen_107()}, a2: $1ee};
+ const $1e8 = {a1: {h: 2 /* And */, a1: csegen_435(), a2: csegen_337()}, a2: $1ee};
  const $208 = $209 => {
   const $20c = ($209.a1.a11.value);
   const $20b = ($209.a1.a11.value={a1: $20c, a2: '\u{5c}'});
   return JSON_Parser_JStr();
  };
  const $207 = {h: 0 /* Run */, a1: $208};
- const $201 = {a1: {h: 2 /* And */, a1: csegen_224(), a2: csegen_224()}, a2: $207};
+ const $201 = {a1: {h: 2 /* And */, a1: csegen_435(), a2: csegen_435()}, a2: $207};
  const $224 = $225 => {
   const $228 = ($225.a1.a11.value);
   const $227 = ($225.a1.a11.value={a1: $228, a2: '/'});
   return JSON_Parser_JStr();
  };
  const $223 = {h: 0 /* Run */, a1: $224};
- const $21a = {a1: {h: 2 /* And */, a1: csegen_224(), a2: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('/'.codePointAt(0)))}}, a2: $223};
+ const $21a = {a1: {h: 2 /* And */, a1: csegen_435(), a2: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('/'.codePointAt(0)))}}, a2: $223};
  const $23a = $23b => {
   const $23e = ($23b.a1.a6.value);
   const $243 = ($23b.a1.a7.value);
@@ -3929,14 +5972,14 @@ function JSON_Parser_jsonTransFor($0) {
  const $c2 = {a1: JSON_Parser_JStr(), a2: $c5};
  const $c1 = {a1: $c2, a2: {h: 0}};
  const $ac = {a1: $ad, a2: $c1};
- const $96 = {a1: {a1: JSON_Parser_OLbl(), a2: Text_ILex_Lexer_dfa({a1: csegen_97(), a2: {a1: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32(':'.codePointAt(0)))}, a2: {h: 0 /* Run */, a1: $a8 => JSON_Parser_OCol()}}, a2: {h: 0}}})}, a2: $ac};
- const $8b = {a1: {a1: JSON_Parser_OCom(), a2: Text_ILex_Lexer_dfa({a1: csegen_97(), a2: csegen_152()})}, a2: $96};
- const $75 = {a1: {a1: JSON_Parser_OVal(), a2: Text_ILex_Lexer_dfa({a1: csegen_97(), a2: {a1: csegen_193(), a2: {a1: {a1: csegen_184(), a2: {h: 0 /* Run */, a1: $87 => JSON_Parser_OCom()}}, a2: {h: 0}}}})}, a2: $8b};
- const $67 = {a1: {a1: JSON_Parser_ONew(), a2: Text_ILex_Lexer_dfa({a1: csegen_97(), a2: {a1: csegen_193(), a2: csegen_152()}})}, a2: $75};
- const $53 = {a1: {a1: JSON_Parser_AVal(), a2: Text_ILex_Lexer_dfa({a1: csegen_97(), a2: {a1: {a1: csegen_184(), a2: {h: 0 /* Run */, a1: $62 => JSON_Parser_ACom()}}, a2: csegen_182()}})}, a2: $67};
+ const $96 = {a1: {a1: JSON_Parser_OLbl(), a2: Text_ILex_Lexer_dfa({a1: csegen_327(), a2: {a1: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32(':'.codePointAt(0)))}, a2: {h: 0 /* Run */, a1: $a8 => JSON_Parser_OCol()}}, a2: {h: 0}}})}, a2: $ac};
+ const $8b = {a1: {a1: JSON_Parser_OCom(), a2: Text_ILex_Lexer_dfa({a1: csegen_327(), a2: csegen_382()})}, a2: $96};
+ const $75 = {a1: {a1: JSON_Parser_OVal(), a2: Text_ILex_Lexer_dfa({a1: csegen_327(), a2: {a1: csegen_404(), a2: {a1: {a1: csegen_395(), a2: {h: 0 /* Run */, a1: $87 => JSON_Parser_OCom()}}, a2: {h: 0}}}})}, a2: $8b};
+ const $67 = {a1: {a1: JSON_Parser_ONew(), a2: Text_ILex_Lexer_dfa({a1: csegen_327(), a2: {a1: csegen_404(), a2: csegen_382()}})}, a2: $75};
+ const $53 = {a1: {a1: JSON_Parser_AVal(), a2: Text_ILex_Lexer_dfa({a1: csegen_327(), a2: {a1: {a1: csegen_395(), a2: {h: 0 /* Run */, a1: $62 => JSON_Parser_ACom()}}, a2: csegen_393()}})}, a2: $67};
  const $3e = {a1: $3f, a2: $53};
  const $25 = {a1: $26, a2: $3e};
- const $1b = {a1: {a1: JSON_Parser_JDone(), a2: Text_ILex_Lexer_dfa({a1: csegen_97(), a2: {h: 0}})}, a2: $25};
+ const $1b = {a1: {a1: JSON_Parser_JDone(), a2: Text_ILex_Lexer_dfa({a1: csegen_327(), a2: {h: 0}})}, a2: $25};
  const $6 = {a1: $7, a2: $1b};
  return Text_ILex_Parser_arr32(11, Text_ILex_Lexer_dfa({h: 0}), $6);
 }
@@ -3952,44 +5995,44 @@ const JSON_Parser_jsonErr = __lazy(function () {
   const $5 = ($3.a12.value);
   return Prelude_Types_maybe(() => $d => {
    const $f = ($3.a6.value);
-   const $e = Text_ILex_Interfaces_case__casex20blockx20inx20bounds_17943(csegen_178()(), $3, $f, ($3.a7.value));
-   const $1f = Text_ILex_Interfaces_unexpectedErr(csegen_277()(), $3, csegen_178()(), {h: 0}, undefined);
+   const $e = Text_ILex_Interfaces_case__casex20blockx20inx20bounds_17943(csegen_319()(), $3, $f, ($3.a7.value));
+   const $1f = Text_ILex_Interfaces_unexpectedErr(csegen_488()(), $3, csegen_319()(), {h: 0}, undefined);
    return {a1: $1f, a2: $e};
   }, () => $2d => $2e => $2d, $5)(undefined);
  };
  const $3b = $3c => $3d => {
   const $3e = ($3c.a12.value);
-  return Prelude_Types_maybe(() => $46 => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_277()(), $3c, csegen_178()(), '[', {a1: ',', a2: {a1: ']', a2: {h: 0}}}, $46), () => $57 => $58 => $57, $3e)(undefined);
+  return Prelude_Types_maybe(() => $46 => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_488()(), $3c, csegen_319()(), '[', {a1: ',', a2: {a1: ']', a2: {h: 0}}}, $46), () => $57 => $58 => $57, $3e)(undefined);
  };
  const $38 = {a1: JSON_Parser_AVal(), a2: $3b};
  const $65 = $66 => $67 => {
   const $68 = ($66.a12.value);
-  return Prelude_Types_maybe(() => $70 => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_277()(), $66, csegen_178()(), '{', {a1: '\"', a2: {a1: '}', a2: {h: 0}}}, $70), () => $81 => $82 => $81, $68)(undefined);
+  return Prelude_Types_maybe(() => $70 => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_488()(), $66, csegen_319()(), '{', {a1: '\"', a2: {a1: '}', a2: {h: 0}}}, $70), () => $81 => $82 => $81, $68)(undefined);
  };
  const $62 = {a1: JSON_Parser_ONew(), a2: $65};
  const $89 = $8a => $8b => {
   const $8c = ($8a.a12.value);
-  return Prelude_Types_maybe(() => $94 => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_277()(), $8a, csegen_178()(), '{', {a1: ',', a2: {a1: '}', a2: {h: 0}}}, $94), () => $a5 => $a6 => $a5, $8c)(undefined);
+  return Prelude_Types_maybe(() => $94 => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_488()(), $8a, csegen_319()(), '{', {a1: ',', a2: {a1: '}', a2: {h: 0}}}, $94), () => $a5 => $a6 => $a5, $8c)(undefined);
  };
  const $86 = {a1: JSON_Parser_OVal(), a2: $89};
  const $ad = $ae => $af => {
   const $b0 = ($ae.a12.value);
-  return Prelude_Types_maybe(() => $b8 => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_277()(), $ae, csegen_178()(), '{', {a1: '\"', a2: {h: 0}}, $b8), () => $c7 => $c8 => $c7, $b0)(undefined);
+  return Prelude_Types_maybe(() => $b8 => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_488()(), $ae, csegen_319()(), '{', {a1: '\"', a2: {h: 0}}, $b8), () => $c7 => $c8 => $c7, $b0)(undefined);
  };
  const $aa = {a1: JSON_Parser_OCom(), a2: $ad};
  const $cf = $d0 => $d1 => {
   const $d2 = ($d0.a12.value);
-  return Prelude_Types_maybe(() => $da => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_277()(), $d0, csegen_178()(), '{', {a1: ':', a2: {h: 0}}, $da), () => $e9 => $ea => $e9, $d2)(undefined);
+  return Prelude_Types_maybe(() => $da => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_488()(), $d0, csegen_319()(), '{', {a1: ':', a2: {h: 0}}, $da), () => $e9 => $ea => $e9, $d2)(undefined);
  };
  const $cc = {a1: JSON_Parser_OLbl(), a2: $cf};
  const $f1 = $f2 => $f3 => {
   const $f4 = ($f2.a12.value);
-  return Prelude_Types_maybe(() => $fc => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_277()(), $f2, csegen_178()(), '{', {h: 0}, $fc), () => $109 => $10a => $109, $f4)(undefined);
+  return Prelude_Types_maybe(() => $fc => Text_ILex_Interfaces_unclosedIfEOIErr(csegen_488()(), $f2, csegen_319()(), '{', {h: 0}, $fc), () => $109 => $10a => $109, $f4)(undefined);
  };
  const $ee = {a1: JSON_Parser_OCol(), a2: $f1};
  const $111 = $112 => $113 => {
   const $114 = ($112.a12.value);
-  return Prelude_Types_maybe(() => $11c => Text_ILex_Interfaces_unclosedIfNLorEOIErr(csegen_277()(), $112, csegen_178()(), '\"', {h: 0}, $11c), () => $129 => $12a => $129, $114)(undefined);
+  return Prelude_Types_maybe(() => $11c => Text_ILex_Interfaces_unclosedIfNLorEOIErr(csegen_488()(), $112, csegen_319()(), '\"', {h: 0}, $11c), () => $129 => $12a => $129, $114)(undefined);
  };
  const $10e = {a1: JSON_Parser_JStr(), a2: $111};
  const $10d = {a1: $10e, a2: {h: 0}};
@@ -3998,9 +6041,9 @@ const JSON_Parser_jsonErr = __lazy(function () {
  const $a9 = {a1: $aa, a2: $cb};
  const $85 = {a1: $86, a2: $a9};
  const $61 = {a1: $62, a2: $85};
- const $5b = {a1: {a1: JSON_Parser_ACom(), a2: csegen_279()}, a2: $61};
+ const $5b = {a1: {a1: JSON_Parser_ACom(), a2: csegen_490()}, a2: $61};
  const $37 = {a1: $38, a2: $5b};
- const $31 = {a1: {a1: JSON_Parser_ANew(), a2: csegen_279()}, a2: $37};
+ const $31 = {a1: {a1: JSON_Parser_ANew(), a2: csegen_490()}, a2: $37};
  return Text_ILex_Parser_arr32(11, $2, $31);
 });
 
@@ -4026,14 +6069,14 @@ function JSON_Parser_jsonEOI($0, $1, $2) {
 
 /* JSON.Parser.jsonDouble : RExp True */
 const JSON_Parser_jsonDouble = __lazy(function () {
- const $0 = {h: 2 /* And */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('.'.codePointAt(0)))}, a2: csegen_310()};
- const $8 = {h: 2 /* And */, a1: {h: 2 /* And */, a1: Text_ILex_RExp_oneof(csegen_323(), csegen_328(), {a1: csegen_109(), a2: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('E'.codePointAt(0)))}, a2: {h: 0}}}), a2: {h: 3 /* Or */, a1: Text_ILex_RExp_oneof(csegen_323(), csegen_328(), {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('+'.codePointAt(0)))}, a2: {a1: csegen_133(), a2: {h: 0}}}), a2: {h: 0 /* Eps */}}}, a2: csegen_310()};
- return {h: 2 /* And */, a1: {h: 2 /* And */, a1: csegen_135(), a2: {h: 3 /* Or */, a1: $0, a2: {h: 0 /* Eps */}}}, a2: {h: 3 /* Or */, a1: $8, a2: {h: 0 /* Eps */}}};
+ const $0 = {h: 2 /* And */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('.'.codePointAt(0)))}, a2: csegen_521()};
+ const $8 = {h: 2 /* And */, a1: {h: 2 /* And */, a1: Text_ILex_RExp_oneof(csegen_534(), csegen_539(), {a1: csegen_339(), a2: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('E'.codePointAt(0)))}, a2: {h: 0}}}), a2: {h: 3 /* Or */, a1: Text_ILex_RExp_oneof(csegen_534(), csegen_539(), {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('+'.codePointAt(0)))}, a2: {a1: csegen_363(), a2: {h: 0}}}), a2: {h: 0 /* Eps */}}}, a2: csegen_521()};
+ return {h: 2 /* And */, a1: {h: 2 /* And */, a1: csegen_365(), a2: {h: 3 /* Or */, a1: $0, a2: {h: 0 /* Eps */}}}, a2: {h: 3 /* Or */, a1: $8, a2: {h: 0 /* Eps */}}};
 });
 
 /* JSON.Parser.json : P1 q (BBErr ObjectError) JSON */
 const JSON_Parser_json = __lazy(function () {
- return {a1: 11, a2: JSON_Parser_JIni(), a3: csegen_341(), a4: JSON_Parser_jsonTrans(), a5: x => $8 => ({h: 0}), a6: JSON_Parser_jsonErr(), a7: csegen_342(), a8: csegen_178()()};
+ return {a1: 11, a2: JSON_Parser_JIni(), a3: csegen_299(), a4: JSON_Parser_jsonTrans(), a5: x => $8 => ({h: 0}), a6: JSON_Parser_jsonErr(), a7: csegen_300(), a8: csegen_319()()};
 });
 
 /* JSON.Parser.jchar : RExp True */
@@ -4050,7 +6093,7 @@ const JSON_Parser_jchar = __lazy(function () {
   }
  }
  const $7 = Text_ILex_Char_Set_range($9);
- const $0 = Text_ILex_Char_Set_inters(csegen_323(), csegen_328(), {h: 0}, $7, Text_ILex_Char_Set_inters(csegen_323(), csegen_328(), {h: 0}, Text_ILex_Char_Set_negation(csegen_323(), csegen_328(), Text_ILex_Char_Set_singleton(_truncUInt32('\"'.codePointAt(0)))), Text_ILex_Char_Set_negation(csegen_323(), csegen_328(), Text_ILex_Char_Set_singleton(_truncUInt32('\u{5c}'.codePointAt(0))))));
+ const $0 = Text_ILex_Char_Set_inters(csegen_534(), csegen_539(), {h: 0}, $7, Text_ILex_Char_Set_inters(csegen_534(), csegen_539(), {h: 0}, Text_ILex_Char_Set_negation(csegen_534(), csegen_539(), Text_ILex_Char_Set_singleton(_truncUInt32('\"'.codePointAt(0)))), Text_ILex_Char_Set_negation(csegen_534(), csegen_539(), Text_ILex_Char_Set_singleton(_truncUInt32('\u{5c}'.codePointAt(0))))));
  return {h: 1 /* Ch */, a1: $0};
 });
 
@@ -4170,12 +6213,12 @@ function JSON_Parser_decode($0) {
 
 /* JSON.Parser.codepoint : RExp True */
 const JSON_Parser_codepoint = __lazy(function () {
- return {h: 2 /* And */, a1: {h: 2 /* And */, a1: {h: 2 /* And */, a1: {h: 2 /* And */, a1: {h: 2 /* And */, a1: csegen_224(), a2: csegen_99()}, a2: Text_ILex_RExp_hexdigit()}, a2: Text_ILex_RExp_hexdigit()}, a2: Text_ILex_RExp_hexdigit()}, a2: Text_ILex_RExp_hexdigit()};
+ return {h: 2 /* And */, a1: {h: 2 /* And */, a1: {h: 2 /* And */, a1: {h: 2 /* And */, a1: {h: 2 /* And */, a1: csegen_435(), a2: csegen_329()}, a2: Text_ILex_RExp_hexdigit()}, a2: Text_ILex_RExp_hexdigit()}, a2: Text_ILex_RExp_hexdigit()}, a2: Text_ILex_RExp_hexdigit()};
 });
 
 /* JSON.Parser.checkedNumberToken : String -> Either String String */
 function JSON_Parser_checkedNumberToken($0) {
- const $4 = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0)))), $f => ({a1: 11, a2: JSON_Parser_JIni(), a3: csegen_341(), a4: JSON_Parser_jsonTransFor(1), a5: x => $19 => ({h: 0}), a6: JSON_Parser_jsonErr(), a7: csegen_342(), a8: csegen_178()()}), Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)));
+ const $4 = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0)))), csegen_321(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)));
  let $3;
  switch($4.h) {
   case 0: /* Left */ {
@@ -4264,6 +6307,20 @@ function JSON_Object_show_Show_ObjectError($0) {
 /* JSON.Object.interpolate */
 function JSON_Object_interpolate_Interpolation_ObjectError($0) {
  return JSON_Object_show_Show_ObjectError($0);
+}
+
+/* JSON.Object.traverseEntries : (ScalarString -> a -> Either e b) -> (source : List (Binding a)) ->
+(0 _ : CanonicalEntries source) -> Either e (TraversedEntries source b) */
+function JSON_Object_traverseEntries($0, $1) {
+ switch($1.h) {
+  case 0: /* nil */ return {h: 1 /* Right */, a1: {h: 0}};
+  case undefined: /* cons */ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($0($1.a1.a1)($1.a1.a2), mapped => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Object_traverseEntries($0, $1.a2), remaining => ({h: 1 /* Right */, a1: {a1: {a1: $1.a1.a1, a2: mapped}, a2: remaining}})));
+ }
+}
+
+/* JSON.Object.traverseAssocWithKey : (ScalarString -> a -> Either e b) -> StringKeySortedAssoc a -> Either e (StringKeySortedAssoc b) */
+function JSON_Object_traverseAssocWithKey($0, $1) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Object_traverseEntries($0, $1), rebuilt => ({h: 1 /* Right */, a1: rebuilt}));
 }
 
 /* JSON.Object.occurrences : ScalarString -> Nat -> List (Binding a) -> List Nat */
@@ -4355,84 +6412,6 @@ function Value_StringKeySortedAssoc_bindingCodes($0) {
  return Value_Unicode_Order_keyCodes(Builtin_fst($0));
 }
 
-/* Data.Maybe.fromMaybe : Lazy a -> Maybe a -> a */
-function Data_Maybe_fromMaybe($0, $1) {
- switch($1.h) {
-  case 0: /* nothing */ return $0();
-  case undefined: /* just */ return $1.a1;
- }
-}
-
-/* Data.Nat.pred : Nat -> Nat */
-function Data_Nat_pred($0) {
- switch($0) {
-  case 0n: return 0n;
-  default: return ($0-1n);
- }
-}
-
-/* Data.List.7787:8508:split */
-function Data_List_n__7787_8508_split($0, $1, $2) {
- return Data_List_n__7787_8509_splitRec($0, $1, $2, $2, $9 => $9);
-}
-
-/* Data.List.take : Nat -> List a -> List a */
-function Data_List_take($0, $1) {
- switch($0) {
-  case 0n: return {h: 0};
-  default: {
-   const $3 = ($0-1n);
-   switch($1.h) {
-    case undefined: /* cons */ return {a1: $1.a1, a2: Data_List_take($3, $1.a2)};
-    default: return {h: 0};
-   }
-  }
- }
-}
-
-/* Data.List.sortBy : (a -> a -> Ordering) -> List a -> List a */
-function Data_List_sortBy($0, $1) {
- switch($1.h) {
-  case 0: /* nil */ return {h: 0};
-  case undefined: /* cons */ {
-   switch($1.a2.h) {
-    case 0: /* nil */ return {a1: $1.a1, a2: {h: 0}};
-    default: {
-     const $6 = Data_List_n__7787_8508_split($1, $0, $1);
-     return Data_List_mergeBy($0, Data_List_sortBy($0, $6.a1), Data_List_sortBy($0, $6.a2));
-    }
-   }
-  }
-  default: {
-   const $15 = Data_List_n__7787_8508_split($1, $0, $1);
-   return Data_List_mergeBy($0, Data_List_sortBy($0, $15.a1), Data_List_sortBy($0, $15.a2));
-  }
- }
-}
-
-/* Data.List.sort : Ord a => List a -> List a */
-function Data_List_sort($0, $1) {
- return Data_List_sortBy($0.a2, $1);
-}
-
-/* Data.List.mergeBy : (a -> a -> Ordering) -> List a -> List a -> List a */
-function Data_List_mergeBy($0, $1, $2) {
- switch($1.h) {
-  case 0: /* nil */ return $2;
-  default: {
-   switch($2.h) {
-    case 0: /* nil */ return $1;
-    default: {
-     switch($0($1.a1)($2.a1)) {
-      case 0: return {a1: $1.a1, a2: Data_List_mergeBy($0, $1.a2, {a1: $2.a1, a2: $2.a2})};
-      default: return {a1: $2.a1, a2: Data_List_mergeBy($0, {a1: $1.a1, a2: $1.a2}, $2.a2)};
-     }
-    }
-   }
-  }
- }
-}
-
 /* Value.Unicode.Order.keyCodes : ScalarString -> List Nat */
 function Value_Unicode_Order_keyCodes($0) {
  return Prelude_Types_List_mapAppend({h: 0}, character => Prelude_Types_prim__integerToNat(BigInt(_truncInt32(character.codePointAt(0)))), Prelude_Types_fastUnpack($0));
@@ -4442,43 +6421,6 @@ function Value_Unicode_Order_keyCodes($0) {
 CodesComparison (keyCodes left) (keyCodes right) */
 function Value_Unicode_Order_compareKeys($0, $1) {
  return Value_Unicode_Order_compareCodesWorker(Value_Unicode_Order_keyCodes($0), Value_Unicode_Order_keyCodes($1));
-}
-
-/* Value.Unicode.with block in scalarString */
-function Value_Unicode_with__scalarString_5417($0, $1, $2) {
- switch($1) {
-  case 1: return {h: 1 /* Right */, a1: $0};
-  case 0: return {h: 0 /* Left */, a1: undefined};
- }
-}
-
-/* Value.Unicode.scalarString : String -> Either UnicodeError ScalarString */
-function Value_Unicode_scalarString($0) {
- return Value_Unicode_with__scalarString_5417($0, Value_Unicode_isScalarString($0), undefined);
-}
-
-/* Value.Unicode.scalarCharacter : Char -> Bool */
-function Value_Unicode_scalarCharacter($0) {
- const $1 = _truncInt32($0.codePointAt(0));
- switch(Prelude_EqOrd_x3ex3d_Ord_Int($1, Number(_truncBigInt32(0n)))) {
-  case 1: {
-   switch(Prelude_EqOrd_x3cx3d_Ord_Int($1, Number(_truncBigInt32(1114111n)))) {
-    case 1: {
-     switch(Prelude_EqOrd_x3c_Ord_Int($1, Number(_truncBigInt32(55296n)))) {
-      case 1: return 1;
-      case 0: return Prelude_EqOrd_x3e_Ord_Int($1, Number(_truncBigInt32(57343n)));
-     }
-    }
-    case 0: return 0;
-   }
-  }
-  case 0: return 0;
- }
-}
-
-/* Value.Unicode.isScalarString : String -> Bool */
-function Value_Unicode_isScalarString($0) {
- return Value_Unicode_scalarCharacters(Prelude_Types_fastUnpack($0));
 }
 
 /* Text.ILex.Util.case block in integerBV */
@@ -4570,13 +6512,13 @@ const Text_ILex_RExp_hexdigit = __lazy(function () {
  }
  const $1d = Text_ILex_Char_Set_range($1f);
  const $1c = {h: 1 /* Ch */, a1: $1d};
- const $8 = Text_ILex_RExp_x3cx7cx3e(csegen_323(), csegen_328(), $e, $1c);
- return Text_ILex_RExp_x3cx7cx3e(csegen_323(), csegen_328(), {h: 1 /* Ch */, a1: csegen_365()}, $8);
+ const $8 = Text_ILex_RExp_x3cx7cx3e(csegen_534(), csegen_539(), $e, $1c);
+ return Text_ILex_RExp_x3cx7cx3e(csegen_534(), csegen_539(), {h: 1 /* Ch */, a1: csegen_572()}, $8);
 });
 
 /* Text.ILex.RExp.decimal : RExp True */
 const Text_ILex_RExp_decimal = __lazy(function () {
- return Text_ILex_RExp_x3cx7cx3e(csegen_323(), csegen_328(), {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('0'.codePointAt(0)))}, {h: 2 /* And */, a1: Text_ILex_RExp_posdigit(), a2: {h: 4 /* Star */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_digit()}}});
+ return Text_ILex_RExp_x3cx7cx3e(csegen_534(), csegen_539(), {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('0'.codePointAt(0)))}, {h: 2 /* And */, a1: Text_ILex_RExp_posdigit(), a2: {h: 4 /* Star */, a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_digit()}}});
 });
 
 /* Text.ILex.RExp.adjRanges : (SetOf t -> RExpOf True s) -> RExpOf b t -> RExpOf b s */
@@ -4603,84 +6545,6 @@ function Text_ILex_RExp_x3cx7cx3e($0, $1, $2, $3) {
  }
 }
 
-/* Data.String.3857:9599:unlines' */
-function Data_String_n__3857_9599_unlinesx27($0) {
- switch($0.h) {
-  case 0: /* nil */ return {h: 0};
-  case undefined: /* cons */ return {a1: $0.a1, a2: {a1: '\n', a2: Data_String_n__3857_9599_unlinesx27($0.a2)}};
- }
-}
-
-/* Data.String.singleton : Char -> String */
-function Data_String_singleton($0) {
- return ($0+'');
-}
-
-/* Data.String.replicate : Nat -> Char -> String */
-function Data_String_replicate($0, $1) {
- return Prelude_Types_fastPack(Data_List_replicateTR({h: 0}, $0, $1));
-}
-
-/* Data.String.padLeft : Nat -> Char -> String -> String */
-function Data_String_padLeft($0, $1, $2) {
- return (Data_String_replicate(Prelude_Types_prim__integerToNat(($0-Prelude_Types_String_length($2))), $1)+$2);
-}
-
-/* Data.String.lines' : List Char -> List (List Char) */
-function Data_String_linesx27($0) {
- return Data_String_n__3990_9729_linesHelp($0, {h: 0}, $0);
-}
-
-/* Data.String.lines : String -> List String */
-function Data_String_lines($0) {
- return Prelude_Types_List_mapAppend({h: 0}, $4 => Prelude_Types_fastPack($4), Data_String_linesx27(Prelude_Types_fastUnpack($0)));
-}
-
-/* Data.String.indent : Nat -> String -> String */
-function Data_String_indent($0, $1) {
- return (Data_String_replicate($0, ' ')+$1);
-}
-
-/* Data.String.fastUnlines : List String -> String */
-function Data_String_fastUnlines($0) {
- return Prelude_Types_fastConcat(Data_String_n__3857_9599_unlinesx27($0));
-}
-
-/* Data.Vect.map */
-function Data_Vect_map_Functor_x28Vectx20x24nx29($0, $1) {
- switch($1.h) {
-  case 0: /* nil */ return {h: 0};
-  case undefined: /* cons */ return {a1: $0($1.a1), a2: Data_Vect_map_Functor_x28Vectx20x24nx29($0, $1.a2)};
- }
-}
-
-/* Data.Vect.reverse : Vect len elem -> Vect len elem */
-function Data_Vect_reverse($0) {
- return Data_Vect_reverseOnto({h: 0}, $0);
-}
-
-/* Data.Vect.fromList : (xs : List elem) -> Vect (length xs) elem */
-function Data_Vect_fromList($0) {
- return Data_Vect_reverse(Data_Vect_fromListx27({h: 0}, $0));
-}
-
-/* Language.Reflection.Derive.mkOrd : Eq a => (a -> a -> Ordering) -> Ord a */
-function Language_Reflection_Derive_mkOrd($0, $1) {
- const $24 = a => b => {
-  switch(Prelude_EqOrd_x3dx3d_Eq_Ordering($1(a)(b), 2)) {
-   case 1: return a;
-   case 0: return b;
-  }
- };
- const $2d = a => b => {
-  switch(Prelude_EqOrd_x3dx3d_Eq_Ordering($1(a)(b), 0)) {
-   case 1: return a;
-   case 0: return b;
-  }
- };
- return {a1: $0, a2: $1, a3: a => b => Prelude_EqOrd_x3dx3d_Eq_Ordering($1(a)(b), 0), a4: a => b => Prelude_EqOrd_x3dx3d_Eq_Ordering($1(a)(b), 2), a5: a => b => Prelude_EqOrd_x2fx3d_Eq_Ordering($1(a)(b), 2), a6: a => b => Prelude_EqOrd_x2fx3d_Eq_Ordering($1(a)(b), 0), a7: $24, a8: $2d};
-}
-
 /* Text.ILex.Char.Set.union : WithBounds t => Neg t => SetOf t -> SetOf t -> SetOf t */
 function Text_ILex_Char_Set_union($0, $1, $2, $3) {
  return Text_ILex_Char_Set_rangeSet($0, $1, Prelude_Types_List_tailRecAppend($2, $3));
@@ -4688,7 +6552,7 @@ function Text_ILex_Char_Set_union($0, $1, $2, $3) {
 
 /* Text.ILex.Char.Set.unicode : Set32 */
 const Text_ILex_Char_Set_unicode = __lazy(function () {
- return Text_ILex_Char_Set_difference(csegen_323(), csegen_328(), Text_ILex_Char_Set_range(Text_ILex_Char_Range_codepoint()), Text_ILex_Char_Set_range(Text_ILex_Char_Range_surrogate()));
+ return Text_ILex_Char_Set_difference(csegen_534(), csegen_539(), Text_ILex_Char_Set_range(Text_ILex_Char_Range_codepoint()), Text_ILex_Char_Set_range(Text_ILex_Char_Range_surrogate()));
 });
 
 /* Text.ILex.Char.Set.singleton : t -> SetOf t */
@@ -4755,7 +6619,7 @@ const Text_ILex_Char_Set_empty = __lazy(function () {
 
 /* Text.ILex.Char.Set.digit : Set32 */
 const Text_ILex_Char_Set_digit = __lazy(function () {
- return csegen_365();
+ return csegen_572();
 });
 
 /* Text.ILex.Char.Set.difference : WithBounds t => Neg t => SetOf t -> SetOf t -> SetOf t */
@@ -5333,7 +7197,7 @@ function Text_ILex_Lexer_case__casex20blockx20inx20byteDFA_3921($0, $1, $2, $3, 
 
 /* Text.ILex.Lexer.case block in byteDFA */
 function Text_ILex_Lexer_case__byteDFA_3861($0, $1) {
- const $3 = Data_SortedMap_fromList(csegen_398(), Prelude_Types_List_mapMaybeAppend({h: 0}, $b => Text_ILex_Lexer_terminals($1.a1, Builtin_snd($b)), $1.a2));
+ const $3 = Data_SortedMap_fromList(csegen_605(), Prelude_Types_List_mapMaybeAppend({h: 0}, $b => Text_ILex_Lexer_terminals($1.a1, Builtin_snd($b)), $1.a2));
  const $12 = Data_Linear_Ref1_withRef1(0n, $16 => r => $17 => Data_Linear_Traverse1_traverse1List({h: 0}, $1b => $1c => Data_Linear_Traverse1_pairIx(r, $1b, $1c), Prelude_Types_List_mapMaybeAppend({h: 0}, $25 => Text_ILex_Lexer_nonFinal($3, Builtin_snd($25)), $1.a2), $17));
  return Text_ILex_Lexer_case__casex20blockx20inx20byteDFA_3921($0, $1.a2, $1.a1, $3, $12, Prelude_Types_List_lengthTR($12));
 }
@@ -5411,7 +7275,7 @@ function Text_ILex_Lexer_move($0, $1) {
 
 /* Text.ILex.Lexer.index : List (Nat, Node) -> SortedMap Nat (Fin (S n)) */
 function Text_ILex_Lexer_index($0, $1) {
- return Data_SortedMap_fromList(csegen_398(), Prelude_Types_List_mapMaybeAppend({h: 0}, $9 => Prelude_Types_map_Functor_Maybe($d => ({a1: $9.a2.a1, a2: $d}), Data_Array_Index_tryNatToFin(($0+1n), $9.a1)), $1));
+ return Data_SortedMap_fromList(csegen_605(), Prelude_Types_List_mapMaybeAppend({h: 0}, $9 => Prelude_Types_map_Functor_Maybe($d => ({a1: $9.a2.a1, a2: $d}), Data_Array_Index_tryNatToFin(($0+1n), $9.a1)), $1));
 }
 
 /* Text.ILex.Lexer.emptyRow : ByteStep n q r s */
@@ -5456,10 +7320,10 @@ function Text_ILex_Internal_Types_n__11879_11880_translate($0, $1, $2, $3) {
 
 /* Text.ILex.Internal.Types.transitions : Edge -> List (Bits8, Nat) */
 function Text_ILex_Internal_Types_transitions($0) {
- const $2 = Text_ILex_Char_Range_lowerBound(csegen_413(), $0.a1);
- const $7 = Text_ILex_Char_Range_upperBound(csegen_413(), $0.a1);
+ const $2 = Text_ILex_Char_Range_lowerBound(csegen_620(), $0.a1);
+ const $7 = Text_ILex_Char_Range_upperBound(csegen_620(), $0.a1);
  switch(Prelude_EqOrd_compare_Ord_Bits8($2, $7)) {
-  case 0: return Prelude_Types_List_mapAppend({h: 0}, $13 => ({a1: $13, a2: $0.a2}), Prelude_Types_rangeFromTo_Range_x24a({a1: {a1: csegen_416(), a2: $1d => $1e => Prelude_Num_div_Integral_Bits8($1d, $1e), a3: $23 => $24 => Prelude_Num_mod_Integral_Bits8($23, $24)}, a2: {a1: csegen_412(), a2: csegen_421()}}, $2, $7));
+  case 0: return Prelude_Types_List_mapAppend({h: 0}, $13 => ({a1: $13, a2: $0.a2}), Prelude_Types_rangeFromTo_Range_x24a({a1: {a1: csegen_623(), a2: $1d => $1e => Prelude_Num_div_Integral_Bits8($1d, $1e), a3: $23 => $24 => Prelude_Num_mod_Integral_Bits8($23, $24)}, a2: {a1: csegen_619(), a2: csegen_628()}}, $2, $7));
   case 1: return {a1: {a1: $2, a2: $0.a2}, a2: {h: 0}};
   case 2: return {h: 0};
  }
@@ -5483,7 +7347,7 @@ function Text_ILex_Internal_Types_normalizeGraph($0, $1) {
 
 /* Text.ILex.Internal.Types.nchildren : NNode -> List Nat */
 function Text_ILex_Internal_Types_nchildren($0) {
- return Prelude_Types_listBind($0.a3, csegen_424());
+ return Prelude_Types_listBind($0.a3, csegen_631());
 }
 
 /* Text.ILex.Internal.Types.machine : (DFAState s a => F1 s b) -> Machine a b */
@@ -5492,7 +7356,7 @@ function Text_ILex_Internal_Types_machine($0) {
   const $5 = Text_ILex_Internal_Types_init($4);
   const $8 = $0(undefined)($5)(undefined);
   const $f = Text_ILex_Internal_Types_pairs1($5.a1, undefined);
-  return {a1: Data_SortedMap_fromList(csegen_398(), $f), a2: $8};
+  return {a1: Data_SortedMap_fromList(csegen_605(), $f), a2: $8};
  };
  return Data_Linear_Token_run1($2);
 }
@@ -5542,12 +7406,12 @@ function Text_ILex_Internal_Types_insert1($0, $1, $2, $3) {
 /* Text.ILex.Internal.Types.init : F1 s (DFAState s a) */
 function Text_ILex_Internal_Types_init($0) {
  const $1 = Text_ILex_Internal_Types_empty(256n, $0);
- const $5 = ({value:Data_SortedMap_empty({a1: {a1: $c => $d => Prelude_Types_x3dx3d_Eq_x28Listx20x24ax29(csegen_390(), $c, $d), a2: $14 => $15 => Prelude_Types_x2fx3d_Eq_x28Listx20x24ax29(csegen_390(), $14, $15)}, a2: $1c => $1d => Prelude_Types_compare_Ord_x28Listx20x24ax29(csegen_398(), $1c, $1d), a3: $24 => $25 => Prelude_Types_x3c_Ord_x28Listx20x24ax29(csegen_398(), $24, $25), a4: $2c => $2d => Prelude_Types_x3e_Ord_x28Listx20x24ax29(csegen_398(), $2c, $2d), a5: $34 => $35 => Prelude_Types_x3cx3d_Ord_x28Listx20x24ax29(csegen_398(), $34, $35), a6: $3c => $3d => Prelude_Types_x3ex3d_Ord_x28Listx20x24ax29(csegen_398(), $3c, $3d), a7: $44 => $45 => Prelude_Types_max_Ord_x28Listx20x24ax29(csegen_398(), $44, $45), a8: $4c => $4d => Prelude_Types_min_Ord_x28Listx20x24ax29(csegen_398(), $4c, $4d)})});
- const $54 = Text_ILex_Internal_Types_empty(256n, undefined);
- const $58 = Text_ILex_Internal_Types_empty(256n, undefined);
- const $5c = Text_ILex_Internal_Types_empty(256n, undefined);
- const $60 = ({value:1n});
- return {a1: $1, a2: $5, a3: $54, a4: $58, a5: $5c, a6: $60};
+ const $5 = ({value:Data_SortedMap_empty({a1: csegen_634(), a2: $d => $e => Prelude_Types_compare_Ord_x28Listx20x24ax29(csegen_605(), $d, $e), a3: $15 => $16 => Prelude_Types_x3c_Ord_x28Listx20x24ax29(csegen_605(), $15, $16), a4: $1d => $1e => Prelude_Types_x3e_Ord_x28Listx20x24ax29(csegen_605(), $1d, $1e), a5: $25 => $26 => Prelude_Types_x3cx3d_Ord_x28Listx20x24ax29(csegen_605(), $25, $26), a6: $2d => $2e => Prelude_Types_x3ex3d_Ord_x28Listx20x24ax29(csegen_605(), $2d, $2e), a7: $35 => $36 => Prelude_Types_max_Ord_x28Listx20x24ax29(csegen_605(), $35, $36), a8: $3d => $3e => Prelude_Types_min_Ord_x28Listx20x24ax29(csegen_605(), $3d, $3e)})});
+ const $45 = Text_ILex_Internal_Types_empty(256n, undefined);
+ const $49 = Text_ILex_Internal_Types_empty(256n, undefined);
+ const $4d = Text_ILex_Internal_Types_empty(256n, undefined);
+ const $51 = ({value:1n});
+ return {a1: $1, a2: $5, a3: $45, a4: $49, a5: $4d, a6: $51};
 }
 
 /* Text.ILex.Internal.Types.inc : DFAState s a => F1 s Nat */
@@ -5581,7 +7445,7 @@ function Text_ILex_Internal_Types_connectedComponent($0, $1, $2, $3) {
 
 /* Text.ILex.Internal.Types.children : Node -> List Nat */
 function Text_ILex_Internal_Types_children($0) {
- return Prelude_Types_List_mapAppend({h: 0}, csegen_424(), $0.a3);
+ return Prelude_Types_List_mapAppend({h: 0}, csegen_631(), $0.a3);
 }
 
 /* Text.ILex.Internal.Types.addSet : DFAState s a => NSet -> F1 s Nat */
@@ -5609,7 +7473,7 @@ function Data_SortedMap_insert($0, $1, $2) {
 
 /* Data.SortedMap.fromList : Ord k => List (k, v) -> SortedMap k v */
 function Data_SortedMap_fromList($0, $1) {
- return Prelude_Basics_flip($4 => $5 => Data_SortedMap_insertFrom(csegen_24(), $4, $5), Data_SortedMap_empty($0), $1);
+ return Prelude_Basics_flip($4 => $5 => Data_SortedMap_insertFrom(csegen_44()(), $4, $5), Data_SortedMap_empty($0), $1);
 }
 
 /* Data.SortedMap.empty : Ord k => SortedMap k v */
@@ -5749,7 +7613,7 @@ function Text_ILex_Internal_DFA_discrete($0, $1, $2) {
 function Text_ILex_Internal_NFA_case__casex20blockx20inx20split_13738($0, $1, $2, $3, $4, $5) {
  switch($5.h) {
   case 0: /* Left */ {
-   const $8 = csegen_447();
+   const $8 = csegen_654();
    const $7 = $8.a3($4)($5.a1);
    switch($7) {
     case 1: return {a1: {a1: $4, a2: $1.a2}, a2: {a1: $3, a2: {a1: $5.a1, a2: $0.a2}}};
@@ -5769,11 +7633,11 @@ function Text_ILex_Internal_NFA_toNFA($0, $1, $2) {
 
 /* Text.ILex.Internal.NFA.split : NEdge -> NEdge -> (NEdge, (NEdge, NEdge)) */
 function Text_ILex_Internal_NFA_split($0, $1) {
- const $2 = Text_ILex_Char_Range_intersection(csegen_412(), $0.a1, $1.a1);
+ const $2 = Text_ILex_Char_Range_intersection(csegen_619(), $0.a1, $1.a1);
  const $a = {a1: $2, a2: Text_ILex_Internal_Types_union_({h: 0}, $0.a2, $1.a2)};
- const $13 = Text_ILex_Char_Range_difference(csegen_412(), csegen_421(), $0.a1, $2);
+ const $13 = Text_ILex_Char_Range_difference(csegen_619(), csegen_628(), $0.a1, $2);
  switch($13.h) {
-  case 0: /* Left */ return Text_ILex_Internal_NFA_case__casex20blockx20inx20split_13738($1, $0, $2, $a, $13.a1, Text_ILex_Char_Range_difference(csegen_412(), csegen_421(), $1.a1, $2));
+  case 0: /* Left */ return Text_ILex_Internal_NFA_case__casex20blockx20inx20split_13738($1, $0, $2, $a, $13.a1, Text_ILex_Char_Range_difference(csegen_619(), csegen_628(), $1.a1, $2));
   case 1: /* Right */ return {a1: {a1: $13.a1.a1, a2: $0.a2}, a2: {a1: $a, a2: {a1: $13.a1.a2, a2: $0.a2}}};
  }
 }
@@ -5834,11 +7698,11 @@ function Text_ILex_Internal_NFA_insertEdge($0, $1) {
    switch($b) {
     case 1: return $8;
     case 0: {
-     switch(Prelude_Types_x3dx3d_Eq_x28Listx20x24ax29(csegen_390(), $1.a2, $0.a1.a2)) {
+     switch(Prelude_Types_x3dx3d_Eq_x28Listx20x24ax29(csegen_597(), $1.a2, $0.a1.a2)) {
       case 0: {
-       switch(Text_ILex_Char_Range_overlap(csegen_412(), $1.a1, $0.a1.a1)) {
+       switch(Text_ILex_Char_Range_overlap(csegen_619(), $1.a1, $0.a1.a1)) {
         case 0: {
-         const $1f = csegen_447();
+         const $1f = csegen_654();
          const $1e = $1f.a3($1.a1)($0.a1.a1);
          switch($1e) {
           case 1: return Text_ILex_Internal_NFA_prep($1, $8);
@@ -5853,26 +7717,26 @@ function Text_ILex_Internal_NFA_insertEdge($0, $1) {
       }
       case 1: {
        let $3d;
-       switch(Text_ILex_Char_Range_overlap(csegen_412(), $1.a1, $0.a1.a1)) {
+       switch(Text_ILex_Char_Range_overlap(csegen_619(), $1.a1, $0.a1.a1)) {
         case 1: {
          $3d = 1;
          break;
         }
         case 0: {
-         $3d = Text_ILex_Char_Range_adjacent(csegen_412(), csegen_421(), $1.a1, $0.a1.a1);
+         $3d = Text_ILex_Char_Range_adjacent(csegen_619(), csegen_628(), $1.a1, $0.a1.a1);
          break;
         }
        }
        switch($3d) {
         case 0: {
-         const $50 = csegen_447();
+         const $50 = csegen_654();
          const $4f = $50.a3($1.a1)($0.a1.a1);
          switch($4f) {
           case 1: return Text_ILex_Internal_NFA_prep($1, $8);
           case 0: return {a1: $0.a1, a2: Text_ILex_Internal_NFA_insertEdge($0.a2, $1)};
          }
         }
-        case 1: return {a1: {a1: Text_ILex_Char_Range_span(csegen_412(), $1.a1, $0.a1.a1), a2: $1.a2}, a2: $0.a2};
+        case 1: return {a1: {a1: Text_ILex_Char_Range_span(csegen_619(), $1.a1, $0.a1.a1), a2: $1.a2}, a2: $0.a2};
        }
       }
      }
@@ -5899,7 +7763,7 @@ function Text_ILex_Internal_NFA_eclosure($0, $1, $2) {
   case 0: /* nothing */ {
    const $a = Text_ILex_Internal_Types_lookupDflt1($1, () => ({a1: {h: 0}, a2: {h: 0}, a3: {h: 0}}), $0.a3, undefined);
    const $14 = Data_Linear_Traverse1_traverse1List({h: 0}, $18 => $19 => Text_ILex_Internal_NFA_eclosure($0, $18, $19), $a.a2, undefined);
-   const $21 = Prelude_Types_foldl_Foldable_List(csegen_442(), Text_ILex_Internal_NFA_fromENode($1, $a), $14);
+   const $21 = Prelude_Types_foldl_Foldable_List(csegen_649(), Text_ILex_Internal_NFA_fromENode($1, $a), $14);
    const $2a = Text_ILex_Internal_Types_insert1($1, $21, $0.a4, undefined);
    return $21;
   }
@@ -5945,8 +7809,8 @@ function Text_ILex_Char_UTF8_n__8584_18432_go($0, $1, $2, $3) {
      const $21 = {h: 2 /* And */, a1: Text_ILex_Char_UTF8_bytes($2.a1, $2.a1), a2: Text_ILex_Char_UTF8_n__8584_18432_go($0, $1, $d, Data_Vect_map_Functor_x28Vectx20x24nx29($2e => Text_ILex_Char_UTF8_MaxAddByte(), $10))};
      const $31 = {h: 2 /* And */, a1: Text_ILex_Char_UTF8_bytes($3.a1, $3.a1), a2: Text_ILex_Char_UTF8_n__8584_18432_go($0, $1, Data_Vect_map_Functor_x28Vectx20x24nx29($3d => Text_ILex_Char_UTF8_MinAddByte(), $d), $10)};
      switch(Prelude_EqOrd_x3c_Ord_Bits8(_add8u($2.a1, 1), $3.a1)) {
-      case 0: return Text_ILex_RExp_x3cx7cx3e(csegen_413(), csegen_421(), $21, $31);
-      case 1: return Text_ILex_RExp_x3cx7cx3e(csegen_413(), csegen_421(), $21, Text_ILex_RExp_x3cx7cx3e(csegen_413(), csegen_421(), $31, {h: 2 /* And */, a1: Text_ILex_Char_UTF8_bytes(_add8u($2.a1, 1), _sub8u($3.a1, 1)), a2: Text_ILex_Char_UTF8_anyBytes($d)}));
+      case 0: return Text_ILex_RExp_x3cx7cx3e(csegen_620(), csegen_628(), $21, $31);
+      case 1: return Text_ILex_RExp_x3cx7cx3e(csegen_620(), csegen_628(), $21, Text_ILex_RExp_x3cx7cx3e(csegen_620(), csegen_628(), $31, {h: 2 /* And */, a1: Text_ILex_Char_UTF8_bytes(_add8u($2.a1, 1), _sub8u($3.a1, 1)), a2: Text_ILex_Char_UTF8_anyBytes($d)}));
      }
     }
    }
@@ -5961,7 +7825,7 @@ function Text_ILex_Char_UTF8_toUTF8($0) {
 
 /* Text.ILex.Char.UTF8.toByteRanges : Set32 -> RExp8 True */
 function Text_ILex_Char_UTF8_toByteRanges($0) {
- return Text_ILex_Char_UTF8_convert(Text_ILex_Char_Set_inters(csegen_323(), csegen_328(), {h: 0}, Text_ILex_Char_Set_unicode(), $0));
+ return Text_ILex_Char_UTF8_convert(Text_ILex_Char_Set_inters(csegen_534(), csegen_539(), {h: 0}, Text_ILex_Char_Set_unicode(), $0));
 }
 
 /* Text.ILex.Char.UTF8.spans : Vect m Bits8 -> Vect n Bits8 -> List Span */
@@ -6094,10 +7958,10 @@ function Text_ILex_Char_UTF8_fromRange($0) {
  switch($1) {
   case 1: return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_empty()};
   case 0: {
-   const $5 = Text_ILex_Char_UTF8_spans(Text_ILex_Char_UTF8_encodeSP(Text_ILex_Char_Range_lowerBound(csegen_323(), $0)), Text_ILex_Char_UTF8_encodeSP(Text_ILex_Char_Range_upperBound(csegen_323(), $0)));
+   const $5 = Text_ILex_Char_UTF8_spans(Text_ILex_Char_UTF8_encodeSP(Text_ILex_Char_Range_lowerBound(csegen_534(), $0)), Text_ILex_Char_UTF8_encodeSP(Text_ILex_Char_Range_upperBound(csegen_534(), $0)));
    switch($5.h) {
     case 0: /* nil */ return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_empty()};
-    case undefined: /* cons */ return Prelude_Types_foldr_Foldable_List(x => y => Text_ILex_RExp_x3cx7cx3e(csegen_413(), csegen_421(), Text_ILex_Char_UTF8_fromSpan(x), y), Text_ILex_Char_UTF8_fromSpan($5.a1), $5.a2);
+    case undefined: /* cons */ return Prelude_Types_foldr_Foldable_List(x => y => Text_ILex_RExp_x3cx7cx3e(csegen_620(), csegen_628(), Text_ILex_Char_UTF8_fromSpan(x), y), Text_ILex_Char_UTF8_fromSpan($5.a1), $5.a2);
    }
   }
  }
@@ -6130,7 +7994,7 @@ function Text_ILex_Char_UTF8_encode($0) {
 function Text_ILex_Char_UTF8_convert($0) {
  switch($0.h) {
   case 0: /* nil */ return {h: 1 /* Ch */, a1: Text_ILex_Char_Set_empty()};
-  case undefined: /* cons */ return Prelude_Types_foldr_Foldable_List(r => y => Text_ILex_RExp_x3cx7cx3e(csegen_413(), csegen_421(), Text_ILex_Char_UTF8_fromRange(r), y), Text_ILex_Char_UTF8_fromRange($0.a1), $0.a2);
+  case undefined: /* cons */ return Prelude_Types_foldr_Foldable_List(r => y => Text_ILex_RExp_x3cx7cx3e(csegen_620(), csegen_628(), Text_ILex_Char_UTF8_fromRange(r), y), Text_ILex_Char_UTF8_fromRange($0.a1), $0.a2);
  }
 }
 
@@ -6154,8 +8018,8 @@ function Text_ILex_Char_UTF8_bytes($0, $1) {
 /* Text.ILex.Char.UTF8.anyBytes : Vect (S n) Bits8 -> RExp8 True */
 function Text_ILex_Char_UTF8_anyBytes($0) {
  switch($0.a2.h) {
-  case 0: /* nil */ return csegen_451();
-  case undefined: /* cons */ return {h: 2 /* And */, a1: csegen_451(), a2: Text_ILex_Char_UTF8_anyBytes($0.a2)};
+  case 0: /* nil */ return csegen_658();
+  case undefined: /* cons */ return {h: 2 /* And */, a1: csegen_658(), a2: Text_ILex_Char_UTF8_anyBytes($0.a2)};
  }
 }
 
@@ -6174,19 +8038,19 @@ function Text_ParseError_case__quote_16142($0, $1) {
  switch($1.h) {
   case undefined: /* cons */ {
    switch($1.a2.h) {
-    case 0: /* nil */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $8 => $8, {a1: '\'', a2: {a1: $1.a1, a2: {a1: '\'', a2: {h: 0}}}});
-    default: return Prelude_Types_foldMap_Foldable_List(csegen_453(), $14 => $14, {a1: '\"', a2: {a1: Prelude_Types_foldMap_Foldable_List(csegen_453(), $1d => $1d, $1), a2: {a1: '\"', a2: {h: 0}}}});
+    case 0: /* nil */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $8 => $8, {a1: '\'', a2: {a1: $1.a1, a2: {a1: '\'', a2: {h: 0}}}});
+    default: return Prelude_Types_foldMap_Foldable_List(csegen_660(), $14 => $14, {a1: '\"', a2: {a1: Prelude_Types_foldMap_Foldable_List(csegen_660(), $1d => $1d, $1), a2: {a1: '\"', a2: {h: 0}}}});
    }
   }
-  default: return Prelude_Types_foldMap_Foldable_List(csegen_453(), $26 => $26, {a1: '\"', a2: {a1: Prelude_Types_foldMap_Foldable_List(csegen_453(), $2f => $2f, $1), a2: {a1: '\"', a2: {h: 0}}}});
+  default: return Prelude_Types_foldMap_Foldable_List(csegen_660(), $26 => $26, {a1: '\"', a2: {a1: Prelude_Types_foldMap_Foldable_List(csegen_660(), $2f => $2f, $1), a2: {a1: '\"', a2: {h: 0}}}});
  }
 }
 
 /* Text.ParseError.8642:16236:go */
 function Text_ParseError_n__8642_16236_go($0, $1, $2, $3) {
  switch($3.h) {
-  case 0: /* nil */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $9 => $9, {a1: 'or ', a2: {a1: Text_ParseError_quote($2), a2: {h: 0}}});
-  case undefined: /* cons */ return (Prelude_Types_foldMap_Foldable_List(csegen_453(), $16 => $16, {a1: Text_ParseError_quote($2), a2: {a1: ', ', a2: {h: 0}}})+Text_ParseError_n__8642_16236_go($0, $1, $3.a1, $3.a2));
+  case 0: /* nil */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $9 => $9, {a1: 'or ', a2: {a1: Text_ParseError_quote($2), a2: {h: 0}}});
+  case undefined: /* cons */ return (Prelude_Types_foldMap_Foldable_List(csegen_660(), $16 => $16, {a1: Text_ParseError_quote($2), a2: {a1: ', ', a2: {h: 0}}})+Text_ParseError_n__8642_16236_go($0, $1, $3.a1, $3.a2));
  }
 }
 
@@ -6223,19 +8087,19 @@ function Text_ParseError_interpolate_Interpolation_x28InnerErrorx20x24ex29($0, $
   case 1: /* EOI */ return 'Unexpected end of input';
   case 2: /* Expected */ {
    switch($1.a1.h) {
-    case 0: /* nil */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $8 => $8, {a1: 'Unexpected ', a2: {a1: Text_ParseError_quote($1.a2), a2: {h: 0}}});
-    case undefined: /* cons */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $14 => $14, {a1: 'Expected ', a2: {a1: Text_ParseError_quotes($1.a1.a1, $1.a1.a2), a2: {a1: ', but got ', a2: {a1: Text_ParseError_quote($1.a2), a2: {h: 0}}}}});
+    case 0: /* nil */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $8 => $8, {a1: 'Unexpected ', a2: {a1: Text_ParseError_quote($1.a2), a2: {h: 0}}});
+    case undefined: /* cons */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $14 => $14, {a1: 'Expected ', a2: {a1: Text_ParseError_quotes($1.a1.a1, $1.a1.a2), a2: {a1: ', but got ', a2: {a1: Text_ParseError_quote($1.a2), a2: {h: 0}}}}});
    }
   }
-  case 3: /* ExpectedChar */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $27 => $27, {a1: 'Expected ', a2: {a1: Text_ParseError_interpolate_Interpolation_CharClass($1.a1), a2: {h: 0}}});
+  case 3: /* ExpectedChar */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $27 => $27, {a1: 'Expected ', a2: {a1: Text_ParseError_interpolate_Interpolation_CharClass($1.a1), a2: {h: 0}}});
   case 4: /* ExpectedEOI */ return 'Expected end of input';
-  case 5: /* InvalidControl */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $33 => $33, {a1: 'Invalid control character: \'', a2: {a1: Text_ParseError_uncontrol($1.a1), a2: {a1: '\'', a2: {h: 0}}}});
+  case 5: /* InvalidControl */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $33 => $33, {a1: 'Invalid control character: \'', a2: {a1: Text_ParseError_uncontrol($1.a1), a2: {a1: '\'', a2: {h: 0}}}});
   case 6: /* InvalidEscape */ return 'Invalid escape sequence';
-  case 7: /* OutOfBounds */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $41 => $41, {a1: 'Value out of bounds: ', a2: {a1: $1.a1, a2: {h: 0}}});
-  case 8: /* Unclosed */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $4b => $4b, {a1: 'Unclosed ', a2: {a1: Text_ParseError_quote($1.a1), a2: {h: 0}}});
-  case 9: /* Unknown */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $57 => $57, {a1: 'Unknown or invalid token: ', a2: {a1: $1.a1, a2: {h: 0}}});
+  case 7: /* OutOfBounds */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $41 => $41, {a1: 'Value out of bounds: ', a2: {a1: $1.a1, a2: {h: 0}}});
+  case 8: /* Unclosed */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $4b => $4b, {a1: 'Unclosed ', a2: {a1: Text_ParseError_quote($1.a1), a2: {h: 0}}});
+  case 9: /* Unknown */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $57 => $57, {a1: 'Unknown or invalid token: ', a2: {a1: $1.a1, a2: {h: 0}}});
   case 0: /* Custom */ return $0($1.a1);
-  case 10: /* InvalidByte */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $63 => $63, {a1: 'Unexpected or invalid byte: 0x', a2: {a1: Text_ParseError_toHex($1.a1), a2: {h: 0}}});
+  case 10: /* InvalidByte */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $63 => $63, {a1: 'Unexpected or invalid byte: 0x', a2: {a1: Text_ParseError_toHex($1.a1), a2: {h: 0}}});
  }
 }
 
@@ -6243,8 +8107,8 @@ function Text_ParseError_interpolate_Interpolation_x28InnerErrorx20x24ex29($0, $
 function Text_ParseError_interpolate_Interpolation_x28FCErrx20x24ex29($0, $1) {
  const $3 = {a1: $1.a1, a2: $1.a2};
  switch($1.a4.h) {
-  case undefined: /* just */ return Data_String_fastUnlines({a1: Prelude_Types_foldMap_Foldable_List(csegen_453(), $e => $e, {a1: $0($1.a5), a2: {h: 0}}), a2: Text_FC_printFC($3, $1.a3, Data_String_lines($1.a4.a1))});
-  case 0: /* nothing */ return Data_String_fastUnlines({a1: Prelude_Types_foldMap_Foldable_List(csegen_453(), $22 => $22, {a1: $0($1.a5), a2: {h: 0}}), a2: {a1: Text_FC_interpolate_Interpolation_FileContext($3), a2: {h: 0}}});
+  case undefined: /* just */ return Data_String_fastUnlines({a1: Prelude_Types_foldMap_Foldable_List(csegen_660(), $e => $e, {a1: $0($1.a5), a2: {h: 0}}), a2: Text_FC_printFC($3, $1.a3, Data_String_lines($1.a4.a1))});
+  case 0: /* nothing */ return Data_String_fastUnlines({a1: Prelude_Types_foldMap_Foldable_List(csegen_660(), $22 => $22, {a1: $0($1.a5), a2: {h: 0}}), a2: {a1: Text_FC_interpolate_Interpolation_FileContext($3), a2: {h: 0}}});
  }
 }
 
@@ -6272,7 +8136,7 @@ function Text_ParseError_quotes($0, $1) {
   case 0: /* nil */ return Text_ParseError_quote($0);
   case undefined: /* cons */ {
    switch($1.a2.h) {
-    case 0: /* nil */ return Prelude_Types_foldMap_Foldable_List(csegen_453(), $a => $a, {a1: Text_ParseError_quote($0), a2: {a1: ' or ', a2: {a1: Text_ParseError_quote($1.a1), a2: {h: 0}}}});
+    case 0: /* nil */ return Prelude_Types_foldMap_Foldable_List(csegen_660(), $a => $a, {a1: Text_ParseError_quote($0), a2: {a1: ' or ', a2: {a1: Text_ParseError_quote($1.a1), a2: {h: 0}}}});
     default: return Text_ParseError_n__8642_16236_go($1, $0, $0, $1);
    }
   }
@@ -6319,7 +8183,7 @@ function Text_FC_interpolate_Interpolation_Origin($0) {
 function Text_FC_interpolate_Interpolation_FileContext($0) {
  switch($0.a2.h) {
   case 0: /* nil */ return Text_FC_interpolate_Interpolation_Origin($0.a1);
-  default: return Prelude_Types_foldMap_Foldable_List(csegen_453(), $9 => $9, {a1: Text_FC_interpolate_Interpolation_Origin($0.a1), a2: {a1: ': ', a2: {a1: Text_Bounds_interpolate_Interpolation_Bounds($0.a2), a2: {h: 0}}}});
+  default: return Prelude_Types_foldMap_Foldable_List(csegen_660(), $9 => $9, {a1: Text_FC_interpolate_Interpolation_Origin($0.a1), a2: {a1: ': ', a2: {a1: Text_Bounds_interpolate_Interpolation_Bounds($0.a2), a2: {h: 0}}}});
  }
 }
 
@@ -6345,7 +8209,7 @@ function Text_FC_printFC($0, $1, $2) {
              switch($1.a2.h) {
               case undefined: /* cons */ {
                const $a = Prelude_Types_String_length(Prelude_Show_show_Show_Nat(($0.a2.a2.a1+1n)));
-               const $11 = Prelude_Types_foldMap_Foldable_List(csegen_453(), $16 => $16, {a1: Text_FC_interpolate_Interpolation_FileContext($0), a2: {h: 0}});
+               const $11 = Prelude_Types_foldMap_Foldable_List(csegen_660(), $16 => $16, {a1: Text_FC_interpolate_Interpolation_FileContext($0), a2: {h: 0}});
                switch((($1.a1.a1===$1.a2.a1)?1:0)) {
                 case 0: return Prelude_Types_SnocList_x3cx3ex3e(Text_FC_lineNumbers({a1: {a1: {h: 0}, a2: ''}, a2: $11}, $a, $0.a2.a1.a1, Text_FC_range($1.a1.a1, Prelude_Types_min_Ord_Nat($1.a2.a1, ($1.a1.a1+5n)), $2)), {h: 0});
                 case 1: {
@@ -6396,8 +8260,8 @@ function Text_Bounds_interpolate_Interpolation_Bounds($0) {
  switch($0.h) {
   case undefined: /* cons */ {
    switch(Text_Bounds_eqPosition($0.a1, $0.a2)) {
-    case 1: return Prelude_Types_foldMap_Foldable_List(csegen_453(), $a => $a, {a1: Text_Bounds_interpolate_Interpolation_Position($0.a1), a2: {h: 0}});
-    case 0: return Prelude_Types_foldMap_Foldable_List(csegen_453(), $14 => $14, {a1: Text_Bounds_interpolate_Interpolation_Position($0.a1), a2: {a1: '--', a2: {a1: Text_Bounds_interpolate_Interpolation_Position($0.a2), a2: {h: 0}}}});
+    case 1: return Prelude_Types_foldMap_Foldable_List(csegen_660(), $a => $a, {a1: Text_Bounds_interpolate_Interpolation_Position($0.a1), a2: {h: 0}});
+    case 0: return Prelude_Types_foldMap_Foldable_List(csegen_660(), $14 => $14, {a1: Text_Bounds_interpolate_Interpolation_Position($0.a1), a2: {a1: '--', a2: {a1: Text_Bounds_interpolate_Interpolation_Position($0.a2), a2: {h: 0}}}});
    }
   }
   case 0: /* nil */ return '';
@@ -6581,7 +8445,7 @@ function Text_ILex_Interfaces_unclosedIfNLorEOIErr($0, $1, $2, $3, $4, $5) {
    switch($6.a1) {
     case 0n: return Text_ILex_Interfaces_unclosedErr($0, $1, $2, $3, undefined);
     default: {
-     switch(Data_ByteVect_any($6.a1, csegen_455(), $6.a2)) {
+     switch(Data_ByteVect_any($6.a1, csegen_662(), $6.a2)) {
       case 1: return Text_ILex_Interfaces_unclosedErr($0, $1, $2, $3, undefined);
       case 0: {
        const $52 = ($2.a7(undefined)($1).value);
@@ -6594,7 +8458,7 @@ function Text_ILex_Interfaces_unclosedIfNLorEOIErr($0, $1, $2, $3, $4, $5) {
    }
   }
   default: {
-   switch(Data_ByteVect_any($6.a1, csegen_455(), $6.a2)) {
+   switch(Data_ByteVect_any($6.a1, csegen_662(), $6.a2)) {
     case 1: return Text_ILex_Interfaces_unclosedErr($0, $1, $2, $3, undefined);
     case 0: {
      const $7f = ($2.a7(undefined)($1).value);
@@ -6660,7 +8524,7 @@ function Text_ILex_Interfaces_popAndGetBounds($0, $1, $2, $3) {
 
 /* Text.ILex.Interfaces.jsonSpace : RExp True */
 const Text_ILex_Interfaces_jsonSpace = __lazy(function () {
- return Text_ILex_RExp_oneof(csegen_323(), csegen_328(), {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32(' '.codePointAt(0)))}, a2: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('\u{9}'.codePointAt(0)))}, a2: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('\n'.codePointAt(0)))}, a2: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('\r'.codePointAt(0)))}, a2: {h: 0}}}}});
+ return Text_ILex_RExp_oneof(csegen_534(), csegen_539(), {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32(' '.codePointAt(0)))}, a2: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('\u{9}'.codePointAt(0)))}, a2: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('\n'.codePointAt(0)))}, a2: {a1: {h: 1 /* Ch */, a1: Text_ILex_Char_Set_singleton(_truncUInt32('\r'.codePointAt(0)))}, a2: {h: 0}}}}});
 });
 
 /* Text.ILex.Runner.case block in run */
@@ -6809,49 +8673,13 @@ function Text_ILex_Runner_init($0, $1, $2, $3) {
  return Text_ILex_Runner_case__casex20blockx20inx20init_21491($2, $0, $1, $4, undefined, Text_ILex_Parser_prim__machineGet($2.a4, $2.a2));
 }
 
-/* JSON.FromJSON.case block in decodeVia */
-function JSON_FromJSON_case__decodeVia_7563($0, $1, $2, $3) {
- switch($3.h) {
-  case 1: /* Right */ {
-   const $5 = $1(undefined)(undefined)($0)($3.a1);
-   switch($5.h) {
-    case 1: /* Right */ return {h: 1 /* Right */, a1: $5.a1};
-    case 0: /* Left */ return {h: 0 /* Left */, a1: {h: 0 /* JErr */, a1: $5.a1}};
-   }
-  }
-  case 0: /* Left */ return {h: 0 /* Left */, a1: {h: 1 /* JParseErr */, a1: $3.a1}};
- }
-}
-
-/* JSON.FromJSON.16874:10708:readElements */
-function JSON_FromJSON_n__16874_10708_readElements($0, $1, $2, $3) {
- switch($3.h) {
-  case 0: /* nil */ return {h: 1 /* Right */, a1: {h: 0}};
-  case undefined: /* cons */ {
-   const $8 = $0(undefined)(undefined)($1)($3.a1);
-   let $7;
-   switch($8.h) {
-    case 0: /* Left */ {
-     $7 = {h: 0 /* Left */, a1: {a1: {a1: {h: 1 /* Index */, a1: $2}, a2: $8.a1.a1}, a2: $8.a1.a2}};
-     break;
-    }
-    case 1: /* Right */ {
-     $7 = {h: 1 /* Right */, a1: $8.a1};
-     break;
-    }
-   }
-   return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($7, decoded => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_FromJSON_n__16874_10708_readElements($0, $1, ($2+1n), $3.a2), remaining => ({h: 1 /* Right */, a1: {a1: decoded, a2: remaining}})));
-  }
- }
-}
-
 /* JSON.FromJSON.13397:7284:isIdentifierKey */
 function JSON_FromJSON_n__13397_7284_isIdentifierKey($0, $1) {
  switch($1.h) {
   case 0: /* nil */ return 0;
   case undefined: /* cons */ {
    switch(Prelude_Types_isAlpha($1.a1)) {
-    case 1: return Prelude_Types_foldMap_Foldable_List({a1: $9 => $a => Prelude_Interfaces_Bool_Semigroup_x3cx2bx3e_Semigroup_AllBool($9, $a), a2: 1}, $10 => Prelude_Types_isAlphaNum($10), $1.a2);
+    case 1: return Prelude_Types_foldMap_Foldable_List(csegen_290(), $a => Prelude_Types_isAlphaNum($a), $1.a2);
     case 0: return 0;
    }
   }
@@ -6881,22 +8709,14 @@ function JSON_FromJSON_n__13397_7280_escapeChar($0, $1) {
  }
 }
 
-/* JSON.FromJSON.interpolate */
-function JSON_FromJSON_interpolate_Interpolation_DecodingErr($0) {
- switch($0.h) {
-  case 0: /* JErr */ return JSON_FromJSON_formatError($0.a1.a1, $0.a1.a2);
-  case 1: /* JParseErr */ return Text_ParseError_interpolate_Interpolation_x28FCErrx20x24ex29($8 => Text_ParseError_interpolate_Interpolation_x28InnerErrorx20x24ex29($b => JSON_Object_interpolate_Interpolation_ObjectError($b), $8), $0.a1);
- }
+/* JSON.FromJSON.fromJSON */
+function JSON_FromJSON_fromJSON_FromJSON_Int64($0, $1) {
+ return JSON_FromJSON_boundedIntegral({a1: $5 => $6 => _add64s($5, $6), a2: $a => $b => _mul64s($a, $b), a3: $f => _truncBigInt64($f)}, $0, () => 'Int64', -9223372036854775808n, 9223372036854775807n, $1);
 }
 
 /* JSON.FromJSON.fromJSON */
-function JSON_FromJSON_fromJSON_FromJSON_String($0, $1) {
- return JSON_FromJSON_withValue($0, 'String', $0.a9, () => 'String', $9 => ({h: 1 /* Right */, a1: $9}), $1);
-}
-
-/* JSON.FromJSON.fromJSON */
-function JSON_FromJSON_fromJSON_FromJSON_x28Listx20x24ax29($0, $1, $2) {
- return JSON_FromJSON_withValue($1, 'Array', $1.a5, () => 'List', $a => JSON_FromJSON_n__16874_10708_readElements($0, $1, 0n, $a), $2);
+function JSON_FromJSON_fromJSON_FromJSON_Bits64($0, $1) {
+ return JSON_FromJSON_boundedIntegral({a1: $5 => $6 => _add64u($5, $6), a2: $a => $b => _mul64u($a, $b), a3: $f => _truncUBigInt64($f)}, $0, () => 'Bits64', 0n, 18446744073709551615n, $1);
 }
 
 /* JSON.FromJSON.withValue : Value v obj =>
@@ -6908,7 +8728,7 @@ function JSON_FromJSON_withValue($0, $1, $2, $3, $4, $5) {
   case 0: /* nothing */ {
    const $b = JSON_FromJSON_typeMismatch($0, $1, $5);
    switch($b.h) {
-    case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: $b.a1.a1, a2: (Prelude_Types_foldMap_Foldable_List(csegen_453(), $19 => $19, {a1: 'parsing ', a2: {a1: $3(), a2: {a1: ' failed, ', a2: {h: 0}}}})+$b.a1.a2)}};
+    case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: $b.a1.a1, a2: (Prelude_Types_foldMap_Foldable_List(csegen_660(), $19 => $19, {a1: 'parsing ', a2: {a1: $3(), a2: {a1: ' failed, ', a2: {h: 0}}}})+$b.a1.a2)}};
     case 1: /* Right */ return {h: 1 /* Right */, a1: $b.a1};
    }
   }
@@ -6917,7 +8737,7 @@ function JSON_FromJSON_withValue($0, $1, $2, $3, $4, $5) {
 
 /* JSON.FromJSON.typeMismatch : Value v obj => String -> Parser v a */
 function JSON_FromJSON_typeMismatch($0, $1, $2) {
- return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: Prelude_Types_foldMap_Foldable_List(csegen_453(), $a => $a, {a1: 'expected ', a2: {a1: $1, a2: {a1: ', but encountered ', a2: {a1: $0.a2($2), a2: {h: 0}}}}})}};
+ return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: Prelude_Types_foldMap_Foldable_List(csegen_660(), $a => $a, {a1: 'expected ', a2: {a1: $1, a2: {a1: ', but encountered ', a2: {a1: $0.a2($2), a2: {h: 0}}}}})}};
 }
 
 /* JSON.FromJSON.formatRelativePath : JSONPath -> String */
@@ -6935,18 +8755,1538 @@ function JSON_FromJSON_formatError($0, $1) {
  return ('Error in '+(JSON_FromJSON_formatPath($0)+(': '+$1)));
 }
 
-/* JSON.FromJSON.explicitParseField : Object obj v => Value v obj => Parser v a -> obj -> Parser String a */
-function JSON_FromJSON_explicitParseField($0, $1, $2, $3, $4) {
- const $6 = $0.a1($4)($3);
- switch($6.h) {
-  case 0: /* nothing */ return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: Prelude_Types_foldMap_Foldable_List(csegen_453(), $12 => $12, {a1: 'key ', a2: {a1: Prelude_Show_show_Show_String($4), a2: {a1: ' not found', a2: {h: 0}}}})}};
-  case undefined: /* just */ {
-   const $1c = $2($6.a1);
-   switch($1c.h) {
-    case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: $4}, a2: $1c.a1.a1}, a2: $1c.a1.a2}};
-    case 1: /* Right */ return {h: 1 /* Right */, a1: $1c.a1};
+/* JSON.FromJSON.boundedIntegral : Num a => Value v obj => Lazy String -> Integer -> Integer -> Parser v a */
+function JSON_FromJSON_boundedIntegral($0, $1, $2, $3, $4, $5) {
+ const $c = n => {
+  let $d;
+  switch(Prelude_EqOrd_x3ex3d_Ord_Integer(n, $3)) {
+   case 1: {
+    $d = Prelude_EqOrd_x3cx3d_Ord_Integer(n, $4);
+    break;
+   }
+   case 0: {
+    $d = 0;
+    break;
    }
   }
+  switch($d) {
+   case 1: return {h: 1 /* Right */, a1: $0.a3(n)};
+   case 0: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: Prelude_Types_foldMap_Foldable_List(csegen_660(), $20 => $20, {a1: 'integer out of bounds: ', a2: {a1: Prelude_Show_show_Show_Integer(n), a2: {h: 0}}})}};
+  }
+ };
+ return JSON_FromJSON_withValue($1, 'Integer', $1.a8, $2, $c, $5);
+}
+
+/* JSON.Wire.Codec.case block in case block in case block in case block in case block in transform */
+function JSON_Wire_Codec_case__casex20blockx20inx20casex20blockx20inx20casex20blockx20inx20casex20blockx20inx20transform_12269($0, $1, $2, $3, $4, $5, $6, $7, $8, $9) {
+ switch($9.h) {
+  case 1: /* Right */ {
+   switch($9.a1.h) {
+    case 1: /* JInteger */ {
+     let $c;
+     switch(Prelude_EqOrd_x3ex3d_Ord_Integer($9.a1.a1, 0n)) {
+      case 1: {
+       $c = Prelude_EqOrd_x3dx3d_Eq_String($7, Prelude_Show_show_Show_Integer($9.a1.a1));
+       break;
+      }
+      case 0: {
+       $c = 0;
+       break;
+      }
+     }
+     switch($c) {
+      case 1: return {h: 1 /* Right */, a1: {h: 1 /* JInteger */, a1: $9.a1.a1}};
+      case 0: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected canonical natural token'}};
+     }
+    }
+    default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected canonical natural token'}};
+   }
+  }
+  default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected canonical natural token'}};
+ }
+}
+
+/* JSON.Wire.Codec.wireEncodeValue : WireDefinition a -> a -> Result JSON */
+function JSON_Wire_Codec_wireEncodeValue($0) {
+ return $0.a2;
+}
+
+/* JSON.Wire.Codec.wireDecodeValue : WireDefinition a -> JSON -> Result a */
+function JSON_Wire_Codec_wireDecodeValue($0) {
+ return $0.a3;
+}
+
+/* JSON.Wire.Codec.validateGraph : CheckedGraph -> JSON -> Result () */
+function JSON_Wire_Codec_validateGraph($0, $1) {
+ const $2 = JSON_Wire_Codec_transform(JSON_Wire_Codec_traversalFuel($0), 0, JSON_Wire_Check_graphShape($0), $1);
+ switch($2.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: $2.a1};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: undefined};
+ }
+}
+
+/* JSON.Wire.Codec.trustedWireDefinition : WireMetadata -> (a -> Result JSON) -> (JSON -> Result a) -> WireDefinition a */
+function JSON_Wire_Codec_trustedWireDefinition($0, $1, $2) {
+ return {a1: $0, a2: $1, a3: $2};
+}
+
+/* JSON.Wire.Codec.trustedAuthoredGraphCodec : GraphDescription -> List DefinitionOrigin -> (a -> Result JSON) -> (JSON -> Result a) -> Either String (GraphCodec a) */
+function JSON_Wire_Codec_trustedAuthoredGraphCodec($0, $1, $2, $3) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_checkGraphWithOrigins($0, $1), checked => ({h: 1 /* Right */, a1: {a1: checked, a2: $2, a3: $3}}));
+}
+
+/* JSON.Wire.Codec.traversalFuel : CheckedGraph -> Nat */
+function JSON_Wire_Codec_traversalFuel($0) {
+ return JSON_Wire_Check_shapeDepth(JSON_Wire_Check_graphShape($0));
+}
+
+/* JSON.Wire.Codec.scalarTextValid : String -> Bool */
+function JSON_Wire_Codec_scalarTextValid($0) {
+ const $4 = character => {
+  const $5 = _truncInt32(character.codePointAt(0));
+  switch(Prelude_EqOrd_x3ex3d_Ord_Int($5, 0)) {
+   case 1: {
+    switch(Prelude_EqOrd_x3cx3d_Ord_Int($5, Number(_truncBigInt32(1114111n)))) {
+     case 1: {
+      switch(Prelude_EqOrd_x3c_Ord_Int($5, Number(_truncBigInt32(55296n)))) {
+       case 1: return 1;
+       case 0: return Prelude_EqOrd_x3e_Ord_Int($5, Number(_truncBigInt32(57343n)));
+      }
+     }
+     case 0: return 0;
+    }
+   }
+   case 0: return 0;
+  }
+ };
+ return Prelude_Types_foldMap_Foldable_List(csegen_290(), $4, Prelude_Types_fastUnpack($0));
+}
+
+/* JSON.Wire.Codec.readString : JSON -> Result String */
+function JSON_Wire_Codec_readString($0) {
+ switch($0.h) {
+  case 5: /* JString */ return {h: 1 /* Right */, a1: $0.a1};
+  default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected string'}};
+ }
+}
+
+/* JSON.Wire.Codec.readRequired : String -> (JSON -> Result a) -> List (String, JSON) -> Result a */
+function JSON_Wire_Codec_readRequired($0, $1, $2) {
+ const $4 = Data_List_lookup(csegen_681()(), $0, $2);
+ let $3;
+ switch($4.h) {
+  case undefined: /* just */ {
+   $3 = $1($4.a1);
+   break;
+  }
+  case 0: /* nothing */ {
+   $3 = {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: missing required field'}};
+   break;
+  }
+ }
+ switch($3.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: $0}, a2: $3.a1.a1}, a2: $3.a1.a2}};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: $3.a1};
+ }
+}
+
+/* JSON.Wire.Codec.readOptional : String -> a -> (JSON -> Result a) -> List (String, JSON) -> Result a */
+function JSON_Wire_Codec_readOptional($0, $1, $2, $3) {
+ const $5 = Data_List_lookup(csegen_681()(), $0, $3);
+ let $4;
+ switch($5.h) {
+  case undefined: /* just */ {
+   $4 = $2($5.a1);
+   break;
+  }
+  case 0: /* nothing */ {
+   $4 = {h: 1 /* Right */, a1: $1};
+   break;
+  }
+ }
+ switch($4.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {a1: {h: 0 /* Key */, a1: $0}, a2: $4.a1.a1}, a2: $4.a1.a2}};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: $4.a1};
+ }
+}
+
+/* JSON.Wire.Codec.readObject : (List (String, JSON) -> Result a) -> JSON -> Result a */
+function JSON_Wire_Codec_readObject($0, $1) {
+ switch($1.h) {
+  case 7: /* JsonObject */ return $0(Prelude_Types_List_mapAppend({h: 0}, $8 => Value_StringKeySortedAssoc_bindingContent($8), $1.a1));
+  default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected object'}};
+ }
+}
+
+/* JSON.Wire.Codec.readNullable : a -> (b -> a) -> (JSON -> Result b) -> JSON -> Result a */
+function JSON_Wire_Codec_readNullable($0, $1, $2, $3) {
+ switch($3.h) {
+  case 0: /* JNull */ return {h: 1 /* Right */, a1: $0};
+  default: {
+   const $6 = $2($3);
+   switch($6.h) {
+    case 0: /* Left */ return {h: 0 /* Left */, a1: $6.a1};
+    case 1: /* Right */ return {h: 1 /* Right */, a1: $1($6.a1)};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Codec.readNatural : JSON -> Result Nat */
+function JSON_Wire_Codec_readNatural($0) {
+ switch($0.h) {
+  case 1: /* JInteger */ {
+   switch(Prelude_EqOrd_x3ex3d_Ord_Integer($0.a1, 0n)) {
+    case 1: return {h: 1 /* Right */, a1: Prelude_Types_prim__integerToNat($0.a1)};
+    case 0: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected natural integer literal'}};
+   }
+  }
+  default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected natural integer literal'}};
+ }
+}
+
+/* JSON.Wire.Codec.readListValues : (JSON -> Result a) -> Nat -> List JSON -> Result (List a) */
+function JSON_Wire_Codec_readListValues($0, $1, $2) {
+ switch($2.h) {
+  case 0: /* nil */ return {h: 1 /* Right */, a1: {h: 0}};
+  case undefined: /* cons */ {
+   const $7 = $0($2.a1);
+   let $6;
+   switch($7.h) {
+    case 0: /* Left */ {
+     $6 = {h: 0 /* Left */, a1: {a1: {a1: {h: 1 /* Index */, a1: $1}, a2: $7.a1.a1}, a2: $7.a1.a2}};
+     break;
+    }
+    case 1: /* Right */ {
+     $6 = {h: 1 /* Right */, a1: $7.a1};
+     break;
+    }
+   }
+   return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($6, checked => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_readListValues($0, ($1+1n), $2.a2), remaining => ({h: 1 /* Right */, a1: {a1: checked, a2: remaining}})));
+  }
+ }
+}
+
+/* JSON.Wire.Codec.readList : (JSON -> Result a) -> JSON -> Result (List a) */
+function JSON_Wire_Codec_readList($0, $1) {
+ switch($1.h) {
+  case 6: /* JArray */ return JSON_Wire_Codec_readListValues($0, 0n, $1.a1);
+  default: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: expected array'}};
+ }
+}
+
+/* JSON.Wire.Codec.readInternalTag : String -> JSON -> Result String */
+function JSON_Wire_Codec_readInternalTag($0, $1) {
+ return JSON_Wire_Codec_readObject($4 => JSON_Wire_Codec_readRequired($0, $8 => JSON_Wire_Codec_readString($8), $4), $1);
+}
+
+/* JSON.Wire.Codec.readBoundNatural : NumericBinding -> JSON -> Result Nat */
+function JSON_Wire_Codec_readBoundNatural($0, $1) {
+ const $2 = JSON_Wire_Numeric_boundNatural($0, $1);
+ switch($2.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $2.a1}};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: $2.a1};
+ }
+}
+
+/* JSON.Wire.Codec.parseText : String -> Either String JSON */
+function JSON_Wire_Codec_parseText($0) {
+ const $1 = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0)))), $c => JSON_Parser_json(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)));
+ switch($1.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: Text_ParseError_interpolate_Interpolation_x28FCErrx20x24ex29(csegen_692(), Text_ByteBounds_toParseError({h: 0}, Data_Buffer_Core_toString(Data_Buffer_Core_fromString(JSON_Parser_prepareText($0)), 0n, Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($0))))), $1.a1))};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: $1.a1};
+ }
+}
+
+/* JSON.Wire.Codec.parseGraphText : CheckedGraph -> String -> Either String JSON */
+function JSON_Wire_Codec_parseGraphText($0, $1) {
+ switch(JSON_Wire_Codec_needsNumberTokens(JSON_Wire_Codec_traversalFuel($0), JSON_Wire_Check_graphShape($0))) {
+  case 1: {
+   const $c = Text_ILex_Runner_run(Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($1)))), csegen_321(), Data_Buffer_Core_fromString(JSON_Parser_prepareText($1)));
+   let $b;
+   switch($c.h) {
+    case 0: /* Left */ {
+     $b = {h: 0 /* Left */, a1: Text_ParseError_interpolate_Interpolation_x28FCErrx20x24ex29(csegen_692(), Text_ByteBounds_toParseError({h: 0}, Data_Buffer_Core_toString(Data_Buffer_Core_fromString(JSON_Parser_prepareText($1)), 0n, Prelude_Types_prim__integerToNat(BigInt(Data_Buffer_stringByteLength(JSON_Parser_prepareText($1))))), $c.a1))};
+     break;
+    }
+    case 1: /* Right */ {
+     $b = {h: 1 /* Right */, a1: $c.a1};
+     break;
+    }
+   }
+   return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($b, json => JSON_Wire_Codec_fieldError(JSON_Wire_Codec_normalizeParsed(JSON_Wire_Codec_traversalFuel($0), JSON_Wire_Check_graphShape($0), json)));
+  }
+  case 0: return JSON_Wire_Codec_parseText($1);
+ }
+}
+
+/* JSON.Wire.Codec.jsonRepresentationKind : JSON -> RepresentationKind */
+function JSON_Wire_Codec_jsonRepresentationKind($0) {
+ switch($0.h) {
+  case 0: /* JNull */ return 0;
+  case 4: /* JBool */ return 1;
+  case 1: /* JInteger */ return 2;
+  case 2: /* JDouble */ return 2;
+  case 3: /* JDecimal */ return 2;
+  case 5: /* JString */ return 3;
+  case 6: /* JArray */ return 4;
+  case 7: /* JsonObject */ return 5;
+ }
+}
+
+/* JSON.Wire.Codec.fieldError : Result a -> Either String a */
+function JSON_Wire_Codec_fieldError($0) {
+ switch($0.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: JSON_FromJSON_formatError($0.a1.a1, $0.a1.a2)};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: $0.a1};
+ }
+}
+
+/* JSON.Wire.Codec.exactKeys : List String -> List (String, JSON) -> Result () */
+function JSON_Wire_Codec_exactKeys($0, $1) {
+ let $2;
+ switch(Prelude_Types_x2fx3d_Eq_Nat(Prelude_Types_List_lengthTR($1), Prelude_Types_List_lengthTR($0))) {
+  case 1: {
+   $2 = 1;
+   break;
+  }
+  case 0: {
+   switch(Prelude_Types_foldMap_Foldable_List(csegen_290(), key => ((Prelude_Types_List_lengthTR(Prelude_Types_List_filterAppend({h: 0}, entry => Prelude_EqOrd_x3dx3d_Eq_String(Builtin_fst(entry), key), $1))===1n)?1:0), $0)) {
+    case 1: {
+     $2 = 0;
+     break;
+    }
+    case 0: {
+     $2 = 1;
+     break;
+    }
+   }
+   break;
+  }
+ }
+ switch($2) {
+  case 1: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire: unknown, missing or duplicate object field'}};
+  case 0: return {h: 1 /* Right */, a1: undefined};
+ }
+}
+
+/* JSON.Wire.Codec.encodeListValues : (a -> Result JSON) -> List a -> Result (List JSON) */
+function JSON_Wire_Codec_encodeListValues($0, $1) {
+ return JSON_Wire_Codec_encodeListAt($0, 0n, $1);
+}
+
+/* JSON.Wire.Codec.encodeListAt : (a -> Result JSON) -> Nat -> List a -> Result (List JSON) */
+function JSON_Wire_Codec_encodeListAt($0, $1, $2) {
+ switch($2.h) {
+  case 0: /* nil */ return {h: 1 /* Right */, a1: {h: 0}};
+  case undefined: /* cons */ {
+   const $7 = $0($2.a1);
+   let $6;
+   switch($7.h) {
+    case 0: /* Left */ {
+     $6 = {h: 0 /* Left */, a1: {a1: {a1: {h: 1 /* Index */, a1: $1}, a2: $7.a1.a1}, a2: $7.a1.a2}};
+     break;
+    }
+    case 1: /* Right */ {
+     $6 = {h: 1 /* Right */, a1: $7.a1};
+     break;
+    }
+   }
+   return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($6, encoded => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_encodeListAt($0, ($1+1n), $2.a2), remaining => ({h: 1 /* Right */, a1: {a1: encoded, a2: remaining}})));
+  }
+ }
+}
+
+/* JSON.Wire.Codec.encodeGraphText : GraphCodec a -> a -> Either String String */
+function JSON_Wire_Codec_encodeGraphText($0, $1) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_fieldError(JSON_Wire_Codec_encodeGraphCheckedValue($0, $1)), json => JSON_Parser_encodeJSONValue(json));
+}
+
+/* JSON.Wire.Codec.encodeGraphCheckedValue : GraphCodec a -> a -> Result JSON */
+function JSON_Wire_Codec_encodeGraphCheckedValue($0, $1) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($0.a2($1), json => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_validateGraph($0.a1, json), $f => ({h: 1 /* Right */, a1: json})));
+}
+
+/* JSON.Wire.Codec.decodeGraphText : GraphCodec a -> String -> Either String a */
+function JSON_Wire_Codec_decodeGraphText($0, $1) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_parseGraphText($0.a1, $1), json => JSON_Wire_Codec_fieldError(JSON_Wire_Codec_decodeGraphCheckedValue($0, json)));
+}
+
+/* JSON.Wire.Codec.decodeGraphCheckedValue : GraphCodec a -> JSON -> Result a */
+function JSON_Wire_Codec_decodeGraphCheckedValue($0, $1) {
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Codec_validateGraph($0.a1, $1), $9 => $0.a3($1));
+}
+
+/* JSON.Wire.Codec.checkObjectKeys : List (String, (Bool, ValueShape)) -> List (String, JSON) -> Result () */
+function JSON_Wire_Codec_checkObjectKeys($0, $1) {
+ const $7 = $8 => {
+  switch(Prelude_Types_elem(csegen_44()(), csegen_681()(), $8.a1)(Prelude_Types_List_mapAppend({h: 0}, csegen_694()(), $0))) {
+   case 1: return ((Prelude_Types_List_lengthTR(Prelude_Types_List_filterAppend({h: 0}, entry => Prelude_EqOrd_x3dx3d_Eq_String(Builtin_fst(entry), $8.a1), $1))===1n)?1:0);
+   case 0: return 0;
+  }
+ };
+ const $3 = Prelude_Types_foldMap_Foldable_List(csegen_290(), $7, $1);
+ let $2;
+ switch($3) {
+  case 1: {
+   const $2d = $2e => {
+    switch($2e.a2.a1) {
+     case 1: return 1;
+     case 0: return Data_Maybe_isJust(Data_List_lookup(csegen_681()(), $2e.a1, $1));
+    }
+   };
+   const $29 = Prelude_Types_foldMap_Foldable_List(csegen_290(), $2d, $0);
+   switch($29) {
+    case 1: {
+     $2 = 0;
+     break;
+    }
+    case 0: {
+     $2 = 1;
+     break;
+    }
+   }
+   break;
+  }
+  case 0: {
+   $2 = 1;
+   break;
+  }
+ }
+ switch($2) {
+  case 1: return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: 'Wire graph: unknown, missing or duplicate object field'}};
+  case 0: return {h: 1 /* Right */, a1: undefined};
+ }
+}
+
+/* JSON.Wire.Codec.buildObjectValue : List (String, JSON) -> Result JSON */
+function JSON_Wire_Codec_buildObjectValue($0) {
+ const $1 = JSON_Parser_objectFromLegacyPairs($0);
+ switch($1.h) {
+  case 0: /* Left */ return {h: 0 /* Left */, a1: {a1: {h: 0}, a2: $1.a1}};
+  case 1: /* Right */ return {h: 1 /* Right */, a1: $1.a1};
+ }
+}
+
+/* JSON.Wire.Check.case block in checkGraphWithOrigins */
+function JSON_Wire_Check_case__checkGraphWithOrigins_16403($0, $1, $2, $3, $4, $5, $6) {
+ switch($6.h) {
+  case 0: /* RecordBody */ {
+   let $8;
+   switch(Prelude_Types_x2fx3d_Eq_x28Listx20x24ax29(csegen_681()(), Prelude_Types_List_mapAppend({h: 0}, $12 => $12.a1, $4.a3), Prelude_Types_List_mapAppend({h: 0}, csegen_696(), $6.a2))) {
+    case 1: {
+     $8 = 1;
+     break;
+    }
+    case 0: {
+     switch(Prelude_Types_null_Foldable_List($4.a4)) {
+      case 1: {
+       $8 = 0;
+       break;
+      }
+      case 0: {
+       $8 = 1;
+       break;
+      }
+     }
+     break;
+    }
+   }
+   switch($8) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire authoring: record origin linkage mismatch'};
+    case 0: return {h: 1 /* Right */, a1: undefined};
+   }
+  }
+  case 12: /* InternalTagBody */ {
+   let $22;
+   switch(Prelude_Types_x2fx3d_Eq_x28Listx20x24ax29(csegen_681()(), Prelude_Types_List_mapAppend({h: 0}, csegen_697(), $4.a4), Prelude_Types_List_mapAppend({h: 0}, csegen_694()(), $6.a2))) {
+    case 1: {
+     $22 = 1;
+     break;
+    }
+    case 0: {
+     switch(Prelude_Types_null_Foldable_List($4.a3)) {
+      case 1: {
+       $22 = 0;
+       break;
+      }
+      case 0: {
+       $22 = 1;
+       break;
+      }
+     }
+     break;
+    }
+   }
+   switch($22) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire authoring: arm origin linkage mismatch'};
+    case 0: return {h: 1 /* Right */, a1: undefined};
+   }
+  }
+  case 8: /* ClosedNullableBody */ {
+   let $3e;
+   switch(Prelude_Types_x2fx3d_Eq_x28Listx20x24ax29(csegen_681()(), Prelude_Types_List_mapAppend({h: 0}, csegen_697(), $4.a4), {a1: $6.a2, a2: {h: 0}})) {
+    case 1: {
+     $3e = 1;
+     break;
+    }
+    case 0: {
+     switch(Prelude_Types_null_Foldable_List($4.a3)) {
+      case 1: {
+       $3e = 0;
+       break;
+      }
+      case 0: {
+       $3e = 1;
+       break;
+      }
+     }
+     break;
+    }
+   }
+   let $3d;
+   switch($3e) {
+    case 1: {
+     $3d = {h: 0 /* Left */, a1: 'Wire authoring: closed nullable origin linkage mismatch'};
+     break;
+    }
+    case 0: {
+     $3d = {h: 1 /* Right */, a1: undefined};
+     break;
+    }
+   }
+   const $54 = $55 => {
+    let $56;
+    switch(Prelude_Types_x2fx3d_Eq_x28Listx20x24ax29(csegen_700(), Prelude_Types_List_mapAppend({h: 0}, csegen_701(), Prelude_Types_foldMap_Foldable_List(csegen_56(), csegen_702(), $4.a4)), JSON_Wire_Check_payloadReferences({h: 0}, $6.a3))) {
+     case 1: {
+      $56 = () => ({h: 0 /* Left */, a1: 'Wire authoring: closed nullable payload reference linkage mismatch'});
+      break;
+     }
+     case 0: {
+      $56 = () => ({h: 1 /* Right */, a1: undefined});
+      break;
+     }
+    }
+    return $56();
+   };
+   return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($3d, $54);
+  }
+  case 9: /* UntaggedBody */ {
+   let $70;
+   switch(Prelude_Types_x2fx3d_Eq_x28Listx20x24ax29(csegen_681()(), Prelude_Types_List_mapAppend({h: 0}, csegen_697(), $4.a4), Prelude_Types_List_mapAppend({h: 0}, $81 => Builtin_fst($81), $6.a2))) {
+    case 1: {
+     $70 = 1;
+     break;
+    }
+    case 0: {
+     switch(Prelude_Types_null_Foldable_List($4.a3)) {
+      case 1: {
+       $70 = 0;
+       break;
+      }
+      case 0: {
+       $70 = 1;
+       break;
+      }
+     }
+     break;
+    }
+   }
+   let $6f;
+   switch($70) {
+    case 1: {
+     $6f = {h: 0 /* Left */, a1: 'Wire authoring: untagged origin linkage mismatch'};
+     break;
+    }
+    case 0: {
+     $6f = {h: 1 /* Right */, a1: undefined};
+     break;
+    }
+   }
+   const $8b = $8c => {
+    const $95 = $96 => {
+     switch(Prelude_Types_x2fx3d_Eq_x28Listx20x24ax29(csegen_700(), Prelude_Types_List_mapAppend({h: 0}, csegen_701(), $96.a2.a3), JSON_Wire_Check_payloadReferences({h: 0}, $96.a1.a2))) {
+      case 1: return {h: 0 /* Left */, a1: 'Wire authoring: untagged payload reference linkage mismatch'};
+      case 0: return {h: 1 /* Right */, a1: undefined};
+     }
+    };
+    const $8d = Prelude_Interfaces_traverse_(csegen_26()(), csegen_44()(), $95);
+    return $8d(Data_List_zip_Zippable_List($6.a2, $4.a4));
+   };
+   return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($6f, $8b);
+  }
+  default: {
+   let $af;
+   switch(Prelude_Types_null_Foldable_List($4.a3)) {
+    case 1: {
+     $af = Prelude_Types_null_Foldable_List($4.a4);
+     break;
+    }
+    case 0: {
+     $af = 0;
+     break;
+    }
+   }
+   switch($af) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire authoring: unexpected member provenance'};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.case block in checkGraph */
+function JSON_Wire_Check_case__checkGraph_16081($0, $1, $2) {
+ switch($2.h) {
+  case 11: /* AbsentNullBody */ return {h: 1 /* Right */, a1: undefined};
+  default: {
+   switch((($1.a3===0n)?1:0)) {
+    case 1: {
+     const $9 = JSON_Wire_Check_resolve(JSON_Wire_Check_expansionBudget($0), $0.a3, {h: 0}, {h: 5 /* Reference */, a1: $1.a1, a2: {h: 0}});
+     switch($9.h) {
+      case 0: /* Left */ return {h: 0 /* Left */, a1: $9.a1};
+      case 1: /* Right */ return {h: 1 /* Right */, a1: undefined};
+     }
+    }
+    case 0: return {h: 1 /* Right */, a1: undefined};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.case block in checkGraph */
+function JSON_Wire_Check_case__checkGraph_15939($0, $1, $2) {
+ switch($2.h) {
+  case undefined: /* cons */ {
+   switch($2.a1.h) {
+    case 0: /* nil */ return {h: 1 /* Right */, a1: {a1: $0, a2: $1, a3: {h: 0}}};
+    case undefined: /* cons */ {
+     switch($2.a2.h) {
+      case 15: /* ObjectValue */ {
+       const $e = $f => {
+        let $10;
+        switch(Prelude_Types_elem(csegen_44()(), csegen_681()(), $2.a1.a1)(Prelude_Types_List_mapAppend({h: 0}, csegen_694()(), $2.a2.a1))) {
+         case 1: {
+          $10 = () => ({h: 0 /* Left */, a1: 'Wire graph: root tag collides with field'});
+          break;
+         }
+         case 0: {
+          $10 = () => ({h: 1 /* Right */, a1: {a1: $0, a2: {h: 15 /* ObjectValue */, a1: {a1: {a1: $2.a1.a1, a2: {a1: 0, a2: {h: 13 /* EnumValue */, a1: {a1: $2.a1.a2, a2: {h: 0}}}}}, a2: $2.a2.a1}}, a3: {h: 0}}});
+          break;
+         }
+        }
+        return $10();
+       };
+       return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Description_checkWireObjectKey($2.a1.a1), $e);
+      }
+      default: return {h: 0 /* Left */, a1: 'Wire graph: fixed root tag requires a record'};
+     }
+    }
+    default: return {h: 0 /* Left */, a1: 'Wire graph: fixed root tag requires a record'};
+   }
+  }
+  default: return {h: 0 /* Left */, a1: 'Wire graph: fixed root tag requires a record'};
+ }
+}
+
+/* JSON.Wire.Check.case block in case block in case block in checkDefinition */
+function JSON_Wire_Check_case__casex20blockx20inx20casex20blockx20inx20checkDefinition_14999($0, $1) {
+ switch($1.h) {
+  case 0: /* RecordBody */ {
+   switch(Prelude_Types_x2fx3d_Eq_Nat($0.a3, 0n)) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire graph: generic records are not supported in W2a'};
+    case 0: {
+     switch(JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, csegen_696(), $1.a2))) {
+      case 1: return {h: 0 /* Left */, a1: 'Wire graph: duplicate source field'};
+      case 0: {
+       switch(JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, $18 => $18.a2, $1.a2))) {
+        case 1: return {h: 0 /* Left */, a1: 'Wire graph: duplicate wire field'};
+        case 0: return Prelude_Interfaces_traverse_(csegen_26()(), csegen_44()(), $25 => JSON_Wire_Description_checkWireObjectKey($25.a2))($1.a2);
+       }
+      }
+     }
+    }
+   }
+  }
+  case 1: /* StringEnum */ {
+   let $2a;
+   switch(Prelude_Types_x2fx3d_Eq_Nat($0.a3, 0n)) {
+    case 1: {
+     $2a = 1;
+     break;
+    }
+    case 0: {
+     $2a = Prelude_Types_null_Foldable_List($1.a1);
+     break;
+    }
+   }
+   switch($2a) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire graph: invalid enum'};
+    case 0: {
+     let $33;
+     switch(JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, $3a => Builtin_fst($3a), $1.a1))) {
+      case 1: {
+       $33 = 1;
+       break;
+      }
+      case 0: {
+       $33 = JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, $43 => Builtin_snd($43), $1.a1));
+       break;
+      }
+     }
+     switch($33) {
+      case 1: return {h: 0 /* Left */, a1: 'Wire graph: duplicate enum arm/tag'};
+      case 0: return {h: 1 /* Right */, a1: undefined};
+     }
+    }
+   }
+  }
+  case 2: /* BooleanBody */ {
+   let $49;
+   switch((($0.a3===0n)?1:0)) {
+    case 1: {
+     switch(Prelude_EqOrd_x2fx3d_Eq_String($1.a1, '')) {
+      case 1: {
+       switch(Prelude_EqOrd_x2fx3d_Eq_String($1.a2, '')) {
+        case 1: {
+         $49 = Prelude_EqOrd_x2fx3d_Eq_String($1.a1, $1.a2);
+         break;
+        }
+        case 0: {
+         $49 = 0;
+         break;
+        }
+       }
+       break;
+      }
+      case 0: {
+       $49 = 0;
+       break;
+      }
+     }
+     break;
+    }
+    case 0: {
+     $49 = 0;
+     break;
+    }
+   }
+   switch($49) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: invalid boolean binding'};
+   }
+  }
+  case 3: /* EmptyBody */ {
+   switch((($0.a3===0n)?1:0)) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: empty binding cannot have parameters'};
+   }
+  }
+  case 4: /* ListBody */ {
+   let $61;
+   switch(Prelude_EqOrd_x2fx3d_Eq_String($0.a1, 'Prelude.Basics.List')) {
+    case 1: {
+     $61 = 1;
+     break;
+    }
+    case 0: {
+     switch(Prelude_Types_x2fx3d_Eq_Nat($0.a3, 1n)) {
+      case 1: {
+       $61 = 1;
+       break;
+      }
+      case 0: {
+       switch(Prelude_EqOrd_x3dx3d_Eq_String($1.a1, '')) {
+        case 1: {
+         $61 = 1;
+         break;
+        }
+        case 0: {
+         switch(Prelude_EqOrd_x3dx3d_Eq_String($1.a2, '')) {
+          case 1: {
+           $61 = 1;
+           break;
+          }
+          case 0: {
+           $61 = Prelude_EqOrd_x3dx3d_Eq_String($1.a1, $1.a2);
+           break;
+          }
+         }
+         break;
+        }
+       }
+       break;
+      }
+     }
+     break;
+    }
+   }
+   switch($61) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire graph: invalid standard List template'};
+    case 0: return {h: 1 /* Right */, a1: undefined};
+   }
+  }
+  case 5: /* SortedAssocBody */ {
+   switch((($0.a3===1n)?1:0)) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: sorted association requires one parameter'};
+   }
+  }
+  case 6: /* PresenceBody */ {
+   switch((($0.a3===1n)?1:0)) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: Presence requires one parameter'};
+   }
+  }
+  case 7: /* NullableBody */ {
+   switch((($0.a3===1n)?1:0)) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: Nullable requires one parameter'};
+   }
+  }
+  case 8: /* ClosedNullableBody */ {
+   let $8b;
+   switch((($0.a3===0n)?1:0)) {
+    case 1: {
+     switch(Prelude_EqOrd_x2fx3d_Eq_String($1.a1, '')) {
+      case 1: {
+       switch(Prelude_EqOrd_x2fx3d_Eq_String($1.a2, '')) {
+        case 1: {
+         $8b = Prelude_EqOrd_x2fx3d_Eq_String($1.a1, $1.a2);
+         break;
+        }
+        case 0: {
+         $8b = 0;
+         break;
+        }
+       }
+       break;
+      }
+      case 0: {
+       $8b = 0;
+       break;
+      }
+     }
+     break;
+    }
+    case 0: {
+     $8b = 0;
+     break;
+    }
+   }
+   switch($8b) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: invalid closed nullable binding'};
+   }
+  }
+  case 9: /* UntaggedBody */ {
+   let $9d;
+   switch(Prelude_Types_x2fx3d_Eq_Nat($0.a3, 0n)) {
+    case 1: {
+     $9d = 1;
+     break;
+    }
+    case 0: {
+     switch(Prelude_Types_x3c_Ord_Nat(Prelude_Types_List_lengthTR($1.a2), 2n)) {
+      case 1: {
+       $9d = 1;
+       break;
+      }
+      case 0: {
+       $9d = Prelude_Types_foldMap_Foldable_List(csegen_251(), $ad => Prelude_EqOrd_x3dx3d_Eq_String(Builtin_fst($ad), ''), $1.a2);
+       break;
+      }
+     }
+     break;
+    }
+   }
+   switch($9d) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire graph: invalid untagged binding'};
+    case 0: {
+     switch(JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, $bb => Builtin_fst($bb), $1.a2))) {
+      case 1: return {h: 0 /* Left */, a1: 'Wire graph: duplicate untagged arm'};
+      case 0: return {h: 1 /* Right */, a1: undefined};
+     }
+    }
+   }
+  }
+  case 10: /* UpdateBody */ {
+   switch((($0.a3===1n)?1:0)) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: update requires one parameter'};
+   }
+  }
+  case 11: /* AbsentNullBody */ {
+   switch((($0.a3===0n)?1:0)) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: absent/null cannot have parameters'};
+   }
+  }
+  case 12: /* InternalTagBody */ {
+   let $cd;
+   switch(Prelude_Types_x2fx3d_Eq_Nat($0.a3, 0n)) {
+    case 1: {
+     $cd = 1;
+     break;
+    }
+    case 0: {
+     switch(Prelude_Types_null_Foldable_List($1.a2)) {
+      case 1: {
+       $cd = 1;
+       break;
+      }
+      case 0: {
+       $cd = Prelude_EqOrd_x3dx3d_Eq_String($1.a1, '');
+       break;
+      }
+     }
+     break;
+    }
+   }
+   switch($cd) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire graph: invalid internal tag'};
+    case 0: {
+     let $da;
+     switch(JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, csegen_694()(), $1.a2))) {
+      case 1: {
+       $da = 1;
+       break;
+      }
+      case 0: {
+       $da = JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, $e9 => $e9.a2.a1, $1.a2));
+       break;
+      }
+     }
+     switch($da) {
+      case 1: return {h: 0 /* Left */, a1: 'Wire graph: duplicate internal arm/tag'};
+      case 0: return JSON_Wire_Description_checkWireObjectKey($1.a1);
+     }
+    }
+   }
+  }
+  case 13: /* ScalarBody */ {
+   switch((($0.a3===0n)?1:0)) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: scalar binding cannot have parameters'};
+   }
+  }
+  case 14: /* FiniteBinary64Body */ {
+   switch((($0.a3===0n)?1:0)) {
+    case 1: return {h: 1 /* Right */, a1: undefined};
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: finite binary64 binding cannot have parameters'};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.case block in resolve */
+function JSON_Wire_Check_case__resolve_13254($0, $1, $2, $3, $4, $5, $6) {
+ switch($6.h) {
+  case 13: /* ScalarBody */ return () => ({h: 1 /* Right */, a1: {h: 4 /* ScalarValue */}});
+  case 14: /* FiniteBinary64Body */ return () => ({h: 1 /* Right */, a1: {h: 5 /* FiniteBinary64Value */, a1: $6.a1}});
+  case 2: /* BooleanBody */ return () => ({h: 1 /* Right */, a1: {h: 6 /* BooleanValue */}});
+  case 3: /* EmptyBody */ return () => ({h: 1 /* Right */, a1: {h: 7 /* NeverValue */}});
+  case 1: /* StringEnum */ return () => ({h: 1 /* Right */, a1: {h: 13 /* EnumValue */, a1: Prelude_Types_List_mapAppend({h: 0}, $12 => Builtin_snd($12), $6.a1)}});
+  case 4: /* ListBody */ {
+   switch($1.h) {
+    case undefined: /* cons */ {
+     switch($1.a2.h) {
+      case 0: /* nil */ {
+       return () => {
+        const $18 = JSON_Wire_Check_resolve($0, $4, $3, $1.a1);
+        switch($18.h) {
+         case 0: /* Left */ return {h: 0 /* Left */, a1: $18.a1};
+         case 1: /* Right */ return {h: 1 /* Right */, a1: {h: 9 /* ArrayValue */, a1: $18.a1}};
+        }
+       };
+      }
+      default: return () => ({h: 0 /* Left */, a1: 'Wire graph: invalid List application'});
+     }
+    }
+    default: return () => ({h: 0 /* Left */, a1: 'Wire graph: invalid List application'});
+   }
+  }
+  case 5: /* SortedAssocBody */ {
+   switch($1.h) {
+    case undefined: /* cons */ {
+     switch($1.a2.h) {
+      case 0: /* nil */ {
+       return () => {
+        const $25 = JSON_Wire_Check_resolve($0, $4, $3, $1.a1);
+        switch($25.h) {
+         case 0: /* Left */ return {h: 0 /* Left */, a1: $25.a1};
+         case 1: /* Right */ return {h: 1 /* Right */, a1: {h: 10 /* DynamicObjectValue */, a1: $25.a1}};
+        }
+       };
+      }
+      default: return () => ({h: 0 /* Left */, a1: 'Wire graph: invalid sorted association application'});
+     }
+    }
+    default: return () => ({h: 0 /* Left */, a1: 'Wire graph: invalid sorted association application'});
+   }
+  }
+  case 6: /* PresenceBody */ return () => ({h: 0 /* Left */, a1: 'Wire graph: Presence is only supported at a record field boundary'});
+  case 7: /* NullableBody */ {
+   switch($1.h) {
+    case undefined: /* cons */ {
+     switch($1.a2.h) {
+      case 0: /* nil */ return () => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $4, $3, $1.a1), csegen_711()());
+      default: return () => ({h: 0 /* Left */, a1: 'Wire graph: invalid Nullable application'});
+     }
+    }
+    default: return () => ({h: 0 /* Left */, a1: 'Wire graph: invalid Nullable application'});
+   }
+  }
+  case 8: /* ClosedNullableBody */ return () => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $4, {a1: $2, a2: $3}, $6.a3), csegen_711()());
+  case 9: /* UntaggedBody */ return () => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(Prelude_Types_traverse_Traversable_List(csegen_26()(), $52 => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $4, {a1: $2, a2: $3}, $52.a2), shape => ({h: 1 /* Right */, a1: {a1: $52.a1, a2: shape}})), $6.a2), expanded => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_checkUntaggedKinds(expanded), $68 => ({h: 1 /* Right */, a1: {h: 12 /* UntaggedValue */, a1: undefined, a2: expanded}})));
+  case 10: /* UpdateBody */ return () => ({h: 0 /* Left */, a1: 'Wire graph: update is only supported at a record field boundary'});
+  case 11: /* AbsentNullBody */ return () => ({h: 0 /* Left */, a1: 'Wire graph: absent/null is only supported at a record field boundary'});
+  case 12: /* InternalTagBody */ {
+   return () => {
+    const $74 = $75 => {
+     switch($75.a2.a2.h) {
+      case 6: /* NullaryPayload */ return {h: 1 /* Right */, a1: {a1: $75.a2.a1, a2: {h: 15 /* ObjectValue */, a1: {a1: {a1: $6.a1, a2: {a1: 0, a2: {h: 13 /* EnumValue */, a1: {a1: $75.a2.a1, a2: {h: 0}}}}}, a2: {h: 0}}}}};
+      default: {
+       let $87;
+       switch($75.a2.a2.h) {
+        case 5: /* Reference */ {
+         switch($75.a2.a2.a2.h) {
+          case 0: /* nil */ {
+           $87 = JSON_Wire_Check_lookupDefinition($4, $75.a2.a2.a1);
+           break;
+          }
+          default: $87 = {h: 0 /* Left */, a1: 'Wire graph: internal tag payload must reference a record'};
+         }
+         break;
+        }
+        default: $87 = {h: 0 /* Left */, a1: 'Wire graph: internal tag payload must reference a record'};
+       }
+       const $8f = definition => {
+        let $91;
+        switch(definition.a4.h) {
+         case 0: /* RecordBody */ {
+          $91 = {h: 1 /* Right */, a1: undefined};
+          break;
+         }
+         default: $91 = {h: 0 /* Left */, a1: 'Wire graph: internal tag payload must reference a record'};
+        }
+        const $96 = $97 => {
+         const $a1 = shape => {
+          switch(shape.h) {
+           case 15: /* ObjectValue */ {
+            switch(Prelude_Types_elem(csegen_44()(), csegen_681()(), $6.a1)(Prelude_Types_List_mapAppend({h: 0}, csegen_694()(), shape.a1))) {
+             case 1: return {h: 0 /* Left */, a1: 'Wire graph: internal tag collides with payload field'};
+             case 0: return {h: 1 /* Right */, a1: {a1: $75.a2.a1, a2: {h: 15 /* ObjectValue */, a1: {a1: {a1: $6.a1, a2: {a1: 0, a2: {h: 13 /* EnumValue */, a1: {a1: $75.a2.a1, a2: {h: 0}}}}}, a2: shape.a1}}}};
+            }
+           }
+           default: return {h: 0 /* Left */, a1: 'Wire graph: internal tag payload must be an object'};
+          }
+         };
+         return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $4, {a1: $2, a2: $3}, $75.a2.a2), $a1);
+        };
+        return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($91, $96);
+       };
+       return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($87, $8f);
+      }
+     }
+    };
+    const $6f = Prelude_Types_traverse_Traversable_List(csegen_26()(), $74, $6.a2);
+    return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($6f, expanded => ({h: 1 /* Right */, a1: {h: 11 /* TaggedValue */, a1: $6.a1, a2: expanded}}));
+   };
+  }
+  case 0: /* RecordBody */ {
+   return () => {
+    const $c8 = Prelude_Types_traverse_Traversable_List(csegen_26()(), $ce => JSON_Wire_Check_resolveField($0, $4, {a1: $2, a2: $3}, $1, $ce), $6.a2);
+    switch($c8.h) {
+     case 0: /* Left */ return {h: 0 /* Left */, a1: $c8.a1};
+     case 1: /* Right */ return {h: 1 /* Right */, a1: {h: 15 /* ObjectValue */, a1: $c8.a1}};
+    }
+   };
+  }
+ }
+}
+
+/* JSON.Wire.Check.case block in identifier */
+function JSON_Wire_Check_case__identifier_12789($0, $1) {
+ switch($1.h) {
+  case 0: /* nil */ return 0;
+  case undefined: /* cons */ {
+   let $3;
+   switch(Prelude_Types_isAlpha($1.a1)) {
+    case 1: {
+     $3 = 1;
+     break;
+    }
+    case 0: {
+     $3 = Prelude_EqOrd_x3dx3d_Eq_Char($1.a1, '_');
+     break;
+    }
+   }
+   switch($3) {
+    case 1: {
+     const $d = x => {
+      switch(Prelude_Types_isAlphaNum(x)) {
+       case 1: return 1;
+       case 0: return Prelude_EqOrd_x3dx3d_Eq_Char(x, '_');
+      }
+     };
+     return Prelude_Types_foldMap_Foldable_List(csegen_290(), $d, $1.a2);
+    }
+    case 0: return 0;
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.case block in expansionBudget,weight */
+function JSON_Wire_Check_case__expansionBudgetx2cweight_12166($0, $1, $2) {
+ switch($2.h) {
+  case 0: /* RecordBody */ return csegen_717()(Prelude_Types_List_mapAppend({h: 0}, $a => JSON_Wire_Check_expressionNodes($a.a3), $2.a2));
+  case 12: /* InternalTagBody */ return csegen_717()(Prelude_Types_List_mapAppend({h: 0}, $15 => JSON_Wire_Check_expressionNodes($15.a2.a2), $2.a2));
+  case 8: /* ClosedNullableBody */ return JSON_Wire_Check_expressionNodes($2.a3);
+  case 9: /* UntaggedBody */ return csegen_717()(Prelude_Types_List_mapAppend({h: 0}, $23 => JSON_Wire_Check_expressionNodes(Builtin_snd($23)), $2.a2));
+  default: return 0n;
+ }
+}
+
+/* JSON.Wire.Check.7385:12157:weight */
+function JSON_Wire_Check_n__7385_12157_weight($0, $1) {
+ return JSON_Wire_Check_case__expansionBudgetx2cweight_12166($0, $1, $1.a4);
+}
+
+/* JSON.Wire.Check.substitute : Nat -> List TypeExpr -> TypeExpr -> Either String TypeExpr */
+function JSON_Wire_Check_substitute($0, $1, $2) {
+ switch($2.h) {
+  case 4: /* Parameter */ {
+   const $4 = JSON_Wire_Check_argumentAt($2.a1, $1);
+   switch($4.h) {
+    case undefined: /* just */ return {h: 1 /* Right */, a1: $4.a1};
+    case 0: /* nothing */ return {h: 0 /* Left */, a1: 'Wire graph: missing parameter argument'};
+   }
+  }
+  default: {
+   switch($0) {
+    case 0n: {
+     switch($2.h) {
+      case 5: /* Reference */ return {h: 0 /* Left */, a1: 'Wire graph: parameter substitution depth exhausted'};
+      default: return {h: 1 /* Right */, a1: $2};
+     }
+    }
+    default: {
+     const $e = ($0-1n);
+     switch($2.h) {
+      case 5: /* Reference */ {
+       const $12 = Prelude_Types_traverse_Traversable_List(csegen_26()(), $18 => JSON_Wire_Check_substitute($e, $1, $18), $2.a2);
+       switch($12.h) {
+        case 0: /* Left */ return {h: 0 /* Left */, a1: $12.a1};
+        case 1: /* Right */ return {h: 1 /* Right */, a1: {h: 5 /* Reference */, a1: $2.a1, a2: $12.a1}};
+       }
+      }
+      default: return {h: 1 /* Right */, a1: $2};
+     }
+    }
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.shapeDepth : ValueShape -> Nat */
+function JSON_Wire_Check_shapeDepth($0) {
+ switch($0.h) {
+  case 14: /* NullableValue */ return (JSON_Wire_Check_shapeDepth($0.a1)+1n);
+  case 9: /* ArrayValue */ return (JSON_Wire_Check_shapeDepth($0.a1)+1n);
+  case 10: /* DynamicObjectValue */ return (JSON_Wire_Check_shapeDepth($0.a1)+1n);
+  case 11: /* TaggedValue */ return (JSON_Wire_Check_armDepth($0.a2)+1n);
+  case 12: /* UntaggedValue */ return (JSON_Wire_Check_armDepth($0.a2)+1n);
+  case 15: /* ObjectValue */ return (JSON_Wire_Check_fieldDepth($0.a1)+1n);
+  default: return 1n;
+ }
+}
+
+/* JSON.Wire.Check.resolveField : Nat -> List TypeDefinition -> List String -> List TypeExpr -> GraphField -> Either String (String,
+(Bool, ValueShape)) */
+function JSON_Wire_Check_resolveField($0, $1, $2, $3, $4) {
+ const $f = value => {
+  switch(value.h) {
+   case 5: /* Reference */ {
+    switch(value.a2.h) {
+     case undefined: /* cons */ {
+      switch(value.a2.a2.h) {
+       case 0: /* nil */ {
+        const $18 = d => {
+         const $19 = {h: 5 /* Reference */, a1: value.a1, a2: {a1: value.a2.a1, a2: {h: 0}}};
+         switch(d.a4.h) {
+          case 6: /* PresenceBody */ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $1, $2, value.a2.a1), shape => ({h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 1, a2: shape}}}));
+          case 10: /* UpdateBody */ {
+           const $35 = shape => {
+            switch(shape.h) {
+             case 15: /* ObjectValue */ return {h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 1, a2: {h: 14 /* NullableValue */, a1: shape}}}};
+             case 10: /* DynamicObjectValue */ return {h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 1, a2: {h: 14 /* NullableValue */, a1: shape}}}};
+             case 11: /* TaggedValue */ return {h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 1, a2: {h: 14 /* NullableValue */, a1: shape}}}};
+             default: return {h: 0 /* Left */, a1: 'Wire graph: update replacement must be an object'};
+            }
+           };
+           return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $1, $2, value.a2.a1), $35);
+          }
+          default: return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $1, $2, $19), shape => ({h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 0, a2: shape}}}));
+         }
+        };
+        return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_lookupDefinition($1, value.a1), $18);
+       }
+       default: return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $1, $2, value), shape => ({h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 0, a2: shape}}}));
+      }
+     }
+     case 0: /* nil */ {
+      const $6e = d => {
+       const $6f = {h: 5 /* Reference */, a1: value.a1, a2: {h: 0}};
+       switch(d.a4.h) {
+        case 11: /* AbsentNullBody */ return {h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 1, a2: {h: 8 /* NullValue */}}}};
+        default: return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $1, $2, $6f), shape => ({h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 0, a2: shape}}}));
+       }
+      };
+      return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_lookupDefinition($1, value.a1), $6e);
+     }
+     default: return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $1, $2, value), shape => ({h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 0, a2: shape}}}));
+    }
+   }
+   default: return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve($0, $1, $2, value), shape => ({h: 1 /* Right */, a1: {a1: $4.a2, a2: {a1: 0, a2: shape}}}));
+  }
+ };
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_substitute(JSON_Wire_Check_expressionDepth($4.a3), $3, $4.a3), $f);
+}
+
+/* JSON.Wire.Check.resolve : Nat -> List TypeDefinition -> List String -> TypeExpr -> Either String ValueShape */
+function JSON_Wire_Check_resolve($0, $1, $2, $3) {
+ switch($3.h) {
+  case 6: /* NullaryPayload */ return {h: 0 /* Left */, a1: 'Wire graph: nullary payload marker requires internal tag arm context'};
+  case 0: /* NaturalType */ return {h: 1 /* Right */, a1: {h: 0 /* NaturalValue */}};
+  case 2: /* Integer64Type */ return {h: 1 /* Right */, a1: {h: 2 /* Integer64Value */, a1: $3.a1}};
+  case 1: /* BoundNaturalType */ {
+   switch(Prelude_EqOrd_x3c_Ord_Integer($3.a1.a1, 0n)) {
+    case 1: return {h: 0 /* Left */, a1: 'Wire graph: numeric upper must be nonnegative'};
+    case 0: return {h: 1 /* Right */, a1: {h: 1 /* BoundNaturalValue */, a1: $3.a1}};
+   }
+  }
+  case 3: /* StringType */ return {h: 1 /* Right */, a1: {h: 3 /* StringValue */}};
+  case 4: /* Parameter */ return {h: 0 /* Left */, a1: 'Wire graph: unbound parameter'};
+  default: {
+   switch($0) {
+    case 0n: return {h: 0 /* Left */, a1: ('Wire graph: expansion exhausted: '+Prelude_Show_show_Show_x28Listx20x24ax29(csegen_722(), {a1: $3.a1, a2: $2}))};
+    default: {
+     const $1e = ($0-1n);
+     let $23;
+     switch(Prelude_Types_elem(csegen_44()(), csegen_681()(), $3.a1)($2)) {
+      case 1: {
+       $23 = {h: 0 /* Left */, a1: ('Wire graph: recursive reference: '+Prelude_Show_show_Show_x28Listx20x24ax29(csegen_722(), Prelude_Types_List_reverse({a1: $3.a1, a2: $2})))};
+       break;
+      }
+      case 0: {
+       $23 = {h: 1 /* Right */, a1: undefined};
+       break;
+      }
+     }
+     const $3b = $3c => {
+      const $42 = d => {
+       let $44;
+       switch(Prelude_Types_x2fx3d_Eq_Nat(Prelude_Types_List_lengthTR($3.a2), d.a3)) {
+        case 1: {
+         $44 = {h: 0 /* Left */, a1: ('Wire graph: parameter arity mismatch: '+$3.a1)};
+         break;
+        }
+        case 0: {
+         $44 = {h: 1 /* Right */, a1: undefined};
+         break;
+        }
+       }
+       return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($44, $51 => JSON_Wire_Check_case__resolve_13254($1e, $3.a2, $3.a1, $2, $1, d, d.a4)());
+      };
+      return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_lookupDefinition($1, $3.a1), $42);
+     };
+     return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($23, $3b);
+    }
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.payloadReferences : List Nat -> TypeExpr -> List (List Nat, String) */
+function JSON_Wire_Check_payloadReferences($0, $1) {
+ switch($1.h) {
+  case 5: /* Reference */ return {a1: {a1: $0, a2: $1.a1}, a2: JSON_Wire_Check_payloadArgumentReferences($0, 0n, $1.a2)};
+  default: return {h: 0};
+ }
+}
+
+/* JSON.Wire.Check.payloadArgumentReferences : List Nat -> Nat -> List TypeExpr -> List (List Nat, String) */
+function JSON_Wire_Check_payloadArgumentReferences($0, $1, $2) {
+ switch($2.h) {
+  case 0: /* nil */ return {h: 0};
+  case undefined: /* cons */ return Prelude_Types_List_tailRecAppend(JSON_Wire_Check_payloadReferences(Prelude_Types_List_tailRecAppend($0, {a1: $1, a2: {h: 0}}), $2.a1), JSON_Wire_Check_payloadArgumentReferences($0, ($1+1n), $2.a2));
+ }
+}
+
+/* JSON.Wire.Check.lookupDefinition : List TypeDefinition -> String -> Either String TypeDefinition */
+function JSON_Wire_Check_lookupDefinition($0, $1) {
+ const $2 = Data_List_find(d => Prelude_EqOrd_x3dx3d_Eq_String(d.a1, $1), $0);
+ switch($2.h) {
+  case undefined: /* just */ return {h: 1 /* Right */, a1: $2.a1};
+  case 0: /* nothing */ return {h: 0 /* Left */, a1: ('Wire graph: missing registry definition: '+$1)};
+ }
+}
+
+/* JSON.Wire.Check.identifier : String -> Bool */
+function JSON_Wire_Check_identifier($0) {
+ return JSON_Wire_Check_case__identifier_12789($0, Prelude_Types_fastUnpack($0));
+}
+
+/* JSON.Wire.Check.graphShape : CheckedGraph -> ValueShape */
+function JSON_Wire_Check_graphShape($0) {
+ return $0.a2;
+}
+
+/* JSON.Wire.Check.fieldDepth : List (String, (Bool, ValueShape)) -> Nat */
+function JSON_Wire_Check_fieldDepth($0) {
+ switch($0.h) {
+  case 0: /* nil */ return 0n;
+  case undefined: /* cons */ return Prelude_Types_max_Ord_Nat(JSON_Wire_Check_shapeDepth($0.a1.a2.a2), JSON_Wire_Check_fieldDepth($0.a2));
+ }
+}
+
+/* JSON.Wire.Check.expressionNodes : TypeExpr -> Nat */
+function JSON_Wire_Check_expressionNodes($0) {
+ switch($0.h) {
+  case 5: /* Reference */ return (JSON_Wire_Check_expressionListNodes($0.a2)+1n);
+  default: return 1n;
+ }
+}
+
+/* JSON.Wire.Check.expressionListNodes : List TypeExpr -> Nat */
+function JSON_Wire_Check_expressionListNodes($0) {
+ switch($0.h) {
+  case 0: /* nil */ return 0n;
+  case undefined: /* cons */ return (JSON_Wire_Check_expressionNodes($0.a1)+JSON_Wire_Check_expressionListNodes($0.a2));
+ }
+}
+
+/* JSON.Wire.Check.expressionListDepth : List TypeExpr -> Nat */
+function JSON_Wire_Check_expressionListDepth($0) {
+ switch($0.h) {
+  case 0: /* nil */ return 0n;
+  case undefined: /* cons */ return Prelude_Types_max_Ord_Nat(JSON_Wire_Check_expressionDepth($0.a1), JSON_Wire_Check_expressionListDepth($0.a2));
+ }
+}
+
+/* JSON.Wire.Check.expressionDepth : TypeExpr -> Nat */
+function JSON_Wire_Check_expressionDepth($0) {
+ switch($0.h) {
+  case 5: /* Reference */ return (JSON_Wire_Check_expressionListDepth($0.a2)+1n);
+  default: return 1n;
+ }
+}
+
+/* JSON.Wire.Check.expansionBudget : GraphDescription -> Nat */
+function JSON_Wire_Check_expansionBudget($0) {
+ return ((Prelude_Types_List_lengthTR($0.a3)+1n)+csegen_717()(Prelude_Types_List_mapAppend({h: 0}, $e => JSON_Wire_Check_n__7385_12157_weight($0, $e), $0.a3)));
+}
+
+/* JSON.Wire.Check.checkUntaggedKinds : List (String, ValueShape) -> Either String () */
+function JSON_Wire_Check_checkUntaggedKinds($0) {
+ let $2;
+ switch(JSON_Wire_Check_disjointArmKinds(0, $0)) {
+  case 1: {
+   $2 = {h: 1 /* Right */, a1: undefined};
+   break;
+  }
+  case 0: {
+   $2 = {h: 0 /* Left */, a1: 'Wire graph: untagged native representation overlap'};
+   break;
+  }
+ }
+ const $9 = $a => {
+  let $b;
+  switch(JSON_Wire_Check_disjointArmKinds(1, $0)) {
+   case 1: {
+    $b = () => ({h: 1 /* Right */, a1: undefined});
+    break;
+   }
+   case 0: {
+    $b = () => ({h: 0 /* Left */, a1: 'Wire graph: untagged canonical representation overlap'});
+    break;
+   }
+  }
+  return $b();
+ };
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($2, $9);
+}
+
+/* JSON.Wire.Check.checkGraphWithOrigins : GraphDescription -> List DefinitionOrigin -> Either String CheckedGraph */
+function JSON_Wire_Check_checkGraphWithOrigins($0, $1) {
+ const $6 = checked => {
+  const $7 = Prelude_Types_List_mapAppend({h: 0}, csegen_723(), $0.a3);
+  let $f;
+  switch(JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, $16 => $16.a1, $1))) {
+   case 1: {
+    $f = {h: 0 /* Left */, a1: 'Wire authoring: duplicate origin identity'};
+    break;
+   }
+   case 0: {
+    $f = {h: 1 /* Right */, a1: undefined};
+    break;
+   }
+  }
+  const $1b = $1c => {
+   let $1f;
+   switch(Prelude_Types_x2fx3d_Eq_Nat(Prelude_Types_List_lengthTR($1), Prelude_Types_List_lengthTR($7))) {
+    case 1: {
+     $1f = 1;
+     break;
+    }
+    case 0: {
+     switch(Prelude_Types_foldMap_Foldable_List(csegen_290(), origin => Prelude_Types_elem(csegen_44()(), csegen_681()(), origin.a1)($7), $1)) {
+      case 1: {
+       $1f = 0;
+       break;
+      }
+      case 0: {
+       $1f = 1;
+       break;
+      }
+     }
+     break;
+    }
+   }
+   let $1e;
+   switch($1f) {
+    case 1: {
+     $1e = {h: 0 /* Left */, a1: 'Wire authoring: origin coverage mismatch'};
+     break;
+    }
+    case 0: {
+     $1e = {h: 1 /* Right */, a1: undefined};
+     break;
+    }
+   }
+   const $3b = $3c => {
+    const $47 = origin => {
+     let $4a;
+     switch(Prelude_EqOrd_x3dx3d_Eq_String(origin.a2.a1, '')) {
+      case 1: {
+       $4a = 1;
+       break;
+      }
+      case 0: {
+       $4a = Prelude_EqOrd_x3dx3d_Eq_String(origin.a2.a3, '');
+       break;
+      }
+     }
+     let $49;
+     switch($4a) {
+      case 1: {
+       $49 = {h: 0 /* Left */, a1: 'Wire authoring: missing source provenance'};
+       break;
+      }
+      case 0: {
+       $49 = {h: 1 /* Right */, a1: undefined};
+       break;
+      }
+     }
+     const $58 = $59 => {
+      const $61 = definition => {
+       const $6d = $6e => {
+        const $77 = reference => {
+         let $78;
+         switch(Prelude_EqOrd_x3dx3d_Eq_String(reference.a4, '')) {
+          case 1: {
+           $78 = 1;
+           break;
+          }
+          case 0: {
+           switch(Prelude_Types_elem(csegen_44()(), csegen_681()(), reference.a5)($7)) {
+            case 1: {
+             $78 = 0;
+             break;
+            }
+            case 0: {
+             $78 = 1;
+             break;
+            }
+           }
+           break;
+          }
+         }
+         switch($78) {
+          case 1: return {h: 0 /* Left */, a1: 'Wire authoring: reference origin linkage mismatch'};
+          case 0: return {h: 1 /* Right */, a1: undefined};
+         }
+        };
+        const $6f = Prelude_Interfaces_traverse_(csegen_26()(), csegen_44()(), $77);
+        return $6f(Prelude_Types_List_tailRecAppend(Prelude_Types_foldMap_Foldable_List(csegen_56(), $93 => $93.a3, origin.a3), Prelude_Types_foldMap_Foldable_List(csegen_56(), csegen_702(), origin.a4)));
+       };
+       return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_case__checkGraphWithOrigins_16403($1, $0, checked, $7, origin, definition, definition.a4), $6d);
+      };
+      return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_lookupDefinition($0.a3, origin.a1), $61);
+     };
+     return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($49, $58);
+    };
+    const $3f = Prelude_Interfaces_traverse_(csegen_26()(), csegen_44()(), $47);
+    const $3e = $3f($1);
+    return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($3e, $a1 => ({h: 1 /* Right */, a1: {a1: $0, a2: JSON_Wire_Check_graphShape(checked), a3: $1}}));
+   };
+   return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($1e, $3b);
+  };
+  return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($f, $1b);
+ };
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_checkGraph($0), $6);
+}
+
+/* JSON.Wire.Check.checkGraph : GraphDescription -> Either String CheckedGraph */
+function JSON_Wire_Check_checkGraph($0) {
+ let $2;
+ switch(JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, csegen_723(), $0.a3))) {
+  case 1: {
+   $2 = {h: 0 /* Left */, a1: 'Wire graph: duplicate registry identity'};
+   break;
+  }
+  case 0: {
+   $2 = {h: 1 /* Right */, a1: undefined};
+   break;
+  }
+ }
+ const $e = $f => {
+  let $11;
+  switch(JSON_Wire_Check_duplicate(Prelude_Types_List_mapAppend({h: 0}, $18 => $18.a2, $0.a3))) {
+   case 1: {
+    $11 = {h: 0 /* Left */, a1: 'Wire graph: duplicate TS name'};
+    break;
+   }
+   case 0: {
+    $11 = {h: 1 /* Right */, a1: undefined};
+    break;
+   }
+  }
+  return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($11, $1f => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(Prelude_Interfaces_traverse_(csegen_26()(), csegen_44()(), $2b => JSON_Wire_Check_checkDefinition($2b))($0.a3), $31 => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(Prelude_Interfaces_traverse_(csegen_26()(), csegen_44()(), d => JSON_Wire_Check_case__checkGraph_16081($0, d, d.a4))($0.a3), $45 => Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29(JSON_Wire_Check_resolve(JSON_Wire_Check_expansionBudget($0), $0.a3, {h: 0}, {h: 5 /* Reference */, a1: $0.a1, a2: {h: 0}}), shape => JSON_Wire_Check_case__checkGraph_15939($0, shape, {a1: $0.a2, a2: shape})))));
+ };
+ return Prelude_Types_x3ex3ex3d_Monad_x28Eitherx20x24ex29($2, $e);
+}
+
+/* JSON.Wire.Check.checkDefinition : TypeDefinition -> Either String () */
+function JSON_Wire_Check_checkDefinition($0) {
+ switch(Prelude_EqOrd_x3dx3d_Eq_String($0.a1, '')) {
+  case 1: return {h: 0 /* Left */, a1: 'Wire graph: empty identity'};
+  case 0: {
+   switch(JSON_Wire_Check_identifier($0.a2)) {
+    case 1: return JSON_Wire_Check_case__casex20blockx20inx20casex20blockx20inx20checkDefinition_14999($0, $0.a4);
+    case 0: return {h: 0 /* Left */, a1: 'Wire graph: invalid TS name'};
+   }
+  }
+ }
+}
+
+/* JSON.Wire.Check.armDepth : List (String, ValueShape) -> Nat */
+function JSON_Wire_Check_armDepth($0) {
+ switch($0.h) {
+  case 0: /* nil */ return 0n;
+  case undefined: /* cons */ return Prelude_Types_max_Ord_Nat(JSON_Wire_Check_shapeDepth($0.a1.a2), JSON_Wire_Check_armDepth($0.a2));
  }
 }
 

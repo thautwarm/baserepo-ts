@@ -155,6 +155,7 @@ mutual
   resolve : Nat -> List TypeDefinition -> List String -> TypeExpr -> Either String ValueShape
   resolve _ _ _ NullaryPayload = Left "Wire graph: nullary payload marker requires internal tag arm context"
   resolve _ _ _ NaturalType = Right NaturalValue
+  resolve _ _ _ (Integer64Type kind) = Right (Integer64Value kind)
   resolve _ _ _ (BoundNaturalType rules) =
     if rules.upper < 0 then Left "Wire graph: numeric upper must be nonnegative"
     else Right (BoundNaturalValue rules)

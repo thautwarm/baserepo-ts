@@ -65,6 +65,8 @@ codecOptions checked =
 export
 reflectTypeExpr : TTImp -> Either String TypeExpr
 reflectTypeExpr (IPrimVal _ (PrT StringType)) = Right StringType
+reflectTypeExpr (IPrimVal _ (PrT Int64Type)) = Right (Integer64Type Signed64)
+reflectTypeExpr (IPrimVal _ (PrT Bits64Type)) = Right (Integer64Type Unsigned64)
 reflectTypeExpr (IVar _ name) =
   if name == "Prelude.Types.Nat" then Right NaturalType
   else Right (Reference (show name) [])
@@ -97,6 +99,8 @@ mutual
   fullApplicationKey NaturalType = "N"
   fullApplicationKey (BoundNaturalType _) = "N"
   fullApplicationKey StringType = "S"
+  fullApplicationKey (Integer64Type Signed64) = "I64"
+  fullApplicationKey (Integer64Type Unsigned64) = "U64"
   fullApplicationKey (Parameter index) = "P" ++ show index ++ ";"
   fullApplicationKey (Reference name args) =
     "R" ++ show (length name) ++ ":" ++ name ++ "[" ++ applicationKeys args ++ "]"
@@ -139,6 +143,8 @@ appliedTypes (arg :: rest) = arg.ttimp :: appliedTypes rest
 
 canonicalType : Elaboration m => Nat -> TTImp -> m TypeExpr
 canonicalType _ (IPrimVal _ (PrT StringType)) = pure StringType
+canonicalType _ (IPrimVal _ (PrT Int64Type)) = pure (Integer64Type Signed64)
+canonicalType _ (IPrimVal _ (PrT Bits64Type)) = pure (Integer64Type Unsigned64)
 canonicalType _ (IVar _ name) = if name == "Prelude.Types.Nat"
   then pure NaturalType else reference 1 (var name)
   where
@@ -157,6 +163,8 @@ canonicalType (S fuel) term = do
 
 sourceExpression : Elaboration m => Nat -> TTImp -> m TypeExpr
 sourceExpression _ (IPrimVal _ (PrT StringType)) = pure StringType
+sourceExpression _ (IPrimVal _ (PrT Int64Type)) = pure (Integer64Type Signed64)
+sourceExpression _ (IPrimVal _ (PrT Bits64Type)) = pure (Integer64Type Unsigned64)
 sourceExpression _ (IVar _ name) = pure (if name == "Prelude.Types.Nat"
   then NaturalType else Reference (show name) [])
 sourceExpression 0 _ = fail "Wire authoring: source type expression exhausted"
@@ -235,6 +243,8 @@ formalIndex name (first :: rest) = if name == first then Just 0 else S <$> forma
 mutual
   templateExpression : Nat -> List Name -> TTImp -> Elab TypeExpr
   templateExpression _ _ (IPrimVal _ (PrT StringType)) = pure StringType
+  templateExpression _ _ (IPrimVal _ (PrT Int64Type)) = pure (Integer64Type Signed64)
+  templateExpression _ _ (IPrimVal _ (PrT Bits64Type)) = pure (Integer64Type Unsigned64)
   templateExpression _ formals (IVar _ name) = case formalIndex name formals of
     Just index => pure (Parameter index)
     Nothing => if name == "Prelude.Types.Nat" then pure NaturalType else do
@@ -452,6 +462,7 @@ mutual
   closeReference _ _ NaturalType = pure NaturalType
   closeReference _ _ value@(BoundNaturalType _) = pure value
   closeReference _ _ StringType = pure StringType
+  closeReference _ _ value@(Integer64Type _) = pure value
   closeReference _ _ (Parameter _) = fail "Wire graph: unbound specialization parameter"
   closeReference 0 _ _ = fail "Wire graph: closed reference expansion exhausted"
   closeReference (S fuel) registrations expression@(Reference name args) =
@@ -485,6 +496,8 @@ mutual
   closedTypeTerm (BoundNaturalType _) = `(Nat)
   closedTypeTerm NaturalType = var "Prelude.Types.Nat"
   closedTypeTerm StringType = primVal (PrT StringType)
+  closedTypeTerm (Integer64Type Signed64) = primVal (PrT Int64Type)
+  closedTypeTerm (Integer64Type Unsigned64) = primVal (PrT Bits64Type)
   closedTypeTerm (Parameter _) = implicitFalse
   closedTypeTerm (Reference name args) = foldl app (varStr name) (closedTypeTerms args)
 
@@ -503,6 +516,8 @@ authoringArgument arg = do
   let lowered = case normalized of
         NaturalType => var "Prelude.Types.Nat"
         StringType => primVal (PrT StringType)
+        Integer64Type Signed64 => primVal (PrT Int64Type)
+        Integer64Type Unsigned64 => primVal (PrT Bits64Type)
         _ => typeExpressionSyntax original
   pure ({ type := lowered } arg, (original, normalized))
 
@@ -862,6 +877,8 @@ mutual
   exprTerm NaturalType = `(NaturalType)
   exprTerm (BoundNaturalType rules) = `(BoundNaturalType ~(numericTerm rules))
   exprTerm StringType = `(JSON.Wire.Description.StringType)
+  exprTerm (Integer64Type Signed64) = `(Integer64Type Signed64)
+  exprTerm (Integer64Type Unsigned64) = `(Integer64Type Unsigned64)
   exprTerm (Parameter index) = `(Parameter (Prelude.fromInteger ~(primVal (BI (cast index)))))
   exprTerm (Reference name arguments) = `(Reference ~(primVal (Str name)) ~(listOf (expressionTerms arguments)))
 

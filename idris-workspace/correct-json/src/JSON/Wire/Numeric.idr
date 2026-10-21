@@ -7,6 +7,19 @@ import Data.List
 
 %default total
 
+export
+integer64Bounds : Integer64Kind -> (Integer, Integer)
+integer64Bounds Signed64 = (-9223372036854775808, 9223372036854775807)
+integer64Bounds Unsigned64 = (0, 18446744073709551615)
+
+export
+integer64 : Integer64Kind -> JSON -> Either String Integer
+integer64 kind (JInteger value) =
+  let (lower, upper) = integer64Bounds kind in
+    if value >= lower && value <= upper then Right value
+    else Left "Wire: integer outside 64-bit range"
+integer64 _ _ = Left "Wire: expected a 64-bit integer literal"
+
 ||| Reuse the actual DFA, requiring exactly the retained number token. This
 ||| rejects forged leading/trailing whitespace and other JSON values too.
 export

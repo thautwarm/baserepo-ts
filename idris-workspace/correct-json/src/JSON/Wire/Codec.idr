@@ -340,6 +340,8 @@ readUntaggedArm arms json = mapFst (\error => ([], error))
 ||| All raw integers remain JInteger until replaced by decimal-token nodes.
 transform : Nat -> Bool -> ValueShape -> JSON -> Result JSON
 transform 0 _ _ _ = fail "Wire graph: checked traversal depth exhausted"
+transform (S _) _ (Integer64Value kind) value =
+  mapFst (\message => ([], message)) (map JInteger (integer64 kind value))
 transform (S fuel) toWire (UntaggedValue ExactlyOne arms) value = do
   let profile = if toWire then CanonicalRepresentation else NativeRepresentation
   shape <- mapFst (\error => ([], error)) (selectUntaggedShape profile (jsonRepresentationKind value) arms)

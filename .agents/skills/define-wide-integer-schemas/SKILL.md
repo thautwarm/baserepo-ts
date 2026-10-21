@@ -57,3 +57,15 @@ one value beyond each limit, negative u64, fractions, unsafe numbers, and unwant
 strings or booleans. Check optional/nullable fields when present. For interop work,
 test actual serializer round trips and compare normalized values and application
 types; identical re-encoded bytes are not required.
+
+## idris-json
+
+For Idris-owned models, use `Int64` / `Bits64` fields and `deriveJSON`; the wire
+generator emits annotated `I64` / `U64` bigint aliases. Generate Zod schemas from
+that output rather than duplicating the annotations or fields in TypeScript.
+
+JSON carries integer number literals. Use generated `stringifyWireJSON` and
+`parseWireJSON`; they serialize bigint exactly and read large integer literals
+from their original tokens. Parse decoded data through the generated Zod schema
+to normalize small numbers to bigint before calling the wire guard. Node 24.6+
+provides the required `JSON.rawJSON` and reviver `context.source` APIs.

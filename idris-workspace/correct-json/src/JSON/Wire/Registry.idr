@@ -85,6 +85,7 @@ mutual
   sameTypeExpression : TypeExpr -> TypeExpr -> Bool
   sameTypeExpression NullaryPayload NullaryPayload = True
   sameTypeExpression NaturalType NaturalType = True
+  sameTypeExpression (Integer64Type left) (Integer64Type right) = left == right
   sameTypeExpression (BoundNaturalType left) (BoundNaturalType right) = sameNumeric left right
   sameTypeExpression StringType StringType = True
   sameTypeExpression (Parameter left) (Parameter right) = left == right

@@ -21,6 +21,16 @@ Use `JSON.Derive` for record codecs. Set `unwrapUnary := False` when single-fiel
 records must remain objects. `decodeEither` and `encode` return `Either String`;
 handle errors rather than falling back to `show` or an empty document.
 
+Use `JSON.Wire.Authoring` when codecs and TypeScript types must share one checked
+wire graph. The [salutation generator](../salutation-types/src/Main.idr) renders
+types and validators from published roots; its library contract remains handwritten.
+
+`Int64` / `Bits64` fields, including nested and container occurrences, generate
+annotated TypeScript `I64` / `U64` bigint aliases. JSON uses integer literals;
+both Idris codecs and TS guards enforce the signed or unsigned 64-bit range.
+Use generated `stringifyWireJSON` / `parseWireJSON` instead of ordinary JSON calls,
+then apply the generated Zod schema to normalize small integers to bigint.
+
 Objects reject duplicate decoded keys and invalid Unicode scalar keys. Encoding
 rejects nonfinite numbers and invalid numeric tokens.
 

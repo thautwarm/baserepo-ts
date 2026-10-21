@@ -1,27 +1,22 @@
 import type { ZodType } from "zod";
+import type { PublicModels } from "./generated/public-models.ts";
 
-export interface Recipient {
-  name: string;
-}
+export type { PublicModels } from "./generated/public-models.ts";
 
-export interface GreetRequest {
-  recipients: Recipient[];
-}
+export type GreetRequest = PublicModels["greetRequest"];
 
-export interface Greeting {
-  message: string;
-}
+export type Recipient = GreetRequest["recipients"][number];
 
-export interface GreetResponse {
-  greetings: Greeting[];
-}
+export type GreetResponse = PublicModels["greetResponse"];
 
-export interface PublicModels {
-  greetRequest: GreetRequest;
-  greetResponse: GreetResponse;
-}
+export type Greeting = GreetResponse["greetings"][number];
+
+export type IntegerBatch = PublicModels["integerBatch"];
+
+export type Integers = IntegerBatch["values"];
 
 export interface ILibrary {
   greet(request: GreetRequest): GreetResponse;
+  roundtripIntegers(batch: IntegerBatch): IntegerBatch;
   schemas: { [K in keyof PublicModels]: ZodType<PublicModels[K]> };
 }

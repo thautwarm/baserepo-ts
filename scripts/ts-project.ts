@@ -11,6 +11,7 @@ interface TypeScriptProjectOptions {
   sources?: string;
   tests?: string;
   lintPaths?: string[];
+  schemaSource?: string;
 }
 
 interface TypeScriptProject extends Project {
@@ -38,27 +39,29 @@ export function tsProject({
   sources = `${directory}/src/**/*`,
   tests = `${directory}/src/**/*.test.ts`,
   lintPaths = [directory],
+  schemaSource,
 }: TypeScriptProjectOptions): TypeScriptProject {
   const root = new NM.Path(directory);
   const config = root.join("tsconfig.json").asPosix();
   const inputs = [root.join("package.json").asPosix(), config];
-  const types = root.join("src/types.ts").asPosix();
+  const types = schemaSource ?? root.join("src/types.ts").asPosix();
   const generated = dependencies.flatMap((project) => project.outputs);
 
-  const schema = existsSync(types)
-    ? NM.target({
-        name: root.join("src/schemas.ts").asPosix(),
-        deps: {
-          toolchain,
-          generator: "scripts/schemas.ts",
-          models: "scripts/schema-models.ts",
-          types,
-        },
-        async build({ deps, target }) {
-          await NM.Shell.runChecked([process.execPath, deps.generator, deps.types, target]);
-        },
-      })
-    : undefined;
+  const schema =
+    schemaSource || existsSync(types)
+      ? NM.target({
+          name: root.join("src/schemas.ts").asPosix(),
+          deps: {
+            toolchain,
+            generator: "scripts/schemas.ts",
+            models: "scripts/schema-models.ts",
+            types,
+          },
+          async build({ deps, target }) {
+            await NM.Shell.runChecked([process.execPath, deps.generator, deps.types, target]);
+          },
+        })
+      : undefined;
 
   const check = NM.target({
     name: `.nomake_files/${name}/check.checked`,

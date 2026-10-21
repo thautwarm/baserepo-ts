@@ -36,6 +36,7 @@ mutual
   encoder _ _ _ NullaryPayload _ = Left "Wire graph: nullary payload marker requires internal tag arm context"
   encoder _ _ _ (BoundNaturalType _) value = Right `(Right (JInteger (cast ~(value))))
   encoder _ _ _ NaturalType value = Right `(Right (JInteger (cast ~(value))))
+  encoder _ _ _ (Integer64Type _) value = Right `(Right (JInteger (cast ~(value))))
   encoder _ _ _ StringType value = Right `(Right (JString ~(value)))
   encoder _ _ _ (Parameter _) _ = Left "Wire graph: cannot encode unbound parameter"
   encoder 0 _ _ (Reference _ _) _ = Left "Wire graph: encoder expansion exhausted"
@@ -67,6 +68,8 @@ mutual
   decoder _ _ _ NullaryPayload = Left "Wire graph: nullary payload marker requires internal tag arm context"
   decoder _ _ _ (BoundNaturalType rules) = Right `(readBoundNatural ~(numericTerm rules))
   decoder _ _ _ NaturalType = Right `(readNatural)
+  decoder _ _ _ (Integer64Type Signed64) = Right `(fromJSON {a = Int64})
+  decoder _ _ _ (Integer64Type Unsigned64) = Right `(fromJSON {a = Bits64})
   decoder _ _ _ StringType = Right `(readString)
   decoder _ _ _ (Parameter _) = Left "Wire graph: cannot decode unbound parameter"
   decoder 0 _ _ (Reference _ _) = Left "Wire graph: decoder expansion exhausted"

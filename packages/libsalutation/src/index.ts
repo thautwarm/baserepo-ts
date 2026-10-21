@@ -1,5 +1,9 @@
 import type { ILibrary } from "@template/libsalutation/types";
-import { greet } from "./implementation.ts";
+import { greet, roundtripIntegers } from "./implementation.ts";
 import { publicModelsSchema } from "./schemas.ts";
 
-export const libsalutation: ILibrary = { greet, schemas: publicModelsSchema.shape };
+export const libsalutation: ILibrary = {
+  greet,
+  roundtripIntegers,
+  schemas: publicModelsSchema.shape,
+};

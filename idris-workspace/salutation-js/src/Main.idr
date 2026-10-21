@@ -8,8 +8,11 @@ raise : String -> String
 exchange : String -> String
 exchange input = either raise id (greetJSON input)
 
-%foreign "javascript:lambda: exchange => { globalThis[Symbol.for('monorepo.salutation')] = { exchange }; }"
-register : (String -> String) -> PrimIO ()
+integers : String -> String
+integers input = either raise id (integersJSON input)
+
+%foreign "javascript:lambda: (exchange, integers) => { globalThis[Symbol.for('monorepo.salutation')] = { exchange, integers }; }"
+register : (String -> String) -> (String -> String) -> PrimIO ()
 
 main : IO ()
-main = primIO (register exchange)
+main = primIO (register exchange integers)

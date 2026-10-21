@@ -10,6 +10,11 @@ type = "local"
 path = "salutation-js"
 ipkg = "salutation-js.ipkg"
 
+[custom.all.salutation-types]
+type = "local"
+path = "salutation-types"
+ipkg = "salutation-types.ipkg"
+
 [custom.all.correct-json]
 type = "local"
 path = "correct-json"

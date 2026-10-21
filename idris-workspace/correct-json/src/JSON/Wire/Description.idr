@@ -107,9 +107,18 @@ public export
 data Binary64Policy = ECMAScriptBinary64
 
 public export
+data Integer64Kind = Signed64 | Unsigned64
+
+public export
+Eq Integer64Kind where
+  Signed64 == Signed64 = True
+  Unsigned64 == Unsigned64 = True
+  _ == _ = False
+
+public export
 -- NullaryPayload is an internal-tag arm marker, never an Idris source type
 -- or a standalone field/template argument. It carries no value or reference.
-data TypeExpr = NaturalType | BoundNaturalType NumericBinding | StringType | Parameter Nat
+data TypeExpr = NaturalType | BoundNaturalType NumericBinding | Integer64Type Integer64Kind | StringType | Parameter Nat
               | Reference String (List TypeExpr) | NullaryPayload
 
 public export
@@ -203,7 +212,7 @@ record DefinitionOrigin where
 ||| A finite checked expansion drives runtime traversal and host guards. The
 ||| source graph remains available for names, references and manifest export.
 public export
-data ValueShape = NaturalValue | BoundNaturalValue NumericBinding | StringValue | ScalarValue
+data ValueShape = NaturalValue | BoundNaturalValue NumericBinding | Integer64Value Integer64Kind | StringValue | ScalarValue
                 | FiniteBinary64Value Binary64Policy
                 | BooleanValue | NeverValue
                 | NullValue
@@ -241,6 +250,7 @@ mutual
   representationKinds _ NeverValue = []
   representationKinds profile NaturalValue = numericKinds profile
   representationKinds profile (BoundNaturalValue _) = numericKinds profile
+  representationKinds _ (Integer64Value _) = [NumberKind]
   representationKinds profile (FiniteBinary64Value _) = numericKinds profile
   representationKinds _ StringValue = [StringKind]
   representationKinds _ ScalarValue = [StringKind]

@@ -4,6 +4,7 @@ import JSON
 import JSON.Wire.Description
 import JSON.Wire.Check
 import JSON.Wire.Codec
+import JSON.Wire.Numeric
 import Data.String
 
 public export
@@ -14,10 +15,39 @@ data TsProfile = CanonicalGraphSyntax | NativeJSONNumbers
 header : String
 header = """
 // Generated from one checked Idris wire description. Do not edit.
-// Canonical syntax view: integer values normalize to decimal token strings.
+// Canonical syntax view: Nat uses token nodes; Int64/Bits64 use bigint.
 // This is not the ExactJSON tree preserving original number lexemes.
 export type WireResult<T> = { readonly ok: true; readonly value: T }
   | { readonly ok: false; readonly error: string };
+/** @schema union([z.int(), z.bigint()]).transform(v => BigInt(v)).pipe(z.int64()) */
+export type I64 = bigint;
+/** @schema union([z.int(), z.bigint()]).transform(v => BigInt(v)).pipe(z.uint64()) */
+export type U64 = bigint;
+export function parseWireJSON(text: string): unknown {
+  return parseIntegerJSON(text, false);
+}
+function parseIntegerJSON(text: string, all: boolean): unknown {
+  return JSON.parse(text, (_key: string, value: unknown, context?: { source: string }) => {
+    if (typeof value === "number" && context !== undefined && /^-?(0|[1-9][0-9]*)$/.test(context.source)
+        && (all || value < -2147483648 || value > 4294967295)) return BigInt(context.source);
+    return value;
+  });
+}
+export function stringifyWireJSON(value: unknown): string {
+  const rawJSON: unknown = Reflect.get(JSON, "rawJSON");
+  const text = JSON.stringify(value, (_key: string, child: unknown) => {
+    if (typeof child !== "bigint") return child;
+    if (typeof rawJSON !== "function") throw new TypeError("Wire: JSON.rawJSON is required for bigint");
+    return rawJSON(child.toString());
+  });
+  if (text === undefined) throw new TypeError("Wire: value has no JSON representation");
+  return text;
+}
+function isInteger64(value: unknown, signed: boolean): value is bigint {
+  return typeof value === "bigint" && (signed
+    ? value >= -9223372036854775808n && value <= 9223372036854775807n
+    : value >= 0n && value <= 18446744073709551615n);
+}
 export interface NaturalSyntax { readonly kind: "integer"; readonly token: string }
 export interface FiniteBinary64Syntax { readonly kind: "finite-binary64"; readonly bits: string }
 export interface WireTransport {
@@ -40,7 +70,7 @@ function snapshotSyntax(value: unknown, depth: number, allowNumbers = false): Wi
   const ancestors = new WeakSet<object>();
   const captured = new WeakMap<object, Record<string, unknown> | unknown[]>();
   function capture(source: unknown, remaining: number): unknown {
-    if (source === null || typeof source === "string" || typeof source === "boolean" || (allowNumbers && typeof source === "number")) return source;
+    if (source === null || typeof source === "string" || typeof source === "boolean" || typeof source === "bigint" || (allowNumbers && typeof source === "number")) return source;
     if (typeof source !== "object" || source === null || remaining === 0 || ancestors.has(source)) {
       throw new TypeError("Wire: invalid syntax data");
     }
@@ -110,6 +140,7 @@ function snapshotSyntax(value: unknown, depth: number, allowNumbers = false): Wi
 function serializeCheckedSyntax(value: unknown): string {
   if (value === null) return "null";
   if (typeof value === "string") return JSON.stringify(value);
+  if (typeof value === "bigint") return value.toString();
   if (typeof value === "boolean") return value ? "true" : "false";
   if (Array.isArray(value)) {
     let text = "[";
@@ -173,9 +204,8 @@ function isFiniteBinary64Syntax(value: unknown): value is FiniteBinary64Syntax {
     && (BigInt("0x" + value.bits) & 0x7ff0000000000000n) !== 0x7ff0000000000000n;
 }
 function readResult<T>(text: string, check: (value: unknown) => value is T): WireResult<T> {
-  // Only reply transport is parsed here: exact numeric payloads have already
-  // crossed Idris checks and are strings in the syntax view or output text.
-  const reply: unknown = JSON.parse(text);
+  // Canonical syntax numbers are fixed-width integers; recover their exact tokens.
+  const reply: unknown = parseIntegerJSON(text, true);
   if (isRecord(reply) && reply.ok === false && typeof reply.error === "string") {
     return { ok: false, error: reply.error };
   }
@@ -302,6 +332,8 @@ shapeType (S fuel) (TaggedValue _ arms) = "(" ++ joinBy " | " (map (\(_, shape) 
 shapeType (S _) NaturalValue = "NaturalSyntax"
 shapeType (S _) (BoundNaturalValue _) = "NaturalSyntax"
 shapeType (S _) (FiniteBinary64Value ECMAScriptBinary64) = "FiniteBinary64Syntax"
+shapeType (S _) (Integer64Value Signed64) = "I64"
+shapeType (S _) (Integer64Value Unsigned64) = "U64"
 shapeType (S _) StringValue = "string"
 shapeType (S _) ScalarValue = "string"
 shapeType (S _) (EnumValue tags) = joinBy " | " (map quote tags)
@@ -314,7 +346,7 @@ shapeType (S fuel) (ObjectValue fields) = "{ " ++ concatMap (\(key, optional, sh
 kindGuard : RepresentationKind -> String -> String
 kindGuard NullKind value = value ++ " === null"
 kindGuard BooleanKind value = "typeof " ++ value ++ " === \"boolean\""
-kindGuard NumberKind value = "typeof " ++ value ++ " === \"number\""
+kindGuard NumberKind value = "(typeof " ++ value ++ " === \"number\" || typeof " ++ value ++ " === \"bigint\")"
 kindGuard StringKind value = "typeof " ++ value ++ " === \"string\""
 kindGuard ArrayKind value = "Array.isArray(" ++ value ++ ")"
 kindGuard ObjectKind value = "isRecord(" ++ value ++ ")"
@@ -332,6 +364,8 @@ shapeGuard (S fuel) (TaggedValue _ arms) value = "(" ++ joinBy " || " (map (\(_,
 shapeGuard (S _) NaturalValue value = "isNatural(" ++ value ++ ")"
 shapeGuard (S _) (BoundNaturalValue rules) value = "(isNatural(" ++ value ++ ") && BigInt(" ++ value ++ ".token) <= BigInt(" ++ quote (show rules.upper) ++ "))"
 shapeGuard (S _) (FiniteBinary64Value ECMAScriptBinary64) value = "isFiniteBinary64Syntax(" ++ value ++ ")"
+shapeGuard (S _) (Integer64Value Signed64) value = "isInteger64(" ++ value ++ ", true)"
+shapeGuard (S _) (Integer64Value Unsigned64) value = "isInteger64(" ++ value ++ ", false)"
 shapeGuard (S _) StringValue value = "typeof " ++ value ++ " === \"string\""
 shapeGuard (S _) ScalarValue value = "isScalar(" ++ value ++ ")"
 shapeGuard (S _) (EnumValue tags) value = "(" ++ joinBy " || " (map (\tag => value ++ " === " ++ quote tag) tags) ++ ")"
@@ -384,6 +418,13 @@ numericJSON rules = mObject
    ("negativeZero", mString (case rules.negativeZero of NormalizeNegativeZero => "normalize"; RejectNegativeZero => "reject")),
    ("nativeView", mString (case rules.nativeView of CanonicalOnly => "canonical-only"; SafeIntegerNumber => "safe-integer-number"))]
 
+integer64JSON : Integer64Kind -> Either String JSON
+integer64JSON kind =
+  let (lower, upper) = integer64Bounds kind in
+    mObject [("kind", mString (if kind == Signed64 then "i64" else "u64")),
+      ("minimum", mString (show lower)), ("maximum", mString (show upper)),
+      ("inputLexical", mString "integer-literal"), ("nativeView", mString "bigint")]
+
 binary64JSON : Binary64Policy -> Either String JSON
 binary64JSON ECMAScriptBinary64 = mObject
   [("kind", mString "finite-binary64"), ("interpretation", mString "ecmascript-number-value"),
@@ -398,6 +439,7 @@ mutual
   exprJSON (BoundNaturalType rules) = numericJSON rules
   exprJSON NullaryPayload = mObject [("kind", mString "absent-payload")]
   exprJSON NaturalType = mObject [("kind", mString "natural")]
+  exprJSON (Integer64Type kind) = integer64JSON kind
   exprJSON StringType = mObject [("kind", mString "string")]
   exprJSON (Parameter index) = mObject [("parameter", mInteger (cast index))]
   exprJSON (Reference name arguments) = mObject [("ref", mString name), ("arguments", mArray (expressionsJSON arguments))]
@@ -456,6 +498,7 @@ shapeJSON (S fuel) direction (TaggedValue key arms) = mObject [("kind", mString 
 shapeJSON (S _) _ (BoundNaturalValue rules) = numericJSON rules
 shapeJSON (S _) _ (FiniteBinary64Value policy) = binary64JSON policy
 shapeJSON (S _) direction NaturalValue = kindJSON direction Natural
+shapeJSON (S _) _ (Integer64Value kind) = integer64JSON kind
 shapeJSON (S _) _ StringValue = kindJSON Input Text
 shapeJSON (S _) _ ScalarValue = mObject [("kind", mString "string"), ("stringDomain", mString "unicode-scalars")]
 shapeJSON (S _) _ (EnumValue tags) = mObject [("kind", mString "string-enum"), ("tags", mArray (map mString tags))]
@@ -562,6 +605,7 @@ function representationKinds(shape: NativeShape, toSyntax: boolean): readonly st
   switch (shape.kind) {
     case "natural": case "bounded-natural": case "finite-binary64":
       return [toSyntax ? "number" : "object"];
+    case "i64": case "u64": return ["bigint"];
     case "string": case "string-enum": return ["string"];
     case "null": return ["null"];
     case "boolean": return ["boolean"];
@@ -588,6 +632,10 @@ function convertNative(shape: NativeShape, value: unknown, toSyntax: boolean): u
       const arm = matches[0];
       if (arm === undefined) throw new TypeError("Wire: no unique untagged representation");
       return convertNative(arm.value, value, toSyntax);
+    }
+    case "i64": case "u64": {
+      if (isInteger64(value, shape.kind === "i64")) return value;
+      throw new TypeError("Wire: invalid 64-bit integer");
     }
     case "finite-binary64": {
       // Number/DataView implement the explicitly selected ECMAScript policy.

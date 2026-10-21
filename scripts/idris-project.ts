@@ -5,6 +5,7 @@ interface IdrisProjectOptions {
   name: string;
   dependencies?: Project[];
   javascript?: string;
+  typescript?: Record<string, string>;
   test?: boolean;
 }
 
@@ -12,11 +13,13 @@ export function idrisProject({
   name,
   dependencies = [],
   javascript,
+  typescript,
   test = false,
 }: IdrisProjectOptions): Project {
   if (test && !javascript) throw new Error(`Idris test ${name} needs a JavaScript executable`);
-  const check = NM.target({
-    name: javascript ?? `.nomake_files/idris-${name}/check.checked`,
+  const executable = javascript ?? (typescript && `.nomake_files/idris-${name}/${name}.mjs`);
+  const compiled = NM.target({
+    name: executable ?? `.nomake_files/idris-${name}/check.checked`,
     deps: () => ({
       tooling: [
         "make.ts",
@@ -33,7 +36,7 @@ export function idrisProject({
       dependencies: dependencies.map((project) => project.check),
     }),
     async build({ deps, target }) {
-      if (javascript) {
+      if (executable) {
         await NM.Shell.runChecked([process.execPath, deps.generator, name, target]);
       } else {
         await NM.Shell.runChecked([process.execPath, "scripts/idris.ts", "pack", "install", name]);
@@ -43,6 +46,28 @@ export function idrisProject({
       }
     },
   });
+
+  const outputs = typescript
+    ? Object.entries(typescript).map(([root, output]) =>
+        NM.target({
+          name: output,
+          deps: { generator: compiled },
+          async build({ deps, target }) {
+            const source = await NM.Shell.runChecked([process.execPath, deps.generator, root], {
+              stdout: "capture",
+            });
+            const file = new NM.Path(target);
+            await file.parent.mkdir({ parents: true, onError: "existOk" });
+            await file.writeText(`${source.trimEnd()}\n`);
+          },
+        }),
+      )
+    : javascript
+      ? [compiled]
+      : [];
+  const check = typescript
+    ? NM.target({ name: `typescript:idris:${name}`, virtual: true, deps: outputs })
+    : compiled;
 
   const tests = test
     ? NM.target({
@@ -63,5 +88,5 @@ export function idrisProject({
   if (test) NM.target({ name: `test:idris:${name}`, virtual: true, deps: [tests] });
   NM.target({ name: `idris:${name}`, virtual: true, deps: [check] });
   NM.target({ name: `check:idris:${name}`, virtual: true, deps: [check] });
-  return { outputs: javascript ? [check] : [], check, tests };
+  return { outputs, check, tests };
 }

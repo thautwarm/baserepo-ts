@@ -36,6 +36,17 @@ const salutationJs = idrisProject({
   dependencies: [salutation],
   javascript: "packages/libsalutation/src/generated/salutation-js.mjs",
 });
+const salutationTypes = idrisProject({
+  name: "salutation-types",
+  dependencies: [salutation],
+  typescript: {
+    GreetRequest: "packages/libsalutation/src/generated/greet-request.ts",
+    GreetResponse: "packages/libsalutation/src/generated/greet-response.ts",
+    IntegerBatch: "packages/libsalutation/src/generated/integer-batch.ts",
+    IntegerBatchNative: "packages/libsalutation/src/generated/integer-batch-native.ts",
+    PublicModels: "packages/libsalutation/src/generated/public-models.ts",
+  },
+});
 const greeting = tsProject({ name: "libgreeting", type: "library" });
 const libarithmetic = tsProject({
   name: "libarithmetic",
@@ -45,7 +56,8 @@ const libarithmetic = tsProject({
 const libsalutation = tsProject({
   name: "libsalutation",
   type: "library",
-  dependencies: [salutationJs],
+  dependencies: [salutationJs, salutationTypes],
+  schemaSource: "packages/libsalutation/src/generated/public-models.ts",
 });
 const cli = tsProject({ name: "cli", type: "app", dependencies: [greeting] });
 const scripts = tsProject({
@@ -64,7 +76,15 @@ const scripts = tsProject({
   ],
 });
 const tsProjects = [greeting, libarithmetic, libsalutation, cli, scripts];
-const projects = [...tsProjects, arithmetic, json, jsonTests, salutation, salutationJs];
+const projects = [
+  ...tsProjects,
+  arithmetic,
+  json,
+  jsonTests,
+  salutation,
+  salutationJs,
+  salutationTypes,
+];
 
 // #endregion
 
