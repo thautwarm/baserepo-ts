@@ -19,26 +19,26 @@ await checkToolchains(["tsc", "biome", "cargo", "docker"]);
 
 // #region Projects
 
-const arithmetic = rustProject({
+const pArithmetic = rustProject({
   name: "arithmetic",
   wasm: "packages/libarithmetic/src/generated/wasm-bytes.ts",
 });
-const json = idrisProject({ name: "correct-json" });
-const jsonTests = idrisProject({
+const pJson = idrisProject({ name: "correct-json" });
+const pJsonTests = idrisProject({
   name: "correct-json-tests",
-  dependencies: [json],
+  dependencies: [pJson],
   javascript: ".nomake_files/idris-correct-json-tests/correct-json-tests.mjs",
   test: true,
 });
-const salutation = idrisProject({ name: "salutation", dependencies: [json] });
-const salutationJs = idrisProject({
+const pSalutation = idrisProject({ name: "salutation", dependencies: [pJson] });
+const pSalutationJs = idrisProject({
   name: "salutation-js",
-  dependencies: [salutation],
+  dependencies: [pSalutation],
   javascript: "packages/libsalutation/src/generated/salutation-js.mjs",
 });
-const salutationTypes = idrisProject({
+const pSalutationTypes = idrisProject({
   name: "salutation-types",
-  dependencies: [salutation],
+  dependencies: [pSalutation],
   typescript: {
     GreetRequest: "packages/libsalutation/src/generated/greet-request.ts",
     GreetResponse: "packages/libsalutation/src/generated/greet-response.ts",
@@ -47,20 +47,20 @@ const salutationTypes = idrisProject({
     PublicModels: "packages/libsalutation/src/generated/public-models.ts",
   },
 });
-const greeting = tsProject({ name: "libgreeting", type: "library" });
-const libarithmetic = tsProject({
+const pLibGreeting = tsProject({ name: "libgreeting", type: "library" });
+const pLibArithmetic = tsProject({
   name: "libarithmetic",
   type: "library",
-  dependencies: [arithmetic],
+  dependencies: [pArithmetic],
 });
-const libsalutation = tsProject({
+const pLibSalutation = tsProject({
   name: "libsalutation",
   type: "library",
-  dependencies: [salutationJs, salutationTypes],
+  dependencies: [pSalutationJs, pSalutationTypes],
   schemaSource: "packages/libsalutation/src/generated/public-models.ts",
 });
-const cli = tsProject({ name: "cli", type: "app", dependencies: [greeting] });
-const scripts = tsProject({
+const pCli = tsProject({ name: "cli", type: "app", dependencies: [pLibGreeting] });
+const pScripts = tsProject({
   name: "scripts",
   directory: ".",
   sources: "scripts/**/*",
@@ -75,15 +75,15 @@ const scripts = tsProject({
     "idris-workspace/toolchain.json",
   ],
 });
-const tsProjects = [greeting, libarithmetic, libsalutation, cli, scripts];
+const tsProjects = [pLibGreeting, pLibArithmetic, pLibSalutation, pCli, pScripts];
 const projects = [
   ...tsProjects,
-  arithmetic,
-  json,
-  jsonTests,
-  salutation,
-  salutationJs,
-  salutationTypes,
+  pArithmetic,
+  pJson,
+  pJsonTests,
+  pSalutation,
+  pSalutationJs,
+  pSalutationTypes,
 ];
 
 // #endregion
@@ -93,31 +93,31 @@ const projects = [
 NM.target({
   name: "schema",
   virtual: true,
-  deps: tsProjects.flatMap((project) => (project.schema ? [project.schema] : [])),
+  deps: tsProjects.flatMap((p) => (p.schema ? [p.schema] : [])),
 });
 
 NM.target({
   name: "check",
   virtual: true,
-  deps: projects.map((project) => project.check),
+  deps: projects.map((p) => p.check),
 });
 
 NM.target({
   name: "idd:check",
   virtual: true,
-  deps: tsProjects.filter((project) => project.type === "library").map((project) => project.check),
+  deps: tsProjects.filter((p) => p.type === "library").map((p) => p.check),
 });
 
 NM.target({
   name: "tests",
   virtual: true,
-  deps: projects.map((project) => project.tests),
+  deps: projects.map((p) => p.tests),
 });
 
 NM.target({
   name: "lint",
   virtual: true,
-  deps: tsProjects.map((project) => project.lint),
+  deps: tsProjects.map((p) => p.lint),
 });
 NM.target({ name: "verify", virtual: true, deps: ["check", "tests", "lint"] });
 
