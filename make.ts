@@ -75,7 +75,14 @@ const pScripts = tsProject({
     "idris-workspace/toolchain.json",
   ],
 });
-const tsProjects = [pLibGreeting, pLibArithmetic, pLibSalutation, pCli, pScripts];
+// biome-ignore format: Keep one project per line.
+const tsProjects = [
+  pLibGreeting,
+  pLibArithmetic,
+  pLibSalutation,
+  pCli,
+  pScripts,
+];
 const projects = [
   ...tsProjects,
   pArithmetic,
