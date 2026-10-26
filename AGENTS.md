@@ -43,6 +43,7 @@ Libraries use the structure below. Node and web apps may use `types.ts` and gene
 - Type declarations, `import type`, and `export type` only; no runtime code.
 - Use Interface-Driven Design (IDD): define models and module contracts before implementations; do not infer contracts from implementations.
 - Provide all public types callers need. Keep implementation-only helper types private.
+- If schema generation does not support `keyof Model`, declare an explicit string-literal union and prove in type tests that it is a subtype of `keyof Model`. Check the reverse relation only when every key is required; valid subsets need not cover all keys. For a constant string array, use `as const satisfies ReadonlyArray<keyof Model>` to reject extra or misspelled keys, then check completeness separately when required. Keep runtime arrays in tests or implementations; `types.ts` remains declaration-only, and public contracts must not be inferred from runtime constants.
 
 ### Generated Schemas: `<package>/src/schemas.ts`
 
