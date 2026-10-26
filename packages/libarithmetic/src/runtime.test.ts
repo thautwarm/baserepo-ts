@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { decode, encode } from "@std/msgpack";
-import { libarithmetic } from "@template/libarithmetic";
+import { libarithmetic } from "./index.ts";
 import { exchange } from "./runtime.ts";
 
 test("exchanges i64 MessagePack requests and replies with Rust Wasm", () => {
