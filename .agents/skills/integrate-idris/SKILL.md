@@ -12,17 +12,19 @@ through ordinary `packages/lib*/` TypeScript libraries and their `ILibrary` cont
 
 Run Idris and pack in Docker through `scripts/idris.ts`; do not use host installs.
 The helper mounts the checkout at `/work`, works in `/work/idris-workspace`, and
-uses the image and platform pinned in `idris-workspace/toolchain.json`.
+uses the multi-arch image pinned in `idris-workspace/toolchain.json`; Docker
+selects the platform matching the host.
 
 ```sh
 pnpm exec node scripts/idris.ts idris2 --version
 pnpm exec node scripts/idris.ts pack --cg javascript build salutation-js
 ```
 
-The image targets `linux/arm64`; other hosts need ARM64 container execution or a
-separately verified image. A Docker volume scoped to this checkout and image
-retains compiler/library installs. Mount only pack's install directory; leave its
-collection metadata and source cache available from the image.
+The container runs as the host user so build output through the bind mount stays
+owned by the host. On first use the helper copies the image's home directory
+(pack's source cache, collection metadata, and installed libraries) into
+`.nomake_files/idris-home/` and mounts it as the container's home. This keeps the
+compiler and common libraries warm across runs.
 
 ## library-and-entry-point
 
