@@ -15,7 +15,7 @@ Provisioning removes this marked section.
 ## Workspace
 
 - `apps/*`: applications.
-- `packages/lib*` (`@template/lib*`): reusable libraries consumed by workspace packages and apps.
+- `packages/lib*`: reusable libraries consumed by workspace packages and apps.
 - `packages/tsconfig`: shared TypeScript configuration.
 - `rust-workspace/*`: Rust libraries compiled to Wasm for TypeScript consumers.
 - `idris-workspace/*`: Idris libraries and JavaScript entry points. Run Idris and pack in Docker through `scripts/idris.ts`.
