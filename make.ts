@@ -1,8 +1,8 @@
 import * as NM from "@nomake/core";
+import { denoDesktopProject } from "./scripts/deno-desktop-project.ts";
 import { denoTypesProject } from "./scripts/deno-types-project.ts";
-import { desktopProject } from "./scripts/desktop-project.ts";
-import { frontendProject } from "./scripts/frontend-project.ts";
 import { idrisProject } from "./scripts/idris-project.ts";
+import { reactProject } from "./scripts/react-project.ts";
 import { rustProject } from "./scripts/rust-project.ts";
 import { checkToolchains } from "./scripts/toolchains.ts";
 import { tsProject } from "./scripts/ts-project.ts";
@@ -64,11 +64,16 @@ const pLibSalutation = tsProject({
 });
 const pCli = tsProject({ name: "cli", type: "app", dependencies: [pLibGreeting] });
 const pDenoTypes = denoTypesProject("apps/desktop/toolchain.json");
-const pFrontend = frontendProject({ name: "frontend", dependencies: [pLibGreeting] });
-const pDesktop = desktopProject({
+const pFrontend = reactProject({ name: "frontend", dependencies: [pLibGreeting] });
+const pDesktop = denoDesktopProject({
   name: "desktop",
-  frontend: pFrontend.build,
   dependencies: [pLibGreeting, pDenoTypes],
+  resources: {
+    directory: pFrontend.build,
+    files: { "/tray.png": "apps/desktop/assets/icon.png" },
+  },
+  targets: ["macos", "windows", "linux"],
+  args: ["--allow-all"],
 });
 const pScripts = tsProject({
   name: "scripts",

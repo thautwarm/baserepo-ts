@@ -1,6 +1,12 @@
 export const desktopPlatforms = ["macos", "windows", "linux"] as const;
 export type DesktopPlatform = (typeof desktopPlatforms)[number];
 type Architecture = "arm64" | "x64";
+export type DesktopPackageFormat = "app" | "dmg" | "msi" | "appimage" | "deb" | "rpm" | "directory";
+export interface DesktopPackageFormats {
+  macos?: "app" | "dmg";
+  windows?: "msi" | "directory";
+  linux?: "appimage" | "deb" | "rpm" | "directory";
+}
 
 export function parseDesktopPlatform(value: string | undefined): DesktopPlatform {
   switch (value) {
@@ -48,17 +54,53 @@ export function desktopTarget(platform: DesktopPlatform, hostArchitecture: strin
   }
 }
 
-export function desktopFilenames(platform: DesktopPlatform, name: string) {
+export function defaultDesktopFormat(platform: DesktopPlatform): DesktopPackageFormat {
   switch (platform) {
-    // Deno 2.9.8 appends .app to the output stem.
     case "macos":
-      return { output: name, artifact: `${name}.app` };
+      return "app";
     case "windows":
-      return { output: `${name}.msi`, artifact: `${name}.msi` };
+      return "msi";
     case "linux":
-      return { output: `${name}.AppImage`, artifact: `${name}.AppImage` };
+      return "appimage";
     default:
       return unreachable(platform);
+  }
+}
+
+export function parseDesktopFormat(value: string | undefined): DesktopPackageFormat {
+  switch (value) {
+    case "app":
+    case "dmg":
+    case "msi":
+    case "appimage":
+    case "deb":
+    case "rpm":
+    case "directory":
+      return value;
+    default:
+      throw new Error(`Unsupported desktop package format: ${value}`);
+  }
+}
+
+export function desktopFilenames(format: DesktopPackageFormat, name: string) {
+  switch (format) {
+    // Deno 2.9.8 appends .app to the output stem.
+    case "app":
+      return { output: name, artifact: `${name}.app` };
+    case "dmg":
+      return { output: `${name}.dmg`, artifact: `${name}.dmg` };
+    case "msi":
+      return { output: `${name}.msi`, artifact: `${name}.msi` };
+    case "appimage":
+      return { output: `${name}.AppImage`, artifact: `${name}.AppImage` };
+    case "deb":
+      return { output: `${name}.deb`, artifact: `${name}.deb` };
+    case "rpm":
+      return { output: `${name}.rpm`, artifact: `${name}.rpm` };
+    case "directory":
+      return { output: name, artifact: name };
+    default:
+      return unreachable(format);
   }
 }
 

@@ -1,9 +1,32 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, extname, join } from "node:path";
 
-const [directory, icon, output, ...extra] = process.argv.slice(2);
-if (!directory || !icon || !output || extra.length)
-  throw new Error("Expected <frontend-dist> <tray-icon> <output-module>");
+const [output, ...options] = process.argv.slice(2);
+if (!output)
+  throw new Error("Expected <output-module> [--directory <path>] [--file <url> <path>]...");
+const directories: string[] = [];
+const files: [string, string][] = [];
+for (let index = 0; index < options.length; ) {
+  const option = options[index++];
+  switch (option) {
+    case "--directory": {
+      const path = options[index++];
+      if (!path) throw new Error("Missing --directory path");
+      directories.push(path);
+      break;
+    }
+    case "--file": {
+      const url = options[index++];
+      const path = options[index++];
+      if (!url?.startsWith("/") || !path)
+        throw new Error("Expected --file <absolute-url-path> <file-path>");
+      files.push([url, path]);
+      break;
+    }
+    default:
+      throw new Error(`Unknown asset option ${option}`);
+  }
+}
 const contentTypes: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
@@ -41,9 +64,8 @@ async function walk(path: string, prefix: string) {
     else throw new Error(`Unsupported asset entry ${file}`);
   }
 }
-await walk(directory, "");
-if (!entries.has("/index.html")) throw new Error("Frontend output has no index.html");
-await add(icon, "/tray.png");
+for (const directory of directories) await walk(directory, "");
+for (const [url, path] of files) await add(path, url);
 await mkdir(dirname(output), { recursive: true });
 await writeFile(
   output,

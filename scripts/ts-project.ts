@@ -8,6 +8,7 @@ interface TypeScriptProjectOptions {
   type?: "app" | "library";
   dependencies?: Project[];
   directory?: string;
+  tsconfig?: string;
   sources?: string;
   tests?: string;
   lintPaths?: string[];
@@ -37,6 +38,7 @@ export function tsProject({
   type,
   dependencies = [],
   directory = type ? `${type === "library" ? "packages" : "apps"}/${name}` : name,
+  tsconfig: projectConfig,
   sources = `${directory}/src/**/*`,
   tests = `${directory}/src/**/*.test.ts`,
   lintPaths = [directory],
@@ -44,7 +46,7 @@ export function tsProject({
   configInputs = [],
 }: TypeScriptProjectOptions): TypeScriptProject {
   const root = new NM.Path(directory);
-  const config = root.join("tsconfig.json").asPosix();
+  const config = projectConfig ?? root.join("tsconfig.json").asPosix();
   const inputs = [root.join("package.json").asPosix(), config];
   const types = schemaSource ?? root.join("src/types.ts").asPosix();
   const generated = dependencies.flatMap((project) => project.outputs);

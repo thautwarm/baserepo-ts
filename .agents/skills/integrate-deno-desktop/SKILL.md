@@ -92,7 +92,7 @@ Register the frontend, resource generation and desktop packaging in `make.ts`, u
 the [nomake](../nomake/SKILL.md) workflow. Keep subprocesses and file generation in
 focused Node TypeScript helpers under `scripts/`.
 
-Reuse `frontendProject()`, `denoTypesProject()` and `desktopProject()`. Their file
+Reuse `reactProject()`, `denoTypesProject()` and `denoDesktopProject()`. Their file
 targets build the browser output, generate the embedded assets/declarations, check
 the desktop sources, and package the TypeScript entry directly. Platform packaging
 is explicit; `pnpm verify` includes the app checks and resource generation.

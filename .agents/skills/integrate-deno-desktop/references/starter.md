@@ -34,13 +34,36 @@ desktop backend.
 When the backend reports no native tray, the window and its Quit action remain
 available. Linux tray integration depends on the desktop environment.
 
-The build graph is declared in `make.ts`, using `frontendProject()`,
-`denoTypesProject()` and `desktopProject()` from `scripts/`:
+The build graph is declared in `make.ts`, using `reactProject()`,
+`denoTypesProject()` and `denoDesktopProject()` from `scripts/`:
 
 ```text
 frontend check → Vite dist → embedded asset module → desktop check → platform package
                             Deno declarations ────────┘
 ```
+
+`make.ts` declares relationships and project choices. The helpers keep build
+steps and conventions:
+
+- `reactProject({ name })` defaults to `apps/<name>`, its browser tsconfig, Vite
+  config discovery and `dist/`. It checks `tsconfig.node.json` when present;
+  `toolingTsconfig: false` opts out. Override `directory`, `tsconfig`, `sources`,
+  `viteConfig`, `output` or `inputs` for a different layout. Vite receives the
+  declared output directory explicitly.
+- `denoDesktopProject` uses conventional app/entry/config/toolchain locations and
+  `artifacts/<name>` by default. Override those paths when needed. `targets`
+  declares the selected platforms; `args` belongs to that application's example.
+  `formats` can override the conventional app/MSI/AppImage outputs, for example
+  `{ linux: "deb" }` or `{ windows: "directory" }`.
+- `resources` is optional. Its `directory` can be a producer target such as the
+  React build; `files` maps URL paths to extra files or producer targets. The
+  helper owns embedding and dependency ordering. No frontend, HTML document or
+  tray image is required by the rule itself. `resources.output` overrides the
+  generated module location.
+
+The included desktop app chooses to use the React output and maps its tray image
+to `/tray.png`. These choices stay in its declaration, not in the generic rule.
+The asset generator also accepts file-only resource sets.
 
 NoMake builds the sibling frontend explicitly before invoking
 `deno desktop --config deno.json src/main.ts` from `apps/desktop`. Deno resolves the

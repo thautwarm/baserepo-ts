@@ -20,9 +20,12 @@ test("resource generation preserves binary bytes and stable URL keys", async () 
     const generate = () =>
       execFileSync(process.execPath, [
         fileURLToPath(new URL("./embed-desktop-assets.ts", import.meta.url)),
-        input,
-        icon,
         output,
+        "--directory",
+        input,
+        "--file",
+        "/tray.png",
+        icon,
       ]);
     generate();
     const first = await readFile(output, "utf8");
@@ -34,7 +37,21 @@ test("resource generation preserves binary bytes and stable URL keys", async () 
     assert.equal(assets.get("/assets/font%20name.woff2").contentType, "font/woff2");
     assert.deepEqual(assets.get("/tray.png").body, bytes);
     await rm(join(input, "index.html"));
-    assert.throws(generate, /Frontend output has no index.html/);
+    generate();
+    const withoutHtml = await import(`${pathToFileURL(output).href}?without-html`);
+    assert.equal(withoutHtml.assets.has("/index.html"), false);
+    assert.deepEqual(withoutHtml.assets.get("/tray.png").body, bytes);
+    const standalone = join(root, "generated/files-only.ts");
+    execFileSync(process.execPath, [
+      fileURLToPath(new URL("./embed-desktop-assets.ts", import.meta.url)),
+      standalone,
+      "--file",
+      "/images/app.png",
+      icon,
+    ]);
+    const fileBundle = await import(pathToFileURL(standalone).href);
+    assert.deepEqual([...fileBundle.assets.keys()], ["/images/app.png"]);
+    assert.deepEqual(fileBundle.assets.get("/images/app.png").body, bytes);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
