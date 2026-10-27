@@ -25,3 +25,7 @@ The example CLI prints `Hello, Example!` using the included greeting library.
 Replace these examples with your application's features.
 
 See [AGENTS.md](AGENTS.md) for development conventions.
+
+For a Deno desktop app, follow the
+[integration workflow](.agents/skills/integrate-deno-desktop/SKILL.md) for app-local
+configuration, frontend resources, native UI and platform packaging.
