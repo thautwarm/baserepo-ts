@@ -19,6 +19,9 @@ pnpm start Example
 <!-- template-only:start -->
 Provisioning removes the template-only scripts and metadata. Pass `--keep-tooling`
 to retain them for re-provisioning or renaming.
+
+The included Deno desktop and React/TSX frontend starter is described in the
+[desktop integration skill](.agents/skills/integrate-deno-desktop/SKILL.md).
 <!-- template-only:end -->
 
 The example CLI prints `Hello, Example!` using the included greeting library.

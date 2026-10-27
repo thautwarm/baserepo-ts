@@ -5,9 +5,26 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
+const appEntries = [
+  { name: "desktop", entry: "main.ts", source: 'import "@starter/libhello";\n' },
+  {
+    name: "frontend",
+    entry: "main.tsx",
+    source: 'import "@starter/libhello";\nexport const title = <h1>Starter</h1>;\n',
+  },
+] as const;
+
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), "ts-template-provision-"));
-  for (const path of ["scripts", "packages/libhello/src", "packages/tsconfig", "apps/cli"]) {
+  for (const path of [
+    "scripts",
+    "packages/libhello/src",
+    "packages/tsconfig",
+    "apps/cli",
+    "apps/desktop/src",
+    "apps/frontend/src",
+    "artifacts",
+  ]) {
     await mkdir(join(root, path), { recursive: true });
   }
   await copyFile(new URL("./provision.ts", import.meta.url), join(root, "scripts/provision.ts"));
@@ -26,9 +43,27 @@ async function fixture() {
     ["packages/libhello", "libhello"],
     ["packages/tsconfig", "tsconfig"],
     ["apps/cli", "cli"],
+    ["apps/desktop", "desktop"],
+    ["apps/frontend", "frontend"],
   ] as const) {
-    await writeFile(join(root, path, "package.json"), JSON.stringify({ name: `@starter/${name}` }));
+    await writeFile(
+      join(root, path, "package.json"),
+      JSON.stringify({
+        name: `@starter/${name}`,
+        dependencies: { "@starter/libhello": "workspace:*" },
+      }),
+    );
   }
+  await writeFile(
+    join(root, "apps/desktop/deno.json"),
+    JSON.stringify({
+      desktop: { app: { name: "starter-template", identifier: "com.example.starter-template" } },
+      nodeModulesDir: "manual",
+    }),
+  );
+  for (const app of appEntries)
+    await writeFile(join(root, `apps/${app.name}/src/${app.entry}`), app.source);
+  await writeFile(join(root, "artifacts/snapshot.json"), '"@starter/libhello"\n');
   await writeFile(
     join(root, "packages/libhello/src/index.ts"),
     'import type { API } from "@starter/libhello/types";\nimport "@starter/libhello-extra";\nimport "@starter/external";\n',
@@ -95,6 +130,27 @@ test("provision renames local package references; successful runs remove the too
     assert.match(source, /@starter\/external/);
     assert.match(await readFile(join(root, "pnpm-lock.yaml"), "utf8"), /@my-project\/libhello/);
     assert.match(await readFile(join(root, "tsconfig.json"), "utf8"), /@my-project\/tsconfig/);
+    for (const app of appEntries) {
+      const child = JSON.parse(await readFile(join(root, `apps/${app.name}/package.json`), "utf8"));
+      assert.equal(child.name, `@my-project/${app.name}`);
+      assert.equal(child.dependencies["@my-project/libhello"], "workspace:*");
+      assert.match(
+        await readFile(join(root, `apps/${app.name}/src/${app.entry}`), "utf8"),
+        /@my-project\/libhello/,
+      );
+    }
+    assert.match(
+      await readFile(join(root, "apps/frontend/src/main.tsx"), "utf8"),
+      /<h1>Starter<\/h1>/,
+    );
+    const desktop = JSON.parse(await readFile(join(root, "apps/desktop/deno.json"), "utf8"));
+    assert.equal(desktop.desktop.app.name, "my-project");
+    assert.equal(desktop.desktop.app.identifier, "com.example.my-project");
+    assert.equal(desktop.nodeModulesDir, "manual");
+    assert.equal(
+      await readFile(join(root, "artifacts/snapshot.json"), "utf8"),
+      '"@starter/libhello"\n',
+    );
     assert.equal(await readFile(join(root, "README.md"), "utf8"), "# my-project\n\npnpm install\n");
     const agents = await readFile(join(root, "AGENTS.md"), "utf8");
     assert.doesNotMatch(agents, /Template and provisioning|project template|template-only/);
@@ -127,7 +183,28 @@ test("provision keeps the tooling, reruns idempotently, and renames with --keep-
     assert.equal(next.status, 0, next.stderr);
     const child = JSON.parse(await readFile(join(root, "packages/libhello/package.json"), "utf8"));
     assert.equal(child.name, "@next-team/libhello");
+    const desktop = JSON.parse(await readFile(join(root, "apps/desktop/deno.json"), "utf8"));
+    assert.equal(desktop.desktop.app.name, "next-project");
+    assert.equal(desktop.desktop.app.identifier, "com.example.next-project");
     await readFile(join(root, "scripts/provision.ts"), "utf8");
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("provision preserves a customized desktop identity", async () => {
+  const { root, run } = await fixture();
+  try {
+    const path = join(root, "apps/desktop/deno.json");
+    await writeFile(
+      path,
+      JSON.stringify({ desktop: { app: { name: "custom-app", identifier: "org.custom.app" } } }),
+    );
+    const result = run("my-project");
+    assert.equal(result.status, 0, result.stderr);
+    const config = JSON.parse(await readFile(path, "utf8"));
+    assert.equal(config.desktop.app.name, "custom-app");
+    assert.equal(config.desktop.app.identifier, "org.custom.app");
   } finally {
     await rm(root, { recursive: true, force: true });
   }

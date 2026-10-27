@@ -1,0 +1,16 @@
+{
+  "version": "0.1.0",
+  "nodeModulesDir": "manual",
+  "desktop": {
+    "backend": "webview",
+    "app": {
+      "name": "typescript-monorepo-template",
+      "identifier": "com.example.typescript-monorepo-template",
+      "icons": {
+        "macos": "assets/icon.png",
+        "windows": "assets/icon.ico",
+        "linux": "assets/icon.png"
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@template/deno-types",
+  "version": "0.0.0",
+  "private": true,
+  "types": "./src/generated/deno.d.ts",
+  "exports": {
+    ".": "./src/generated/deno.d.ts",
+    "./desktop": "./src/generated/desktop.d.ts"
+  }
+}

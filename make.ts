@@ -1,5 +1,8 @@
 import * as NM from "@nomake/core";
+import { denoDesktopProject } from "./scripts/deno-desktop-project.ts";
+import { denoTypesProject } from "./scripts/deno-types-project.ts";
 import { idrisProject } from "./scripts/idris-project.ts";
+import { reactProject } from "./scripts/react-project.ts";
 import { rustProject } from "./scripts/rust-project.ts";
 import { checkToolchains } from "./scripts/toolchains.ts";
 import { tsProject } from "./scripts/ts-project.ts";
@@ -60,6 +63,18 @@ const pLibSalutation = tsProject({
   schemaSource: "packages/libsalutation/src/generated/public-models.ts",
 });
 const pCli = tsProject({ name: "cli", type: "app", dependencies: [pLibGreeting] });
+const pDenoTypes = denoTypesProject("apps/desktop/toolchain.json");
+const pFrontend = reactProject({ name: "frontend", dependencies: [pLibGreeting] });
+const pDesktop = denoDesktopProject({
+  name: "desktop",
+  dependencies: [pLibGreeting, pDenoTypes],
+  resources: {
+    directory: pFrontend.build,
+    files: { "/tray.png": "apps/desktop/assets/icon.png" },
+  },
+  targets: ["macos", "windows", "linux"],
+  args: ["--allow-all"],
+});
 const pScripts = tsProject({
   name: "scripts",
   directory: ".",
@@ -72,6 +87,7 @@ const pScripts = tsProject({
     "tsconfig.json",
     "biome.jsonc",
     "packages/tsconfig",
+    "packages/deno-types",
     "idris-workspace/toolchain.json",
   ],
 });
@@ -81,10 +97,13 @@ const tsProjects = [
   pLibArithmetic,
   pLibSalutation,
   pCli,
+  pFrontend,
+  pDesktop,
   pScripts,
 ];
 const projects = [
   ...tsProjects,
+  pDenoTypes,
   pArithmetic,
   pJson,
   pJsonTests,

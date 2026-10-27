@@ -8,10 +8,12 @@ interface TypeScriptProjectOptions {
   type?: "app" | "library";
   dependencies?: Project[];
   directory?: string;
+  tsconfig?: string;
   sources?: string;
   tests?: string;
   lintPaths?: string[];
   schemaSource?: string;
+  configInputs?: string[];
 }
 
 interface TypeScriptProject extends Project {
@@ -36,13 +38,15 @@ export function tsProject({
   type,
   dependencies = [],
   directory = type ? `${type === "library" ? "packages" : "apps"}/${name}` : name,
+  tsconfig: projectConfig,
   sources = `${directory}/src/**/*`,
   tests = `${directory}/src/**/*.test.ts`,
   lintPaths = [directory],
   schemaSource,
+  configInputs = [],
 }: TypeScriptProjectOptions): TypeScriptProject {
   const root = new NM.Path(directory);
-  const config = root.join("tsconfig.json").asPosix();
+  const config = projectConfig ?? root.join("tsconfig.json").asPosix();
   const inputs = [root.join("package.json").asPosix(), config];
   const types = schemaSource ?? root.join("src/types.ts").asPosix();
   const generated = dependencies.flatMap((project) => project.outputs);
@@ -67,7 +71,7 @@ export function tsProject({
     name: `.nomake_files/${name}/check.checked`,
     deps: () => ({
       toolchain,
-      tsconfig,
+      tsconfig: [...tsconfig, ...configInputs],
       project: inputs,
       sources: NM.Path.glob(sources, {
         includeDirs: false,

@@ -1,0 +1,5 @@
+{
+  "extends": "@template/tsconfig/browser.json",
+  "compilerOptions": { "jsx": "react-jsx" },
+  "include": ["src"]
+}

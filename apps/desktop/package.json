@@ -1,0 +1,13 @@
+{
+  "name": "@template/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@template/libgreeting": "workspace:*"
+  },
+  "devDependencies": {
+    "@template/tsconfig": "workspace:*",
+    "@template/deno-types": "workspace:*"
+  }
+}
