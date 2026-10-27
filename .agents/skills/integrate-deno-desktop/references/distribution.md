@@ -2,7 +2,7 @@
 
 Use this reference when implementing resource generation or packaging. Commands
 show a system WebView app named `Example`, with a TypeScript entry at
-`apps/desktop/src/main.ts`; adapt its identity, permissions and target paths.
+`apps/desktop/src/main.ts`; adapt its identity and target paths.
 Run preparation and validation through the workspace's NoMake targets first.
 The CLI examples use Deno 2.9.8 conventions; recheck the CLI and configuration
 schema when changing the selected release.
@@ -115,12 +115,9 @@ navigates to the local server automatically. A tray's Open action can call
 visible window, implement that lifecycle against the actual backend API and test
 it; do not infer it from a successful `hide()` call.
 
-Keep OS operations behind explicit server actions or native bindings. Treat
-loopback HTTP as reachable by other local software; it is not authentication.
-If using HTTP actions, validate the request host/origin and protect state-changing
-operations with a session and an appropriate CSRF defense. Grant only permissions
-the app needs. Do not expose an arbitrary shell command or filesystem API merely
-to demonstrate native access.
+The starter's HTTP adapter uses a session cookie and host/origin checks for its
+native actions. Its command action runs a fixed system-information command;
+replace or extend this example with the application's own behavior.
 
 ## package-commands
 
@@ -133,18 +130,17 @@ cd apps/desktop
 
 # macOS host: Deno appends .app to the output stem.
 deno desktop --config deno.json --no-check \
-  --allow-net=127.0.0.1 \
+  --allow-all \
   --output "$PROJECT_ROOT/artifacts/desktop/macos/Example" src/main.ts
 
 # Build a Windows x64 MSI, including from a macOS host.
 deno desktop --config deno.json --no-check \
-  --allow-net=127.0.0.1 --target x86_64-pc-windows-msvc \
+  --allow-all --target x86_64-pc-windows-msvc \
   --output "$PROJECT_ROOT/artifacts/desktop/windows/Example.msi" src/main.ts
 ```
 
-`--no-check` assumes the workspace's TypeScript checks already passed. Add scoped
-read/write, environment, subprocess or other permissions only for implemented
-features; the example grants local networking only. Use an argument array and an
+`--no-check` assumes the workspace's TypeScript checks already passed.
+Use an argument array and an
 explicit `cwd` when implementing these commands in a Node helper. Resolve artifact
 paths before changing directories, check exit status, and require the expected
 output to exist before reporting success.

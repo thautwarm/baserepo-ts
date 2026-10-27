@@ -56,10 +56,6 @@ export function createHandler(options: HandlerOptions) {
     const asset = options.assets.get(path);
     if (!asset) return json({ error: "Not found" }, 404);
     headers.set("Content-Type", asset.contentType);
-    headers.set(
-      "Content-Security-Policy",
-      "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'",
-    );
     if (path === "/index.html")
       headers.set("Set-Cookie", `desktop_session=${session}; HttpOnly; SameSite=Strict; Path=/`);
     return new Response(request.method === "HEAD" ? null : new Uint8Array(asset.body), { headers });

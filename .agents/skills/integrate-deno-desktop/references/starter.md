@@ -20,6 +20,11 @@ their package names, workspace dependencies, imports and shared tsconfig referen
 It also changes the default desktop name and `com.example.<project-name>` identifier
 in `apps/desktop/deno.json`; customized app names and identifiers are preserved.
 
+The frontend uses React and TSX with Vite's React plugin. `src/main.tsx` mounts
+`App.tsx`; components use typed state, effects and the desktop HTTP client.
+The Vite configuration is checked separately with Node types, while browser
+components use the frontend tsconfig and React's JSX runtime.
+
 The frontend uses `@template/libgreeting` in the browser, and the desktop uses the
 same library in Deno. The app's tray opens/focuses its window or quits. Closing the
 main window exits the demo. Its native-check button runs a fixed system-information

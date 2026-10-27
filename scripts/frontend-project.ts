@@ -10,10 +10,35 @@ export function frontendProject({
   dependencies?: Project[];
 }) {
   const directory = `apps/${name}`;
+  const configCheck = NM.target({
+    name: `.nomake_files/${name}/config.checked`,
+    deps: {
+      config: `${directory}/tsconfig.node.json`,
+      source: `${directory}/vite.config.ts`,
+      tooling: [
+        "make.ts",
+        "scripts/frontend-project.ts",
+        "package.json",
+        "pnpm-workspace.yaml",
+        "packages/tsconfig/package.json",
+        "packages/tsconfig/base.json",
+        `${directory}/package.json`,
+        "pnpm-lock.yaml",
+        process.execPath,
+      ],
+    },
+    async build({ deps, target }) {
+      await NM.Shell.runChecked(["tsc", "--noEmit", "--project", deps.config]);
+      const stamp = new NM.Path(target);
+      await stamp.parent.mkdir({ parents: true, onError: "existOk" });
+      await stamp.writeText("ok\n");
+    },
+  });
+  const tooling: Project = { outputs: [], check: configCheck, tests: configCheck };
   const project = tsProject({
     name,
     type: "app",
-    dependencies,
+    dependencies: [...dependencies, tooling],
     configInputs: ["packages/tsconfig/browser.json"],
   });
   const build = NM.target({

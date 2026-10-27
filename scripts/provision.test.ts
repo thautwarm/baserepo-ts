@@ -5,6 +5,15 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
+const appEntries = [
+  { name: "desktop", entry: "main.ts", source: 'import "@starter/libhello";\n' },
+  {
+    name: "frontend",
+    entry: "main.tsx",
+    source: 'import "@starter/libhello";\nexport const title = <h1>Starter</h1>;\n',
+  },
+] as const;
+
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), "ts-template-provision-"));
   for (const path of [
@@ -52,8 +61,8 @@ async function fixture() {
       nodeModulesDir: "manual",
     }),
   );
-  for (const app of ["desktop", "frontend"])
-    await writeFile(join(root, `apps/${app}/src/main.ts`), 'import "@starter/libhello";\n');
+  for (const app of appEntries)
+    await writeFile(join(root, `apps/${app.name}/src/${app.entry}`), app.source);
   await writeFile(join(root, "artifacts/snapshot.json"), '"@starter/libhello"\n');
   await writeFile(
     join(root, "packages/libhello/src/index.ts"),
@@ -121,15 +130,19 @@ test("provision renames local package references; successful runs remove the too
     assert.match(source, /@starter\/external/);
     assert.match(await readFile(join(root, "pnpm-lock.yaml"), "utf8"), /@my-project\/libhello/);
     assert.match(await readFile(join(root, "tsconfig.json"), "utf8"), /@my-project\/tsconfig/);
-    for (const app of ["desktop", "frontend"]) {
-      const child = JSON.parse(await readFile(join(root, `apps/${app}/package.json`), "utf8"));
-      assert.equal(child.name, `@my-project/${app}`);
+    for (const app of appEntries) {
+      const child = JSON.parse(await readFile(join(root, `apps/${app.name}/package.json`), "utf8"));
+      assert.equal(child.name, `@my-project/${app.name}`);
       assert.equal(child.dependencies["@my-project/libhello"], "workspace:*");
       assert.match(
-        await readFile(join(root, `apps/${app}/src/main.ts`), "utf8"),
+        await readFile(join(root, `apps/${app.name}/src/${app.entry}`), "utf8"),
         /@my-project\/libhello/,
       );
     }
+    assert.match(
+      await readFile(join(root, "apps/frontend/src/main.tsx"), "utf8"),
+      /<h1>Starter<\/h1>/,
+    );
     const desktop = JSON.parse(await readFile(join(root, "apps/desktop/deno.json"), "utf8"));
     assert.equal(desktop.desktop.app.name, "my-project");
     assert.equal(desktop.desktop.app.identifier, "com.example.my-project");
