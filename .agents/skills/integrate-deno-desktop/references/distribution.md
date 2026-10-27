@@ -7,6 +7,24 @@ Run preparation and validation through the workspace's NoMake targets first.
 The CLI examples use Deno 2.9.8 conventions; recheck the CLI and configuration
 schema when changing the selected release.
 
+## module-packaging
+
+`deno run main.ts` handles TypeScript transformation and module loading without
+a separate JavaScript build. Desktop packaging also accepts the TypeScript entry
+directly: Deno 2.9.8's desktop implementation calls `compile_binary`, which builds
+the module graph and embeds it in the runtime. It explicitly sets `bundle: false`;
+collecting modules into an application package does not require merging them into
+a single JavaScript file first.
+
+For an explicit JavaScript bundle, `deno bundle` is a separate command backed by
+esbuild. Keep that optional step separate from desktop module packaging and from
+the frontend's browser build.
+
+Sources: [TypeScript execution](https://docs.deno.com/runtime/fundamentals/typescript/#how-typescript-runs-in-deno),
+[Deno 2.9.8 desktop compiler invocation](https://github.com/denoland/deno/blob/v2.9.8/cli/tools/desktop.rs#L506-L539),
+[module graph and executable output](https://github.com/denoland/deno/blob/v2.9.8/cli/tools/compile.rs#L636-L750),
+[deno bundle](https://docs.deno.com/runtime/reference/cli/bundle/).
+
 ## resources
 
 Choose one explicit resource contract:
