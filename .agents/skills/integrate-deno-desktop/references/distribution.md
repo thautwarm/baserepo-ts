@@ -1,8 +1,8 @@
 # distribution
 
 Use this reference when implementing resource generation or packaging. Commands
-show a system WebView app named `Example`, with an already built
-`apps/desktop/build/entry.js`; adapt its identity, permissions and target paths.
+show a system WebView app named `Example`, with a TypeScript entry at
+`apps/desktop/src/main.ts`; adapt its identity, permissions and target paths.
 Run preparation and validation through the workspace's NoMake targets first.
 The CLI examples use Deno 2.9.8 conventions; recheck the CLI and configuration
 schema when changing the selected release.
@@ -63,6 +63,7 @@ Example `apps/desktop/deno.json`:
 ```json
 {
   "version": "0.1.0",
+  "nodeModulesDir": "manual",
   "desktop": {
     "backend": "webview",
     "app": {
@@ -75,8 +76,12 @@ Example `apps/desktop/deno.json`:
 
 Configure distribution icons and signing settings here using the selected
 release's schema. Runtime tray images are supplied by the app, not by this block.
-If an unbundled development entry uses npm packages from pnpm's installed layout,
-set `nodeModulesDir` to `manual` in its applicable config or CLI invocation.
+The example uses pnpm's installed layout through `nodeModulesDir: "manual"`.
+Deno reads the app's `package.json` dependencies and follows installed workspace
+links, including packages exporting TypeScript source. Run `pnpm install` before
+building. Neither moving the workspace packages into the app nor duplicating them
+in an import map is required for this path. Test both resolution and the compiled
+package; a successful development import only establishes the first.
 Do not rely on a desktop app's config being discovered by a sibling server entry.
 
 ## serving-and-window-lifecycle
@@ -111,12 +116,12 @@ cd apps/desktop
 # macOS host: Deno appends .app to the output stem.
 deno desktop --config deno.json --no-check \
   --allow-net=127.0.0.1 \
-  --output "$PROJECT_ROOT/artifacts/desktop/macos/Example" build/entry.js
+  --output "$PROJECT_ROOT/artifacts/desktop/macos/Example" src/main.ts
 
 # Build a Windows x64 MSI, including from a macOS host.
 deno desktop --config deno.json --no-check \
   --allow-net=127.0.0.1 --target x86_64-pc-windows-msvc \
-  --output "$PROJECT_ROOT/artifacts/desktop/windows/Example.msi" build/entry.js
+  --output "$PROJECT_ROOT/artifacts/desktop/windows/Example.msi" src/main.ts
 ```
 
 `--no-check` assumes the workspace's TypeScript checks already passed. Add scoped
@@ -151,4 +156,6 @@ Sources: [Deno desktop configuration](https://docs.deno.com/runtime/desktop/conf
 [windows](https://docs.deno.com/runtime/desktop/windows/),
 [backends](https://docs.deno.com/runtime/desktop/backends/),
 [distribution](https://docs.deno.com/runtime/desktop/distribution/),
+[Node/npm compatibility](https://docs.deno.com/runtime/fundamentals/node/),
+[workspace compatibility](https://docs.deno.com/runtime/fundamentals/workspaces/#npm-and-pnpm-workspace-compatibility),
 [Deno 2.9.8 desktop declarations](https://github.com/denoland/deno/blob/v2.9.8/cli/tsc/dts/lib.deno.desktop.d.ts).

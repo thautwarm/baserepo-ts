@@ -46,7 +46,6 @@ A possible layout, with app names adapted to the project:
 apps/desktop/deno.json          # desktop metadata, backend, app-specific settings
 apps/desktop/assets/            # source icons
 apps/desktop/src/main.ts        # native entry
-apps/desktop/build/entry.js     # ignored distribution bundle
 apps/frontend/                 # frontend sources and its build output
 apps/server/                   # HTTP service, when shared with another entry
 packages/deno-types/src/generated/
@@ -57,6 +56,13 @@ The root stays the pnpm/NoMake coordinator. Place `deno.json` in the owning app;
 invoke Deno from that directory with an explicit configuration file. Resolve
 icons and output paths against that declared build working directory. Keep
 TypeScript checking in `tsconfig`; desktop metadata does not replace it.
+
+For pnpm-managed dependencies, run `pnpm install` and use
+`"nodeModulesDir": "manual"` in the app config. Deno can resolve dependencies in
+the app's `package.json` through the installed workspace links and package exports.
+A TypeScript entry can be packaged directly; test that path before adding a
+bundler. Deno's own workspace discovery is separate: `pnpm-workspace.yaml` alone
+does not declare Deno workspace members.
 
 Generate runtime declarations with the selected Deno binary:
 
@@ -77,14 +83,14 @@ and shared tsconfig files; avoid adding Deno-specific inputs to every TS project
 
 ## build-for-distribution
 
-Register the frontend, resource generation and desktop bundle in `make.ts`, using
+Register the frontend, resource generation and desktop packaging in `make.ts`, using
 the [nomake](../nomake/SKILL.md) workflow. Keep subprocesses and file generation in
 focused Node TypeScript helpers under `scripts/`.
 
 ```text
 frontend sources → frontend build → embedded resources ┐
-desktop/server/library sources + checks ───────────────┴→ desktop entry bundle
-desktop entry bundle + app config + icons + toolchain → platform package
+desktop/server/library sources + checks ───────────────┤
+app config + icons + toolchain + installed dependencies┴→ platform package
 ```
 
 Runtime code must not discover frontend files through the source tree. One option
@@ -93,11 +99,11 @@ typed map of URL paths to bytes and content types; inject that map into the serv
 Another is Deno's included-file mechanism with explicit inclusion paths. Read
 [distribution](references/distribution.md) for the resource and packaging details.
 
-Bundle the desktop/server entry and its workspace libraries before packaging when
-pnpm workspace imports would otherwise need source links at runtime. Keep the
-bundle outside handwritten source globs, as an ignored distribution output.
-Browser and desktop distribution bundles are separate from running Node tooling
-directly from TypeScript.
+Use the TypeScript entry directly when Deno resolves and packages its module graph.
+A separate desktop bundle is optional, for example when a required transform is
+outside Deno's compiler. Keep any such bundle outside handwritten source globs as
+an ignored distribution output. Frontend bundling and running Node tooling directly
+from TypeScript remain separate build concerns.
 
 Give each generated file or dedicated output directory one owning target. Declare
 the frontend tree, runtime sources, asset inputs, generators, tsconfigs, app config,
