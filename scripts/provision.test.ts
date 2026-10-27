@@ -11,12 +11,14 @@ async function fixture() {
     await mkdir(join(root, path), { recursive: true });
   }
   await copyFile(new URL("./provision.ts", import.meta.url), join(root, "scripts/provision.ts"));
+  await writeFile(join(root, "scripts/provision.test.ts"), "// template test placeholder\n");
   await writeFile(
     join(root, "package.json"),
     JSON.stringify({
       name: "starter-template",
       type: "module",
       template: { scope: "@starter" },
+      scripts: { provision: "node scripts/provision.ts", verify: "node make.ts verify" },
       devDependencies: { "@starter/tsconfig": "workspace:*" },
     }),
   );
@@ -36,7 +38,20 @@ async function fixture() {
     join(root, "pnpm-lock.yaml"),
     'dependencies:\n  "@starter/libhello": workspace:*\n',
   );
-  await writeFile(join(root, "README.md"), "# Starter\n\nTemplate documentation.\n");
+  await writeFile(
+    join(root, "README.md"),
+    [
+      "# Starter",
+      "",
+      "<!-- template-only:start -->",
+      "Template documentation.",
+      "<!-- template-only:end -->",
+      "",
+      "pnpm provision starter",
+      "pnpm install",
+      "",
+    ].join("\n"),
+  );
   await writeFile(
     join(root, "AGENTS.md"),
     [
@@ -63,14 +78,16 @@ async function fixture() {
   };
 }
 
-test("provision renames local package references and lockfile; reruns are idempotent", async () => {
+test("provision renames local package references; successful runs remove the tooling", async () => {
   const { root, run } = await fixture();
   try {
-    const first = run("my-project");
-    assert.equal(first.status, 0, first.stderr);
+    const result = run("my-project");
+    assert.equal(result.status, 0, result.stderr);
     const manifest = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
     assert.equal(manifest.name, "my-project");
-    assert.equal(manifest.template.scope, "@my-project");
+    assert.equal(manifest.template, undefined);
+    assert.equal(manifest.scripts?.provision, undefined);
+    assert.equal(manifest.scripts?.verify, "node make.ts verify");
     assert.equal(manifest.devDependencies["@my-project/tsconfig"], "workspace:*");
     const source = await readFile(join(root, "packages/libhello/src/index.ts"), "utf8");
     assert.match(source, /@my-project\/libhello\/types/);
@@ -78,31 +95,39 @@ test("provision renames local package references and lockfile; reruns are idempo
     assert.match(source, /@starter\/external/);
     assert.match(await readFile(join(root, "pnpm-lock.yaml"), "utf8"), /@my-project\/libhello/);
     assert.match(await readFile(join(root, "tsconfig.json"), "utf8"), /@my-project\/tsconfig/);
-    assert.match(await readFile(join(root, "README.md"), "utf8"), /^# my-project\n/);
-    const agentsPath = join(root, "AGENTS.md");
-    const agents = await readFile(agentsPath, "utf8");
+    assert.equal(await readFile(join(root, "README.md"), "utf8"), "# my-project\n\npnpm install\n");
+    const agents = await readFile(join(root, "AGENTS.md"), "utf8");
     assert.doesNotMatch(agents, /Template and provisioning|project template|template-only/);
     assert.match(agents, /^# Project conventions\n\n## Workspace roles\n/);
     assert.match(agents, /Use "@my-project\/libhello" and keep these project conventions\./);
-    const second = run("my-project");
-    assert.equal(second.status, 0, second.stderr);
-    assert.match(second.stdout, /updated 0 files/);
-    assert.equal(await readFile(agentsPath, "utf8"), agents);
+    assert.match(result.stdout, /Removed template-only provisioning tooling/);
+    await assert.rejects(readFile(join(root, "scripts/provision.ts")), { code: "ENOENT" });
+    await assert.rejects(readFile(join(root, "scripts/provision.test.ts")), { code: "ENOENT" });
   } finally {
     await rm(root, { recursive: true, force: true });
   }
 });
 
-test("provision accepts a separate scope and can rename an already provisioned project", async () => {
+test("provision keeps the tooling, reruns idempotently, and renames with --keep-tooling", async () => {
   const { root, run } = await fixture();
   try {
-    assert.equal(run("my-project", "--scope", "@acme").status, 0);
-    const next = run("next-project", "--scope", "next-team");
+    const first = run("my-project", "--scope", "@acme", "--keep-tooling");
+    assert.equal(first.status, 0, first.stderr);
+    const manifest = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
+    assert.equal(manifest.template.scope, "@acme");
+    assert.equal(manifest.scripts.provision, "node scripts/provision.ts");
+    assert.doesNotMatch(first.stdout, /Removed template-only provisioning tooling/);
+    const agentsPath = join(root, "AGENTS.md");
+    const agents = await readFile(agentsPath, "utf8");
+    const second = run("my-project", "--scope", "@acme", "--keep-tooling");
+    assert.equal(second.status, 0, second.stderr);
+    assert.match(second.stdout, /updated 0 files/);
+    assert.equal(await readFile(agentsPath, "utf8"), agents);
+    const next = run("next-project", "--scope", "next-team", "--keep-tooling");
     assert.equal(next.status, 0, next.stderr);
-    const manifest = JSON.parse(
-      await readFile(join(root, "packages/libhello/package.json"), "utf8"),
-    );
-    assert.equal(manifest.name, "@next-team/libhello");
+    const child = JSON.parse(await readFile(join(root, "packages/libhello/package.json"), "utf8"));
+    assert.equal(child.name, "@next-team/libhello");
+    await readFile(join(root, "scripts/provision.ts"), "utf8");
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -116,6 +141,7 @@ test("invalid provision arguments leave the template unchanged", async () => {
     for (const args of [
       ["../escape"],
       ["Valid"],
+      ["Valid", "--keep-tooling"],
       ["valid", "--scope"],
       ["valid", "--scope", "../escape"],
       ["valid", "--unknown"],
@@ -123,6 +149,8 @@ test("invalid provision arguments leave the template unchanged", async () => {
       assert.notEqual(run(...args).status, 0);
       assert.equal(await readFile(path, "utf8"), original);
     }
+    await readFile(join(root, "scripts/provision.ts"), "utf8");
+    await readFile(join(root, "scripts/provision.test.ts"), "utf8");
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -141,6 +169,7 @@ test("unmatched template-only markers fail before changing any files", async () 
     assert.match(result.stderr, /unmatched template-only markers/);
     assert.equal(await readFile(manifestPath, "utf8"), manifest);
     assert.equal(await readFile(agentsPath, "utf8"), agents);
+    await readFile(join(root, "scripts/provision.ts"), "utf8");
   } finally {
     await rm(root, { recursive: true, force: true });
   }

@@ -3,13 +3,19 @@
 <!-- template-only:start -->
 ## Template setup
 
-`pnpm provision <project-name> [--scope <scope>]` sets the project name and package scope.
-The scope defaults to `@<project-name>`. Run `pnpm install --frozen-lockfile` afterward.
+`pnpm provision <project-name> [--scope <scope>] [--keep-tooling]` sets the project
+name and package scope. The scope defaults to `@<project-name>`. Run
+`pnpm install --frozen-lockfile` afterward.
 
-Provisioning uses only Node built-ins and must remain idempotent. Preserve `.git`,
+Provisioning uses only Node built-ins. With `--keep-tooling` it must remain
+idempotent and support renaming an already provisioned project. Preserve `.git`,
 installed dependencies, and unrelated external references. Read package names from
 manifests and the current scope from `template.scope`; do not hardcode template names.
-Provisioning removes this marked section.
+
+A successful run without `--keep-tooling` removes the marked template-only sections,
+the `provision` script entry, the `template` metadata, and `scripts/provision.ts` plus
+`scripts/provision.test.ts`. Pass `--keep-tooling` when maintaining the template or
+renaming an already provisioned project.
 <!-- template-only:end -->
 
 ## Workspace

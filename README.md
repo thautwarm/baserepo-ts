@@ -16,6 +16,11 @@ pnpm install --frozen-lockfile
 pnpm start Example
 ```
 
+<!-- template-only:start -->
+Provisioning removes the template-only scripts and metadata. Pass `--keep-tooling`
+to retain them for re-provisioning or renaming.
+<!-- template-only:end -->
+
 The example CLI prints `Hello, Example!` using the included greeting library.
 Replace these examples with your application's features.
 
