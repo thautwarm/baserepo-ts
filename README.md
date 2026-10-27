@@ -19,13 +19,12 @@ pnpm start Example
 <!-- template-only:start -->
 Provisioning removes the template-only scripts and metadata. Pass `--keep-tooling`
 to retain them for re-provisioning or renaming.
+
+The included Deno desktop and Vite frontend starter is described in the
+[desktop integration skill](.agents/skills/integrate-deno-desktop/SKILL.md).
 <!-- template-only:end -->
 
 The example CLI prints `Hello, Example!` using the included greeting library.
 Replace these examples with your application's features.
 
 See [AGENTS.md](AGENTS.md) for development conventions.
-
-For a Deno desktop app, follow the
-[integration workflow](.agents/skills/integrate-deno-desktop/SKILL.md) for app-local
-configuration, frontend resources, native UI and platform packaging.

@@ -12,6 +12,7 @@ interface TypeScriptProjectOptions {
   tests?: string;
   lintPaths?: string[];
   schemaSource?: string;
+  configInputs?: string[];
 }
 
 interface TypeScriptProject extends Project {
@@ -40,6 +41,7 @@ export function tsProject({
   tests = `${directory}/src/**/*.test.ts`,
   lintPaths = [directory],
   schemaSource,
+  configInputs = [],
 }: TypeScriptProjectOptions): TypeScriptProject {
   const root = new NM.Path(directory);
   const config = root.join("tsconfig.json").asPosix();
@@ -67,7 +69,7 @@ export function tsProject({
     name: `.nomake_files/${name}/check.checked`,
     deps: () => ({
       toolchain,
-      tsconfig,
+      tsconfig: [...tsconfig, ...configInputs],
       project: inputs,
       sources: NM.Path.glob(sources, {
         includeDirs: false,

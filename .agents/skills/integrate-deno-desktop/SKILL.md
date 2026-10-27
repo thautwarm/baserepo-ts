@@ -5,8 +5,9 @@ description: Add a Deno desktop application to this TypeScript workspace, includ
 
 # integrate-deno-desktop
 
-Keep the pnpm/NoMake workspace and add Deno at the application boundary. This
-workflow does not install a desktop framework into every project using the template.
+Use this skill for Deno desktop integration work. For the included starter apps,
+read [starter](references/starter.md). In a provisioned project, inspect the current
+app manifests and `make.ts`; app names, locations and build targets may have changed.
 
 ## start-from-the-workspace
 
@@ -21,6 +22,10 @@ the Deno version used for declarations, builds and validation, including any
 experimental status reported by its CLI. Install frontend
 and bundler dependencies only when needed, using the workspace's pinned versions
 or locking newly selected versions in `pnpm-lock.yaml`.
+
+Provisioning covers both app manifests/imports and the default desktop identity.
+Keep new package references discoverable by `scripts/provision.ts`, and extend
+its tests when adding app metadata that should follow a project rename.
 
 ## choose-the-runtime-boundary
 
@@ -86,6 +91,11 @@ and shared tsconfig files; avoid adding Deno-specific inputs to every TS project
 Register the frontend, resource generation and desktop packaging in `make.ts`, using
 the [nomake](../nomake/SKILL.md) workflow. Keep subprocesses and file generation in
 focused Node TypeScript helpers under `scripts/`.
+
+Reuse `frontendProject()`, `denoTypesProject()` and `desktopProject()`. Their file
+targets build the browser output, generate the embedded assets/declarations, check
+the desktop sources, and package the TypeScript entry directly. Platform packaging
+is explicit; `pnpm verify` includes the app checks and resource generation.
 
 ```text
 frontend sources → frontend build → embedded resources ┐

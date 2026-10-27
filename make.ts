@@ -1,4 +1,7 @@
 import * as NM from "@nomake/core";
+import { denoTypesProject } from "./scripts/deno-types-project.ts";
+import { desktopProject } from "./scripts/desktop-project.ts";
+import { frontendProject } from "./scripts/frontend-project.ts";
 import { idrisProject } from "./scripts/idris-project.ts";
 import { rustProject } from "./scripts/rust-project.ts";
 import { checkToolchains } from "./scripts/toolchains.ts";
@@ -60,6 +63,13 @@ const pLibSalutation = tsProject({
   schemaSource: "packages/libsalutation/src/generated/public-models.ts",
 });
 const pCli = tsProject({ name: "cli", type: "app", dependencies: [pLibGreeting] });
+const pDenoTypes = denoTypesProject("apps/desktop/toolchain.json");
+const pFrontend = frontendProject({ name: "frontend", dependencies: [pLibGreeting] });
+const pDesktop = desktopProject({
+  name: "desktop",
+  frontend: pFrontend.build,
+  dependencies: [pLibGreeting, pDenoTypes],
+});
 const pScripts = tsProject({
   name: "scripts",
   directory: ".",
@@ -72,6 +82,7 @@ const pScripts = tsProject({
     "tsconfig.json",
     "biome.jsonc",
     "packages/tsconfig",
+    "packages/deno-types",
     "idris-workspace/toolchain.json",
   ],
 });
@@ -81,10 +92,13 @@ const tsProjects = [
   pLibArithmetic,
   pLibSalutation,
   pCli,
+  pFrontend,
+  pDesktop,
   pScripts,
 ];
 const projects = [
   ...tsProjects,
+  pDenoTypes,
   pArithmetic,
   pJson,
   pJsonTests,

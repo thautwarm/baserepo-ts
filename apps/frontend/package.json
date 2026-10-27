@@ -1,0 +1,13 @@
+{
+  "name": "@template/frontend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@template/libgreeting": "workspace:*"
+  },
+  "devDependencies": {
+    "@template/tsconfig": "workspace:*",
+    "vite": "7.3.7"
+  }
+}
