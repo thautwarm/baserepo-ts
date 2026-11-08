@@ -1,0 +1,5 @@
+{
+  "extends": "@template/tsconfig/deno.json",
+  "compilerOptions": { "types": ["@template/deno-types", "@template/deno-types/desktop", "node"] },
+  "include": ["src"]
+}

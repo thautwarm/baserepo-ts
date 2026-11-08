@@ -25,6 +25,7 @@ const root = new URL("../", import.meta.url);
 const manifestPath = new URL("package.json", root);
 const readmePath = new URL("README.md", root).href;
 const agentsPath = new URL("AGENTS.md", root).href;
+const desktopPath = new URL("apps/desktop/deno.json", root).href;
 const markedDocs = new Set([readmePath, agentsPath]);
 const oldScope = manifest.template?.scope;
 if (typeof oldScope !== "string") throw new Error("Missing template.scope in root package.json.");
@@ -42,7 +43,15 @@ for (const parent of ["apps", "packages"]) {
   }
 }
 
-const ignored = new Set([".git", "node_modules", "dist", "target", ".pnpm-store", ".nomake_files"]);
+const ignored = new Set([
+  ".git",
+  "node_modules",
+  "dist",
+  "target",
+  "artifacts",
+  ".pnpm-store",
+  ".nomake_files",
+]);
 const extensions = new Set([
   ".json",
   ".jsonc",
@@ -77,6 +86,14 @@ async function collect(directory: URL): Promise<void> {
         const updated = JSON.parse(text);
         updated.name = name;
         updated.template.scope = scope;
+        text = `${JSON.stringify(updated, null, 2)}\n`;
+      }
+      if (path.href === desktopPath) {
+        const updated = JSON.parse(text);
+        const app = updated.desktop?.app;
+        if (app?.name === manifest.name) app.name = name;
+        if (app?.identifier === `com.example.${manifest.name}`)
+          app.identifier = `com.example.${name}`;
         text = `${JSON.stringify(updated, null, 2)}\n`;
       }
       if (path.href === readmePath) {

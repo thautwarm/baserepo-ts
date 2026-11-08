@@ -19,7 +19,12 @@
     "provision": "node scripts/provision.ts",
     "schema": "node make.ts schema",
     "test": "node make.ts tests",
-    "verify": "node make.ts verify"
+    "verify": "node make.ts verify",
+    "build:web": "node make.ts build:frontend",
+    "desktop:mac": "node make.ts package:desktop:macos",
+    "desktop:windows": "node make.ts package:desktop:windows",
+    "desktop:linux": "node make.ts package:desktop:linux",
+    "deno:types": "node make.ts deno:types"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",

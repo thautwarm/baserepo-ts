@@ -38,6 +38,7 @@ async function* lintInputs(paths: string[]) {
         includeDirs: false,
         exclude: [
           "**/node_modules/**",
+          "**/dist/**",
           "apps/*/src/schemas.ts",
           "packages/*/src/schemas.ts",
           "**/src/generated/**",

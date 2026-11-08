@@ -5,3 +5,7 @@ idris-workspace/**/build/
 .env
 .env.*
 !.env.example
+artifacts/
+apps/frontend/dist/
+apps/desktop/src/generated/
+packages/deno-types/src/generated/
